@@ -16,5 +16,6 @@ else:
     print('Directory dont exists')
 
 # borrar lista
+print('borrando items')
 for item in remove_list:
     remove(dst + '/' + item)
