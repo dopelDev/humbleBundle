@@ -48,7 +48,7 @@
     "PHP|decimal": 50.76107567660748,
     "ZAR|decimal": 14.979486295466298
   },
-  "csrfTokenInput": "<input type='hidden' class='csrftoken' name='_le_csrf_token' value='w26mbOpY1lxo7boX-1-1633505288' />",
+  "csrfTokenInput": "<input type='hidden' class='csrftoken' name='_le_csrf_token' value='fpMXAETpJ3npiKLu-1-1633508965' />",
   "csrfToken": {},
   "baseSubscriptionMsrp|money": {
     "currency": "USD",
@@ -137,7 +137,7 @@
               "start_date|datetime": "2021-09-30T18:00:00",
               "end_date|datetime": "2021-10-21T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 5509.0,
+              "bundles_sold|decimal": 5527.0,
               "tile_name": "Humble Book Bundle: Witchcraft, Magick, and Spirituality",
               "short_marketing_blurb": "There\u2019s more to life than meets the eye...",
               "tile_image_information": {
@@ -231,7 +231,7 @@
               "start_date|datetime": "2021-09-16T18:00:00",
               "end_date|datetime": "2021-10-07T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 11230.0,
+              "bundles_sold|decimal": 11256.0,
               "tile_name": "Humble Audiobook Bundle: Voices of Warhammer 2021 by Black Library",
               "short_marketing_blurb": "Live the Warhammer universe, one audiobook at a time",
               "tile_image_information": {
@@ -317,7 +317,7 @@
               "start_date|datetime": "2021-09-16T18:00:00",
               "end_date|datetime": "2021-10-14T18:00:00",
               "tile_stamp": "software",
-              "bundles_sold|decimal": 26345.0,
+              "bundles_sold|decimal": 26360.0,
               "tile_name": "Humble Software Bundle: UNITY FPS Games and Game Dev Assets",
               "short_marketing_blurb": "Call the shots.",
               "tile_image_information": {
@@ -427,7 +427,7 @@
               "start_date|datetime": "2021-09-30T18:00:00",
               "end_date|datetime": "2021-10-21T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 5509.0,
+              "bundles_sold|decimal": 5527.0,
               "tile_name": "Humble Book Bundle: Witchcraft, Magick, and Spirituality",
               "short_marketing_blurb": "There\u2019s more to life than meets the eye...",
               "tile_image_information": {
@@ -521,7 +521,7 @@
               "start_date|datetime": "2021-09-16T18:00:00",
               "end_date|datetime": "2021-10-07T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 11230.0,
+              "bundles_sold|decimal": 11256.0,
               "tile_name": "Humble Audiobook Bundle: Voices of Warhammer 2021 by Black Library",
               "short_marketing_blurb": "Live the Warhammer universe, one audiobook at a time",
               "tile_image_information": {
@@ -615,7 +615,7 @@
               "start_date|datetime": "2021-09-27T18:00:00",
               "end_date|datetime": "2021-10-18T18:00:00",
               "tile_stamp": "comics",
-              "bundles_sold|decimal": 2122.0,
+              "bundles_sold|decimal": 2127.0,
               "tile_name": "Humble Comic Bundle: James Bond and Beyond by Dynamite",
               "short_marketing_blurb": "The name\u2019s Bond...",
               "tile_image_information": {
@@ -709,7 +709,7 @@
               "start_date|datetime": "2021-10-04T18:00:00",
               "end_date|datetime": "2021-10-25T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 4774.0,
+              "bundles_sold|decimal": 4823.0,
               "tile_name": "Humble Book Bundle: Infrastructure and Ops by O'Reilly",
               "short_marketing_blurb": "Master the modern IT environment",
               "tile_image_information": {
@@ -803,7 +803,7 @@
               "start_date|datetime": "2021-09-20T18:00:00",
               "end_date|datetime": "2021-10-11T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 3310.0,
+              "bundles_sold|decimal": 3314.0,
               "tile_name": "Humble Book Bundle: Harry Potter Film Vault Series by Insight Editions",
               "short_marketing_blurb": "For the ultimate Harry Potter film fan",
               "tile_image_information": {
@@ -897,7 +897,7 @@
               "start_date|datetime": "2021-09-23T18:00:00",
               "end_date|datetime": "2021-10-14T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 4986.0,
+              "bundles_sold|decimal": 4995.0,
               "tile_name": "Humble RPG Book Bundle: Tomes of Lost Magic for 5th Edition by Frog God Games",
               "short_marketing_blurb": "Expand your tabletop world, with Frog God Games!",
               "tile_image_information": {

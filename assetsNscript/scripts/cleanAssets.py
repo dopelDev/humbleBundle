@@ -7,7 +7,7 @@ from os.path import split, exists
 print('buscando directory')
 seed_path = getcwd()
 dst = split(seed_path)
-dst = dst[0] + '/' + 'assets'
+dst = dst[0] + '/' + 'assetsNscript/assets'
 
 # obteniendo lista para borar
 if exists(dst):

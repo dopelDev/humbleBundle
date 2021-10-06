@@ -46,8 +46,13 @@ def load_decode_json(path : str):
     print(type(json_file))
     return json_file 
 
+# call al script de download
 def download_html(path : str):
     call(['python', path + '/assetsNscript/scripts/download.py']) 
+
+def cleanAssets(path : str):
+    call(['python', path + '/assetsNscript/scripts/cleanAssets.py']) 
+
 
 def searcher(data):
     pass

@@ -8,7 +8,7 @@ from requests import get
 
 seed_path = getcwd()
 dst = split(seed_path)
-dst = dst[0] + '/' + 'assets'
+dst = dst[0] + '/' + 'assetsNscript/assets'
 print('buscando directory')
 
 def recurse_download():
