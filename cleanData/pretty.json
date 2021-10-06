@@ -1,9 +1,54 @@
 {
+  "showSubsV3": null,
   "userOptions": {
     "is_logged_in": false,
     "logout_url": "/logout?goto=/books&qs="
   },
   "showSingleSignOn": true,
+  "debug": false,
+  "ipInChina": false,
+  "isEuCountry": false,
+  "baseSubscriptionPrice|money": {
+    "currency": "USD",
+    "amount": 19.99
+  },
+  "bannerOptions": null,
+  "exchangeRates": {
+    "USD|decimal": 1.0,
+    "IDR|decimal": 14227.391828995002,
+    "BGN|decimal": 1.6857438372694362,
+    "ISK|decimal": 127.56421306671264,
+    "ILS|decimal": 3.230218927771074,
+    "GBP|decimal": 0.7341234269953456,
+    "DKK|decimal": 6.410877434925013,
+    "CAD|decimal": 1.2594380279262196,
+    "JPY|decimal": 111.17910705050853,
+    "HUF|decimal": 307.6193759696604,
+    "RON|decimal": 4.264523358041717,
+    "MYR|decimal": 4.17876228236511,
+    "SEK|decimal": 8.732115152559903,
+    "SGD|decimal": 1.3569212204792278,
+    "HKD|decimal": 7.78520944664713,
+    "AUD|decimal": 1.3736424754352698,
+    "CHF|decimal": 0.9267367695224962,
+    "KRW|decimal": 1186.105843820031,
+    "CNY|decimal": 6.447595242199621,
+    "TRY|decimal": 8.852525426650578,
+    "HRK|decimal": 6.468712290984313,
+    "NZD|decimal": 1.4350973970005172,
+    "THB|decimal": 33.78986381658335,
+    "EUR|decimal": 0.8619203585588692,
+    "NOK|decimal": 8.546371315290466,
+    "RUB|decimal": 72.53413204619893,
+    "INR|decimal": 74.54576797103948,
+    "MXN|decimal": 20.50543009825892,
+    "CZK|decimal": 21.81348043440786,
+    "BRL|decimal": 5.4392346147216,
+    "PLN|decimal": 3.9646612652990862,
+    "PHP|decimal": 50.76107567660748,
+    "ZAR|decimal": 14.979486295466298
+  },
+  "csrfTokenInput": "<input type='hidden' class='csrftoken' name='_le_csrf_token' value='w26mbOpY1lxo7boX-1-1633505288' />",
   "csrfToken": {},
   "baseSubscriptionMsrp|money": {
     "currency": "USD",
@@ -13,9 +58,9 @@
     "popular": {
       "mosaic": [
         {
-          "section_url_text": null,
-          "section_title": null,
-          "section_url": null,
+          "section_url_text": "",
+          "section_title": {},
+          "section_url": "",
           "section_type": "query",
           "layouts": [
             "threes",
@@ -28,7 +73,7 @@
               "tile_logo_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/logos/warhammer40000stories2021blacklibrary_bookbundle_logo-product-retina.png",
+                  "gcs": "images/logos/witchcraftmagickandspirituality_bundle-logo-product.png",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -40,17 +85,17 @@
                   }
                 }
               },
-              "machine_name": "warhammer40000stories2021blacklibrary_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/c646f3ddc85f8e7dd74c78a3f8ed4fec638ecf0c.png?auto=compress,format&fit=crop&h=600&w=1200&s=51edcf0a3ff7e64cd63b57a7593076a0",
+              "machine_name": "witchcraftmagickandspirituality_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/5100eab7289e1d59a73a7bfdd49af2af0182f01e.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=99b6488afcd4de1174de8b448bba9b5d",
               "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Double Eagle</em>, <em>The Lords of Silence</em>, <em>Dawn of Fire: Avenging Son</em>, and more!",
+              "marketing_blurb": "Get <em>Witchery</em>, <em>Wishcraft</em>, <em>City Magick</em>, <em>Wicca Made Easy</em>, <em>Year Of The Witch</em>, and more!",
               "hover_title": "Pay What You Want",
-              "product_url": "/books/warhammer-40000-stories-2021-black-library-books",
-              "tile_image": "https://hb.imgix.net/c646f3ddc85f8e7dd74c78a3f8ed4fec638ecf0c.png?auto=compress,format&fit=crop&h=353&w=616&s=daa41474c743c6d77f9cdba71c2984ee",
+              "product_url": "/books/witchcraft-magick-and-spirituality-books",
+              "tile_image": "https://hb.imgix.net/5100eab7289e1d59a73a7bfdd49af2af0182f01e.jpg?auto=compress,format&fit=crop&h=353&w=616&s=b5669faad79689d03708c034e195ee65",
               "high_res_tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/warhammer40000stories2021blacklibrary_bundle-product.png",
+                  "gcs": "images/humble_home/witchcraftmagickandspirituality_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -64,678 +109,8 @@
               },
               "hero_highlights": [
                 {
-                  "heading": "US$295 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$295."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "DRM-free",
-                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
-                },
-                {
-                  "heading": "Multi-format",
-                  "tooltip": "These ebooks come in PDF, MOBI, and ePub file types to support many devices."
-                }
-              ],
-              "hover_highlights": [
-                "26 books",
-                "US$295 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "Push back the forces of Chaos with Black Library ebooks like <em>Dawn of Fire Avenging Son</em>, <em>Lords of Silence</em>, and <em>Double Eagle</em>. Plus, your purchase helps support EveryLibrary!",
-              "tile_logo": "https://hb.imgix.net/ab1f776daa4e4e0da178a9f6becbe00ce63cf41e.png?auto=compress,format&h=170&w=1200&s=e48ce58722252aad617f9b2be35fdd73",
-              "tile_short_name": "Warhammer 40,000 Stories 2021 by Black Library",
-              "start_date|datetime": "2021-04-15T18:00:00",
-              "end_date|datetime": "2021-05-06T18:00:00",
-              "tile_stamp": "books",
-              "bundles_sold|decimal": 7296.0,
-              "tile_name": "Humble eBook Bundle: Warhammer 40,000 Stories 2021 by Black Library",
-              "short_marketing_blurb": "Get The Lords of Silence, Dawn of Fire: Avenging Son and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/warhammer40000stories2021blacklibrary_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "26 books",
-                "US$295 Value",
-                "Support Charity"
-              ]
-            },
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/ultimatepythonbookshelfpackt_bookbundle_logo-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "ultimatepythonbookshelfpackt_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/c89be2add9b715c9687e1b4c27533a3331bc2e10.png?auto=compress,format&fit=crop&h=600&w=1200&s=c438a57c1362ce2e21df3c7a8c36dd92",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>The Python Workshop</em>, <em>Modern Python Cookbook</em>, <em>Data Engineering with Python</em>, <em>Artificial Intelligence with Python</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/books/ultimate-python-bookshelf-packt-books",
-              "tile_image": "https://hb.imgix.net/c89be2add9b715c9687e1b4c27533a3331bc2e10.png?auto=compress,format&fit=crop&h=353&w=616&s=f7ea862dea95ce917d8bbdd45ac75321",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/ultimatepythonbookshelfpackt_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$999 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$999."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "DRM-free",
-                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
-                },
-                {
-                  "heading": "Multi-format",
-                  "tooltip": "These ebooks come in PDF, MOBI, and ePub file types to support many devices."
-                }
-              ],
-              "hover_highlights": [
-                "24 books",
-                "US$999 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "A bundle packed with Packt Python coding knowledge. Get your hands on ebooks like <em>Data Engineering with Python</em>, <em>Modern Python Cookbook</em>, and <em>Artificial Intelligence with Python</em>. Plus, your purchase helps support Doctors Without Borders & Stop AAPI Hate!",
-              "tile_logo": "https://hb.imgix.net/4eb8b7bc0579cd76a437bd01eed0a76bf92ca8f4.png?auto=compress,format&h=170&w=1200&s=038111fc13facd7f469fdb279d7c251e",
-              "tile_short_name": "The Ultimate Python Bookshelf by Packt",
-              "start_date|datetime": "2021-04-05T18:00:00",
-              "end_date|datetime": "2021-04-26T18:00:00",
-              "tile_stamp": "books",
-              "bundles_sold|decimal": 16846.0,
-              "tile_name": "Humble Book Bundle: The Ultimate Python Bookshelf by Packt",
-              "short_marketing_blurb": "Get The Python Workshop, Modern Python Cookbook and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/ultimatepythonbookshelfpackt_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "24 books",
-                "US$999 Value",
-                "Support Charity"
-              ]
-            },
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/springintovrbundle_bundle-logo-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "springintovrbundle_bundle",
-              "high_res_tile_image": "https://hb.imgix.net/7fc5d0f97a18c1d58239e50d0f256787bfe22159.png?auto=compress,format&fit=crop&h=600&w=1200&s=a9f55635765dd8416f85c9ee64479da6",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Detached</em>, <em>Sairento VR</em>, <em>Job Simulator</em>, <em>Star Trek: Bridge Crew</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/games/spring-into-vr-bundle",
-              "tile_image": "https://hb.imgix.net/7fc5d0f97a18c1d58239e50d0f256787bfe22159.png?auto=compress,format&fit=crop&h=353&w=616&s=d1c56b63326928593e35f2f803dfbcba",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/springintovrbundle_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$215 worth of awesome stuff",
-                  "tooltip": "Get games collectively valued at up to US$215."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "Redeem on Steam",
-                  "tooltip": "Pay US$1 or more for access to content on Steam."
-                }
-              ],
-              "hover_highlights": [
-                "8 games",
-                "US$215 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "Following last year\u2019s successful VR bundle, we thought we\u2019d drop even more VR enjoyment into your lap! Jump into VR games like Detached, Star Trek: Bridge Crew, Sairento VR, and Job Simulator. Plus, your purchase will support a charity of your choice!",
-              "tile_logo": "https://hb.imgix.net/4626c896af5f2d8b3058918495181e90f81af17f.png?auto=compress,format&h=170&w=1200&s=a4e8573a5b2000f15fbb43a617c60422",
-              "tile_short_name": "Spring Into VR",
-              "start_date|datetime": "2021-04-07T18:00:00",
-              "end_date|datetime": "2021-04-21T18:00:00",
-              "tile_stamp": "games",
-              "bundles_sold|decimal": 81428.0,
-              "tile_name": "Humble Spring Into VR Bundle",
-              "short_marketing_blurb": "Get Detached, Sairento VR, Job Simulator, Star Trek: Bridge Crew and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/springintovrbundle_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "8 games",
-                "US$215 Value",
-                "Support Charity"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    "books": {
-      "mosaic": [
-        {
-          "section_url_text": null,
-          "section_title": null,
-          "section_url": null,
-          "section_type": "query",
-          "layouts": [
-            "threes",
-            "threes"
-          ],
-          "products": [
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/warhammer40000stories2021blacklibrary_bookbundle_logo-product-retina.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "warhammer40000stories2021blacklibrary_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/c646f3ddc85f8e7dd74c78a3f8ed4fec638ecf0c.png?auto=compress,format&fit=crop&h=600&w=1200&s=51edcf0a3ff7e64cd63b57a7593076a0",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Double Eagle</em>, <em>The Lords of Silence</em>, <em>Dawn of Fire: Avenging Son</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/books/warhammer-40000-stories-2021-black-library-books",
-              "tile_image": "https://hb.imgix.net/c646f3ddc85f8e7dd74c78a3f8ed4fec638ecf0c.png?auto=compress,format&fit=crop&h=353&w=616&s=daa41474c743c6d77f9cdba71c2984ee",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/warhammer40000stories2021blacklibrary_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$295 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$295."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "DRM-free",
-                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
-                },
-                {
-                  "heading": "Multi-format",
-                  "tooltip": "These ebooks come in PDF, MOBI, and ePub file types to support many devices."
-                }
-              ],
-              "hover_highlights": [
-                "26 books",
-                "US$295 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "Push back the forces of Chaos with Black Library ebooks like <em>Dawn of Fire Avenging Son</em>, <em>Lords of Silence</em>, and <em>Double Eagle</em>. Plus, your purchase helps support EveryLibrary!",
-              "tile_logo": "https://hb.imgix.net/ab1f776daa4e4e0da178a9f6becbe00ce63cf41e.png?auto=compress,format&h=170&w=1200&s=e48ce58722252aad617f9b2be35fdd73",
-              "tile_short_name": "Warhammer 40,000 Stories 2021 by Black Library",
-              "start_date|datetime": "2021-04-15T18:00:00",
-              "end_date|datetime": "2021-05-06T18:00:00",
-              "tile_stamp": "books",
-              "bundles_sold|decimal": 7296.0,
-              "tile_name": "Humble eBook Bundle: Warhammer 40,000 Stories 2021 by Black Library",
-              "short_marketing_blurb": "Get The Lords of Silence, Dawn of Fire: Avenging Son and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/warhammer40000stories2021blacklibrary_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "26 books",
-                "US$295 Value",
-                "Support Charity"
-              ]
-            },
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/ultimatepythonbookshelfpackt_bookbundle_logo-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "ultimatepythonbookshelfpackt_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/c89be2add9b715c9687e1b4c27533a3331bc2e10.png?auto=compress,format&fit=crop&h=600&w=1200&s=c438a57c1362ce2e21df3c7a8c36dd92",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>The Python Workshop</em>, <em>Modern Python Cookbook</em>, <em>Data Engineering with Python</em>, <em>Artificial Intelligence with Python</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/books/ultimate-python-bookshelf-packt-books",
-              "tile_image": "https://hb.imgix.net/c89be2add9b715c9687e1b4c27533a3331bc2e10.png?auto=compress,format&fit=crop&h=353&w=616&s=f7ea862dea95ce917d8bbdd45ac75321",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/ultimatepythonbookshelfpackt_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$999 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$999."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "DRM-free",
-                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
-                },
-                {
-                  "heading": "Multi-format",
-                  "tooltip": "These ebooks come in PDF, MOBI, and ePub file types to support many devices."
-                }
-              ],
-              "hover_highlights": [
-                "24 books",
-                "US$999 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "A bundle packed with Packt Python coding knowledge. Get your hands on ebooks like <em>Data Engineering with Python</em>, <em>Modern Python Cookbook</em>, and <em>Artificial Intelligence with Python</em>. Plus, your purchase helps support Doctors Without Borders & Stop AAPI Hate!",
-              "tile_logo": "https://hb.imgix.net/4eb8b7bc0579cd76a437bd01eed0a76bf92ca8f4.png?auto=compress,format&h=170&w=1200&s=038111fc13facd7f469fdb279d7c251e",
-              "tile_short_name": "The Ultimate Python Bookshelf by Packt",
-              "start_date|datetime": "2021-04-05T18:00:00",
-              "end_date|datetime": "2021-04-26T18:00:00",
-              "tile_stamp": "books",
-              "bundles_sold|decimal": 16846.0,
-              "tile_name": "Humble Book Bundle: The Ultimate Python Bookshelf by Packt",
-              "short_marketing_blurb": "Get The Python Workshop, Modern Python Cookbook and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/ultimatepythonbookshelfpackt_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "24 books",
-                "US$999 Value",
-                "Support Charity"
-              ]
-            },
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/spring2021animeseason_bookbundle-logo-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "spring2021animeseason_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/9e5af8bcea809a46b44cf6361b9f53bc1569e91f.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=38db36b30aae931d44e5d58d77518612",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Eden's Zero Vol 1</em>, <em>Shaman King 0 Vol. 1</em>, <em>To Your Eternity Vol 1</em>, <em>The Seven Deadly Sins Vol 1-24</em>, <em>That Time I Got Reincarnated As A Slime Vol 1</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/books/spring-2021-anime-season-books",
-              "tile_image": "https://hb.imgix.net/9e5af8bcea809a46b44cf6361b9f53bc1569e91f.jpg?auto=compress,format&fit=crop&h=353&w=616&s=cce7b4efd870787aa59757ec5cffc4d4",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/spring2021animeseason_bundle-product.jpg",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$939 worth of awesome stuff",
-                  "tooltip": "Get comics collectively valued at up to US$939."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "DRM-free",
-                  "tooltip": "Download the comics onto your favorite device to enjoy anywhere, anytime."
-                },
-                {
-                  "heading": "Multi-format",
-                  "tooltip": "These comics come in CBZ, PDF, and ePub file types to support many devices."
-                }
-              ],
-              "hover_highlights": [
-                "27 comics",
-                "US$939 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "Enjoy big Kodansha manga stories in our newest bundle! Grab ebooks like <em>That Time I Got Reincarnated As A Slime Vol 1</em>, <em>Shaman King 0 Vol. 1</em>, <em>Eden's Zero Vol 1</em>, and <em>To Your Eternity Vol 1</em>. Plus, your purchase helps support Stop AAPI Hate!",
-              "tile_logo": "https://hb.imgix.net/f4306247ab413a003118fbc9d71464b9d3b6cfdc.png?auto=compress,format&h=170&w=1200&s=d2bfae5a7fea8c34d9de965e1135e342",
-              "tile_short_name": "Spring 2021 Anime Season",
-              "start_date|datetime": "2021-04-08T18:00:00",
-              "end_date|datetime": "2021-04-29T18:00:00",
-              "tile_stamp": "comics",
-              "bundles_sold|decimal": 6849.0,
-              "tile_name": "Humble Manga Bundle: Spring 2021 Anime Season",
-              "short_marketing_blurb": "Get Eden's Zero Vol 1, Shaman King 0 Vol. 1 and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/spring2021animeseason_bundle-product.jpg",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "27 comics",
-                "US$939 Value",
-                "Support Charity"
-              ]
-            },
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/newandclassicdnd_bookbundle_logo_product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "newandclassicdnd_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/dab039daad820528892c6b127f4fe9772e8f12b6.png?auto=compress,format&fit=crop&h=600&w=1200&s=f0f8c006aa5758a8d34cd22f80b9b55b",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Dragonlance Classics Vol. 1</em>, <em>Dragonlance Classics Vol. 3</em>, <em>Dragonlance Classics Vol. 2</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/books/new-and-classic-dnd-idw-books",
-              "tile_image": "https://hb.imgix.net/dab039daad820528892c6b127f4fe9772e8f12b6.png?auto=compress,format&fit=crop&h=353&w=616&s=67e959a933f9c20231f2bb76103a1b29",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/newandclassicdnd_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$332 worth of awesome stuff",
-                  "tooltip": "Get comics and ebooks collectively valued at up to US$332."
-                },
-                {
-                  "heading": "Pay US$1 or more",
-                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
-                },
-                {
-                  "heading": "DRM-free",
-                  "tooltip": "Download the comics and ebooks onto your favorite device to enjoy anywhere, anytime."
-                },
-                {
-                  "heading": "Multi-format",
-                  "tooltip": "These comics and ebooks come in multiple file types to support many devices."
-                }
-              ],
-              "hover_highlights": [
-                "32 comics",
-                "US$332 Value"
-              ],
-              "fallback_store_sale_logo": "",
-              "supports_partners": true,
-              "detailed_marketing_blurb": "We've teamed up with IDW Publishing to deliver you a feast of Dungeons & Dragons comics even a Goliath would be intimidated by! Delve into D&D comics like <em>Dungeons & Dragons: The Legend of Drizzt, Vol. 1: Homeland </em>,<em>Dungeons & Dragons: Evil at Baldur\u2019s Gate</em>, and <em>Dragonlance: The Legend of Huma</em>. Plus, your purchase helps support Hasbro Children\u2019s Fund!",
-              "tile_logo": "https://hb.imgix.net/ac41a2682842eb395d7c303607a7b5e3419ebc1d.png?auto=compress,format&h=170&w=1200&s=56f15f8c29e6212087dd41dbde2c6d89",
-              "tile_short_name": "New and Classic D&D by IDW Publishing",
-              "start_date|datetime": "2021-04-12T18:00:00",
-              "end_date|datetime": "2021-05-03T18:00:00",
-              "tile_stamp": "comics",
-              "bundles_sold|decimal": 4772.0,
-              "tile_name": "Humble Comics Bundle: New and Classic D&D by IDW Publishing",
-              "short_marketing_blurb": "Get Dragonlance Classics Vol. 1, Dragonlance Classics Vol. 3 and more!",
-              "tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/newandclassicdnd_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "type": "bundle",
-              "highlights": [
-                "Pay What You Want",
-                "32 comics",
-                "US$332 Value",
-                "Support Charity"
-              ]
-            },
-            {
-              "tile_logo_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/logos/mindfulnessandmeditationbyquarto_bookbundle_logo-product-retina.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "machine_name": "mindfulnessandmeditationbyquarto_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/e5560874f7892a1e361616046366de0c5233c1b8.png?auto=compress,format&fit=crop&h=600&w=1200&s=45636c399521c8c3dac29d05ce8a27f5",
-              "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Life Unplugged: A Digital Detox Workbook</em>, <em>Conscious Creativity: Look, Connect, Create</em>, <em>Love Poems of Rumi: Translated by Nader Khalili</em>, and more!",
-              "hover_title": "Pay What You Want",
-              "product_url": "/books/mindfulness-and-meditation-quarto-books",
-              "tile_image": "https://hb.imgix.net/e5560874f7892a1e361616046366de0c5233c1b8.png?auto=compress,format&fit=crop&h=353&w=616&s=9e4f758e9882d094358c5a1499a0b9c4",
-              "high_res_tile_image_information": {
-                "config": {
-                  "image_type": "gcs",
-                  "gcs": "images/humble_home/mindfulnessandmeditationbyquarto_bundle-product.png",
-                  "imgix": {
-                    "args": {},
-                    "master_image": {
-                      "image_type": "gcs",
-                      "gcs": "",
-                      "static": "",
-                      "imgix": {}
-                    }
-                  }
-                }
-              },
-              "hero_highlights": [
-                {
-                  "heading": "US$652 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$652."
+                  "heading": "US$393 worth of awesome stuff",
+                  "tooltip": "Get ebooks collectively valued at up to US$393."
                 },
                 {
                   "heading": "Pay US$1 or more",
@@ -751,24 +126,24 @@
                 }
               ],
               "hover_highlights": [
-                "40 books",
-                "US$652 Value"
+                "24 books",
+                "US$393 Value"
               ],
               "fallback_store_sale_logo": "",
               "supports_partners": true,
-              "detailed_marketing_blurb": "We've teamed up with Quarto to bring you a big bundle of good vibes and tranquility. Relax into ebooks like <em>Eff This! Meditation: 108 Tips, Tricks, and Ideas for When You're Feeling Anxious, Stressed Out, or Overwhelmed</em>, <em>Love Poems of Rumi</em>, <em>Best Meditations on the Planet: 100 Techniques to Beat Stress, Improve Health, and Create Happiness-In Just Minutes A Day</em>, and <em>Conscious Creativity: Look, Connect, Create</em>. Achieve a more relaxed outlook on life while your purchase helps support the Mental Health Foundation!",
-              "tile_logo": "https://hb.imgix.net/4d8da2b2648388cc71fca4b76efadc70e2569b50.png?auto=compress,format&h=170&w=1200&s=1ff8fe79afb6069e46bafa0c16772500",
-              "tile_short_name": "Mindfulness & Meditation by Quarto",
-              "start_date|datetime": "2021-04-01T18:00:00",
-              "end_date|datetime": "2021-04-22T18:00:00",
+              "detailed_marketing_blurb": "Life isn\u2019t the straightforward journey we all believe it to be. There is so much about our world, our solar system, and our universe we don\u2019t understand. There are mysteries and magic in every corner of our world, and we\u2019ve collected some of that mystical knowledge up for you to get your hands on, no travel required! Thanks to our partners at Hay House, Weiser Books, and HarperCollins, it's easier than ever to explore spirituality, magick, and elements of witchcraft with ebooks like <em>Wicca Made Easy</em>, <em>Wishcraft</em>, <em>Witchery</em>, and <em>Year Of The Witch</em>. Plus, your purchase helps support a charity of your choice!",
+              "tile_logo": "https://hb.imgix.net/8097ba40e89f7a6cd17d80eaf6658325fd82c0ce.png?auto=compress,format&h=170&w=1200&s=58799dc326bdf0d52f3c64e5ee405f22",
+              "tile_short_name": "Witchcraft, Magick, and Spirituality",
+              "start_date|datetime": "2021-09-30T18:00:00",
+              "end_date|datetime": "2021-10-21T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 4514.0,
-              "tile_name": "Humble Book Bundle: Mindfulness & Meditation by Quarto",
-              "short_marketing_blurb": "Get Life Unplugged: A Digital Detox Workbook and more!",
+              "bundles_sold|decimal": 5509.0,
+              "tile_name": "Humble Book Bundle: Witchcraft, Magick, and Spirituality",
+              "short_marketing_blurb": "There\u2019s more to life than meets the eye...",
               "tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/mindfulnessandmeditationbyquarto_bundle-product.png",
+                  "gcs": "images/humble_home/witchcraftmagickandspirituality_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -783,8 +158,8 @@
               "type": "bundle",
               "highlights": [
                 "Pay What You Want",
-                "40 books",
-                "US$652 Value",
+                "24 books",
+                "US$393 Value",
                 "Support Charity"
               ]
             },
@@ -792,7 +167,7 @@
               "tile_logo_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/logos/headfirstprogrammingoreilly_bookbundle_logo-product-retina.png",
+                  "gcs": "images/logos/voiceswarhammer2021blacklibrary_bundle-logo-product.png",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -804,17 +179,17 @@
                   }
                 }
               },
-              "machine_name": "headfirstprogrammingoreilly_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/b6bd8c1352b9d7a15c563c5e3be99d06138685a0.png?auto=compress,format&fit=crop&h=600&w=1200&s=a072243188eb08838ee33fd499bff6de",
+              "machine_name": "voiceswarhammer2021blacklibrary_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/4611d90c168ddeeb12511060a93d9d34e8ba03ff.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=0f58637935afc439b1014a2f7a563931",
               "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Head First C</em>, <em>Head First C#, 3rd Edition</em>, <em>Head First Java, 2nd Edition</em>, <em>Head First Python, 2nd Edition</em>, and more!",
+              "marketing_blurb": "Get <em>Beastgrave</em>, <em>Soul Hunter</em>, <em>Cadian Honour</em>, and more!",
               "hover_title": "Pay What You Want",
-              "product_url": "/books/head-first-programming-oreilly-books",
-              "tile_image": "https://hb.imgix.net/b6bd8c1352b9d7a15c563c5e3be99d06138685a0.png?auto=compress,format&fit=crop&h=353&w=616&s=fbba13ddc6890c7c7fc211c67c84945b",
+              "product_url": "/books/voices-warhammer-2021-black-library-books",
+              "tile_image": "https://hb.imgix.net/4611d90c168ddeeb12511060a93d9d34e8ba03ff.jpg?auto=compress,format&fit=crop&h=353&w=616&s=f690a27d32069ff0a50906b305f91fd2",
               "high_res_tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/headfirstprogrammingoreilly_bundle-product.png",
+                  "gcs": "images/humble_home/voiceswarhammer2021blacklibrary_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -828,8 +203,486 @@
               },
               "hero_highlights": [
                 {
-                  "heading": "US$772 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$772."
+                  "heading": "US$589 worth of awesome stuff",
+                  "tooltip": "Get ebooks and audiobooks collectively valued at up to US$589."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                },
+                {
+                  "heading": "DRM-free",
+                  "tooltip": "Download the ebooks and audiobooks onto your favorite device to enjoy anywhere, anytime."
+                },
+                {
+                  "heading": "Multi-format",
+                  "tooltip": "These ebooks and audiobooks come in multiple file types to support many devices."
+                }
+              ],
+              "hover_highlights": [
+                "19 books",
+                "US$589 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Age of Sigmar? 40K? Whether you\u2019re a fan of fantasy or sci-fi, Black Library is delivering a wealth of Warhammer stories right to your eardrums, with our newest bundle. Sit back, relax, and lose yourself in audiobooks and audiodramas like <em>Cadian Honour</em>, <em>Soul Hunter</em>, and much more! Plus, your purchase helps support EveryLibrary!",
+              "tile_logo": "https://hb.imgix.net/2a862f44cef91037711cd248882baa5256b7e2e9.png?auto=compress,format&h=170&w=1200&s=ace4055574ce8dffc94f094ec56eb0cb",
+              "tile_short_name": "Voices of Warhammer 2021 by Black Library",
+              "start_date|datetime": "2021-09-16T18:00:00",
+              "end_date|datetime": "2021-10-07T18:00:00",
+              "tile_stamp": "books",
+              "bundles_sold|decimal": 11230.0,
+              "tile_name": "Humble Audiobook Bundle: Voices of Warhammer 2021 by Black Library",
+              "short_marketing_blurb": "Live the Warhammer universe, one audiobook at a time",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/voiceswarhammer2021blacklibrary_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "19 books",
+                "US$589 Value",
+                "Support Charity"
+              ]
+            },
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/unityfpsgamesandgamedevassets_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "unityfpsgamesandgamedevassets_softwarebundle",
+              "high_res_tile_image": "https://hb.imgix.net/c1c38342df6a8e74009ef22d094346aa89b83042.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=8ce29496d218324e3638ec017a937f21",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get UFPS: Ultimate FPS, SCI FI CHARACTERS MEGA PACK VOL 2, Character Movement Fundamentals, Character Movement Fundamentals and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/software/unity-fps-games-and-game-dev-assets-software",
+              "tile_image": "https://hb.imgix.net/c1c38342df6a8e74009ef22d094346aa89b83042.jpg?auto=compress,format&fit=crop&h=353&w=616&s=894a8885294573b3a6ae419d1e982130",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/unityfpsgamesandgamedevassets_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$1,120 worth of awesome stuff",
+                  "tooltip": "Get software collectively valued at up to US$1,120."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                }
+              ],
+              "hover_highlights": [
+                "26 items",
+                "US$1,120 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Humble Bundle and Unity have joined forces to bring you top-notch tools and art packs for your next FPS project. Take advantage of massive savings on great assets, all while contributing to sustainable initiatives worldwide. Then, enter the<span style=\"color: #169fe3;\">&nbsp;<a style=\"color: #169fe3;\" href=\"https://play.unity.com/discover/showcases/2021-unity-x-humble-bundle-showcase\" target=\"_blank\">Unity x Humble Bundle Showcase</a></span> for a chance to share your creation on <a style=\"color: #169fe3;\"href=\"http://play.unity.com/\" target=\"_blank\">play.unity.com</a> and have it livestreamed on Twitch!",
+              "tile_logo": "https://hb.imgix.net/2ddd52ccc0a13c5c18b01dba87cb9e208f6bc7ca.png?auto=compress,format&h=170&w=1200&s=2ed16ed018d9b11415a10c7d0929733e",
+              "tile_short_name": "UNITY FPS Games and Game Dev Assets",
+              "start_date|datetime": "2021-09-16T18:00:00",
+              "end_date|datetime": "2021-10-14T18:00:00",
+              "tile_stamp": "software",
+              "bundles_sold|decimal": 26345.0,
+              "tile_name": "Humble Software Bundle: UNITY FPS Games and Game Dev Assets",
+              "short_marketing_blurb": "Call the shots.",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/unityfpsgamesandgamedevassets_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "26 items",
+                "US$1,120 Value",
+                "Support Charity"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "books": {
+      "mosaic": [
+        {
+          "section_url_text": "",
+          "section_title": {},
+          "section_url": "",
+          "section_type": "query",
+          "layouts": [
+            "threes",
+            "threes"
+          ],
+          "products": [
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/witchcraftmagickandspirituality_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "witchcraftmagickandspirituality_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/5100eab7289e1d59a73a7bfdd49af2af0182f01e.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=99b6488afcd4de1174de8b448bba9b5d",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get <em>Witchery</em>, <em>Wishcraft</em>, <em>City Magick</em>, <em>Wicca Made Easy</em>, <em>Year Of The Witch</em>, and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/books/witchcraft-magick-and-spirituality-books",
+              "tile_image": "https://hb.imgix.net/5100eab7289e1d59a73a7bfdd49af2af0182f01e.jpg?auto=compress,format&fit=crop&h=353&w=616&s=b5669faad79689d03708c034e195ee65",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/witchcraftmagickandspirituality_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$393 worth of awesome stuff",
+                  "tooltip": "Get ebooks collectively valued at up to US$393."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                },
+                {
+                  "heading": "DRM-free",
+                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
+                },
+                {
+                  "heading": "Multi-format",
+                  "tooltip": "These ebooks come in PDF and ePub file types to support many devices."
+                }
+              ],
+              "hover_highlights": [
+                "24 books",
+                "US$393 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Life isn\u2019t the straightforward journey we all believe it to be. There is so much about our world, our solar system, and our universe we don\u2019t understand. There are mysteries and magic in every corner of our world, and we\u2019ve collected some of that mystical knowledge up for you to get your hands on, no travel required! Thanks to our partners at Hay House, Weiser Books, and HarperCollins, it's easier than ever to explore spirituality, magick, and elements of witchcraft with ebooks like <em>Wicca Made Easy</em>, <em>Wishcraft</em>, <em>Witchery</em>, and <em>Year Of The Witch</em>. Plus, your purchase helps support a charity of your choice!",
+              "tile_logo": "https://hb.imgix.net/8097ba40e89f7a6cd17d80eaf6658325fd82c0ce.png?auto=compress,format&h=170&w=1200&s=58799dc326bdf0d52f3c64e5ee405f22",
+              "tile_short_name": "Witchcraft, Magick, and Spirituality",
+              "start_date|datetime": "2021-09-30T18:00:00",
+              "end_date|datetime": "2021-10-21T18:00:00",
+              "tile_stamp": "books",
+              "bundles_sold|decimal": 5509.0,
+              "tile_name": "Humble Book Bundle: Witchcraft, Magick, and Spirituality",
+              "short_marketing_blurb": "There\u2019s more to life than meets the eye...",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/witchcraftmagickandspirituality_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "24 books",
+                "US$393 Value",
+                "Support Charity"
+              ]
+            },
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/voiceswarhammer2021blacklibrary_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "voiceswarhammer2021blacklibrary_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/4611d90c168ddeeb12511060a93d9d34e8ba03ff.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=0f58637935afc439b1014a2f7a563931",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get <em>Beastgrave</em>, <em>Soul Hunter</em>, <em>Cadian Honour</em>, and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/books/voices-warhammer-2021-black-library-books",
+              "tile_image": "https://hb.imgix.net/4611d90c168ddeeb12511060a93d9d34e8ba03ff.jpg?auto=compress,format&fit=crop&h=353&w=616&s=f690a27d32069ff0a50906b305f91fd2",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/voiceswarhammer2021blacklibrary_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$589 worth of awesome stuff",
+                  "tooltip": "Get ebooks and audiobooks collectively valued at up to US$589."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                },
+                {
+                  "heading": "DRM-free",
+                  "tooltip": "Download the ebooks and audiobooks onto your favorite device to enjoy anywhere, anytime."
+                },
+                {
+                  "heading": "Multi-format",
+                  "tooltip": "These ebooks and audiobooks come in multiple file types to support many devices."
+                }
+              ],
+              "hover_highlights": [
+                "19 books",
+                "US$589 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Age of Sigmar? 40K? Whether you\u2019re a fan of fantasy or sci-fi, Black Library is delivering a wealth of Warhammer stories right to your eardrums, with our newest bundle. Sit back, relax, and lose yourself in audiobooks and audiodramas like <em>Cadian Honour</em>, <em>Soul Hunter</em>, and much more! Plus, your purchase helps support EveryLibrary!",
+              "tile_logo": "https://hb.imgix.net/2a862f44cef91037711cd248882baa5256b7e2e9.png?auto=compress,format&h=170&w=1200&s=ace4055574ce8dffc94f094ec56eb0cb",
+              "tile_short_name": "Voices of Warhammer 2021 by Black Library",
+              "start_date|datetime": "2021-09-16T18:00:00",
+              "end_date|datetime": "2021-10-07T18:00:00",
+              "tile_stamp": "books",
+              "bundles_sold|decimal": 11230.0,
+              "tile_name": "Humble Audiobook Bundle: Voices of Warhammer 2021 by Black Library",
+              "short_marketing_blurb": "Live the Warhammer universe, one audiobook at a time",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/voiceswarhammer2021blacklibrary_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "19 books",
+                "US$589 Value",
+                "Support Charity"
+              ]
+            },
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/jamesbondandbeyonddynamite_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "jamesbondandbeyonddynamite_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/dfb3aeeba38608837876a4e3650149f70f322e8a.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=d5aa64af45186bbf34041154fd37ef9d",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get <em>Control</em>, <em>Weaver Vol. 1</em>, <em>James Bond: Service</em>, and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/books/james-bond-and-beyond-dynamite-books",
+              "tile_image": "https://hb.imgix.net/dfb3aeeba38608837876a4e3650149f70f322e8a.jpg?auto=compress,format&fit=crop&h=353&w=616&s=f12cf506c9ce7fbd6848bdf7c0e1ea2e",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/jamesbondandbeyonddynamite_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$391 worth of awesome stuff",
+                  "tooltip": "Get comics collectively valued at up to US$391."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                },
+                {
+                  "heading": "DRM-free",
+                  "tooltip": "Download the comics onto your favorite device to enjoy anywhere, anytime."
+                },
+                {
+                  "heading": "Multi-format",
+                  "tooltip": "These comics come in CBZ, PDF, and ePub file types to support many devices."
+                }
+              ],
+              "hover_highlights": [
+                "29 comics",
+                "US$391 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Suave, sophisticated, and downright scary to his enemies, James Bond is 007 and one of Her Majesty\u2019s most effective agents. With No Time To Die hitting theatres, we thought there was no better time to deliver a Dynamite Comics bundle, packed with comics like <em>James Bond 007 Vol. 2</em>, <em>James Bond Vol. 1: Vargr</em>, <em>James Bond: Casino Royale</em>, and <em>James Bond: Reflections of Death</em>.   And while Bond is saving the world once again, you\u2019ll be helping to save lives, as your purchase supports Doctors Without Borders and a charity of your choice!",
+              "tile_logo": "https://hb.imgix.net/d2ca7eee1b5fa36ffc6e79623fd196f9fae7113e.png?auto=compress,format&h=170&w=1200&s=1c17965c99cdcfea2f3007980640686e",
+              "tile_short_name": "James Bond and Beyond by Dynamite",
+              "start_date|datetime": "2021-09-27T18:00:00",
+              "end_date|datetime": "2021-10-18T18:00:00",
+              "tile_stamp": "comics",
+              "bundles_sold|decimal": 2122.0,
+              "tile_name": "Humble Comic Bundle: James Bond and Beyond by Dynamite",
+              "short_marketing_blurb": "The name\u2019s Bond...",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/jamesbondandbeyonddynamite_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "29 comics",
+                "US$391 Value",
+                "Support Charity"
+              ]
+            },
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/infrastructureandopsoreilly_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "infrastructureandopsoreilly_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/698c49fff065806d838c57ff6259eaf6b85b4c93.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=9ed9c039b2b2a4f0131502b3ddea6289",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get <em>Learning Helm</em>, <em>Kubernetes Operators</em>, <em>Kubernetes Best Practices</em>, <em>Distributed Tracing in Practice</em>, <em>Distributed Systems with Node.js</em>, and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/books/infrastructure-and-ops-oreilly-books",
+              "tile_image": "https://hb.imgix.net/698c49fff065806d838c57ff6259eaf6b85b4c93.jpg?auto=compress,format&fit=crop&h=353&w=616&s=a25c89e2390cdbcaab7caa4a98dc43f1",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/infrastructureandopsoreilly_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$726 worth of awesome stuff",
+                  "tooltip": "Get ebooks collectively valued at up to US$726."
                 },
                 {
                   "heading": "Pay US$1 or more",
@@ -846,23 +699,23 @@
               ],
               "hover_highlights": [
                 "15 books",
-                "US$772 Value"
+                "US$726 Value"
               ],
               "fallback_store_sale_logo": "",
               "supports_partners": true,
-              "detailed_marketing_blurb": "Get a head-start on learning to program with O'Reilly in our newest bundle, Head First Programming by O'Reilly! Dive into ebooks like <em>Head First Java, 2nd Edition</em>, <em>Head First Python, 2nd Edition</em>, and <em>Head First C#, 3rd Edition</em>. Plus, your purchase helps support Code For America!",
-              "tile_logo": "https://hb.imgix.net/1eb3ddb0cb04c8831dc97ff477643041a3039ce2.png?auto=compress,format&h=170&w=1200&s=b2cde12a9659e22413569222540b4cf7",
-              "tile_short_name": "Head First Programming by O'Reilly",
-              "start_date|datetime": "2021-04-19T18:00:00",
-              "end_date|datetime": "2021-05-10T18:00:00",
+              "detailed_marketing_blurb": "Modern technology has changed the way we live and work. Developing systems, applications, and more is complex, but O'Reilly are showing us how to get stuff done in our newest bundle, Infrastructure and Ops by O'Reilly!   Dive into ebooks like <em>Kubernetes Operators</em>, <em>Learning Helm</em>, <em>Kubernetes Best Practices</em>, and <em>Distributed Systems with Node.js</em>, and learn how to shape our digital world to suit you, both in and out of work! Plus, your purchase helps support Code for America!",
+              "tile_logo": "https://hb.imgix.net/7a46b56dc3db25971430a7c40adaf77fa58b01e5.png?auto=compress,format&h=170&w=1200&s=99877a3ad0caba19e6c2bb3ef766b878",
+              "tile_short_name": "Infrastructure and Ops by O'Reilly",
+              "start_date|datetime": "2021-10-04T18:00:00",
+              "end_date|datetime": "2021-10-25T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 2108.0,
-              "tile_name": "Humble Book Bundle: Head First Programming by O'Reilly",
-              "short_marketing_blurb": "Get Head First C, Head First C#, 3rd Edition and more!",
+              "bundles_sold|decimal": 4774.0,
+              "tile_name": "Humble Book Bundle: Infrastructure and Ops by O'Reilly",
+              "short_marketing_blurb": "Master the modern IT environment",
               "tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/headfirstprogrammingoreilly_bundle-product.png",
+                  "gcs": "images/humble_home/infrastructureandopsoreilly_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -878,7 +731,195 @@
               "highlights": [
                 "Pay What You Want",
                 "15 books",
-                "US$772 Value",
+                "US$726 Value",
+                "Support Charity"
+              ]
+            },
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/harrypotterfilmvaultseriesinsighteditions_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "harrypotterfilmvaultseriesinsighteditions_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/758c0d039d6291d4ad1b0d99369b0a4befc1c53c.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=25702cfbe37206a1532459fe5cc8e31e",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get <em>Harry Potter: Knitting Magic</em>, <em>Harry Potter: Film Vault: Volume 6</em>, <em>Harry Potter: Film Vault: Volume 7</em>, <em>Harry Potter: Film Vault: Volume 1</em>, <em>Harry Potter: Film Vault: Volume 12</em>, and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/books/harry-potter-film-vault-series-insight-editions-books",
+              "tile_image": "https://hb.imgix.net/758c0d039d6291d4ad1b0d99369b0a4befc1c53c.jpg?auto=compress,format&fit=crop&h=353&w=616&s=01ec0a6264793ed8dd72e2b63e6a403a",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/harrypotterfilmvaultseriesinsighteditions_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$136 worth of awesome stuff",
+                  "tooltip": "Get ebooks collectively valued at up to US$136."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                },
+                {
+                  "heading": "DRM-free",
+                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
+                },
+                {
+                  "heading": "Multi-format",
+                  "tooltip": "These ebooks come in PDF and ePub file types to support many devices."
+                }
+              ],
+              "hover_highlights": [
+                "13 books",
+                "US$136 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Step beyond the limits of the silver screen and join Insight Editions in our newest bundle, a Gringott\u2019s vault filled with the complete Harry Potter Film Vault collection! Discover the makings of the movies, everything from magical creatures to props and more. 12 in-depth volumes will ensure you\u2019re the ultimate wizarding whizz, and there\u2019s even the Harry Potter: Knitting Magic book included - in case you feel like creating some memorabilia to show your house pride! Your Potterific purchase helps support NatureBridge!",
+              "tile_logo": "https://hb.imgix.net/d0efc393ed42b9b2d6388d7ba3e6c1af51e6307d.png?auto=compress,format&h=170&w=1200&s=20cec7da131c2de62b92977f7e5045c3",
+              "tile_short_name": "Harry Potter Film Vault Series by Insight Editions",
+              "start_date|datetime": "2021-09-20T18:00:00",
+              "end_date|datetime": "2021-10-11T18:00:00",
+              "tile_stamp": "books",
+              "bundles_sold|decimal": 3310.0,
+              "tile_name": "Humble Book Bundle: Harry Potter Film Vault Series by Insight Editions",
+              "short_marketing_blurb": "For the ultimate Harry Potter film fan",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/harrypotterfilmvaultseriesinsighteditions_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "13 books",
+                "US$136 Value",
+                "Support Charity"
+              ]
+            },
+            {
+              "tile_logo_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/logos/froggod5ewithphysical_bundle-logo-product.png",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "machine_name": "froggod5ewithphysical_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/322419ef9d7e901936efb9095dba263465e768bb.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=60955bbca9fb306aae8f6be1bef7df4c",
+              "disable_hero_tile": false,
+              "marketing_blurb": "Get <em>Tome of Alchemy</em>, <em>Treacherous Traps</em>, <em>the\u00a0Book of Lost Spells (2nd Printing) hardcover book</em>, and more!",
+              "hover_title": "Pay What You Want",
+              "product_url": "/books/frog-god-5e-physical-books",
+              "tile_image": "https://hb.imgix.net/322419ef9d7e901936efb9095dba263465e768bb.jpg?auto=compress,format&fit=crop&h=353&w=616&s=a4033b174f1fdf2433154642747c9d63",
+              "high_res_tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/froggod5ewithphysical_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "hero_highlights": [
+                {
+                  "heading": "US$449 worth of awesome stuff",
+                  "tooltip": "Get ebooks collectively valued at up to US$449."
+                },
+                {
+                  "heading": "Pay US$1 or more",
+                  "tooltip": "Name your price of US$1 or more and increase your contribution to upgrade your bundle."
+                },
+                {
+                  "heading": "DRM-free",
+                  "tooltip": "Download the ebooks onto your favorite device to enjoy anywhere, anytime."
+                },
+                {
+                  "heading": "PDF",
+                  "tooltip": "These ebooks come in PDF format to support many devices."
+                }
+              ],
+              "hover_highlights": [
+                "32 books",
+                "US$449 Value"
+              ],
+              "fallback_store_sale_logo": "",
+              "supports_partners": true,
+              "detailed_marketing_blurb": "Sure, you might have the original sourcebooks. And sure, you might not have finished that one-shot that was only meant to last a session or two (we\u2019ve all been there). You might even be between campaigns and looking for something new. Wherever you find yourself in your 5th Edition sessions, you\u2019ve barely scratched the surface of what you can explore or imagine! Frog God Games have joined forces with Humble to deliver a bundle of spectacular value, all with the aim of expanding your 5e universe. Within the bundle, you\u2019ll discover ebooks like <em>Book of Lost Spells (2nd Printing)</em>, <em>Tome of Alchemy</em>, <em>The Red Opera</em>, and <em>Tokens of Horror 2020</em> that add anything from new towns and places to explore to entirely new spells and monsters to face off against!  Your purchase will also help support Hospice of the Northwest and a charity of your choice!",
+              "tile_logo": "https://hb.imgix.net/ecc99722630b9bd7ef3c981e1e5ed48bf59d8240.png?auto=compress,format&h=170&w=1200&s=89ffd2fee7b9bbe101124eb5957736f0",
+              "tile_short_name": "Tomes of Lost Magic for 5th Edition by Frog God Games",
+              "start_date|datetime": "2021-09-23T18:00:00",
+              "end_date|datetime": "2021-10-14T18:00:00",
+              "tile_stamp": "books",
+              "bundles_sold|decimal": 4986.0,
+              "tile_name": "Humble RPG Book Bundle: Tomes of Lost Magic for 5th Edition by Frog God Games",
+              "short_marketing_blurb": "Expand your tabletop world, with Frog God Games!",
+              "tile_image_information": {
+                "config": {
+                  "image_type": "gcs",
+                  "gcs": "images/humble_home/froggod5ewithphysical_bundle-product.jpg",
+                  "imgix": {
+                    "args": {},
+                    "master_image": {
+                      "image_type": "gcs",
+                      "gcs": "",
+                      "static": "",
+                      "imgix": {}
+                    }
+                  }
+                }
+              },
+              "type": "bundle",
+              "highlights": [
+                "Pay What You Want",
+                "32 books",
+                "US$449 Value",
                 "Support Charity"
               ]
             }
@@ -888,49 +929,5 @@
     }
   },
   "user_max_reward_amount": 0,
-  "isEuCountry": false,
-  "ipInChina": false,
-  "baseSubscriptionPrice|money": {
-    "currency": "USD",
-    "amount": 19.99
-  },
-  "exchangeRates": {
-    "USD|decimal": 1.0,
-    "IDR|decimal": 14510.452845866224,
-    "BGN|decimal": 1.6250934773577066,
-    "ISK|decimal": 126.04902368093062,
-    "ILS|decimal": 3.262318238471126,
-    "GBP|decimal": 0.7175321977565434,
-    "DKK|decimal": 6.178977980889074,
-    "CAD|decimal": 1.249522226838388,
-    "JPY|decimal": 108.09306190278355,
-    "HUF|decimal": 299.318653926049,
-    "RON|decimal": 4.093061902783548,
-    "MYR|decimal": 4.123473203157458,
-    "SEK|decimal": 8.39094308267553,
-    "SGD|decimal": 1.33061902783548,
-    "HKD|decimal": 7.766929788117989,
-    "AUD|decimal": 1.287162442874948,
-    "CHF|decimal": 0.91383464894059,
-    "KRW|decimal": 1114.1587037806398,
-    "CNY|decimal": 6.50793518903199,
-    "TRY|decimal": 8.076277523888658,
-    "HRK|decimal": 6.291067719152472,
-    "NZD|decimal": 1.3917739925218113,
-    "THB|decimal": 31.233070211882012,
-    "EUR|decimal": 0.8309098462816784,
-    "NOK|decimal": 8.286913169921064,
-    "RUB|decimal": 76.23822185292896,
-    "INR|decimal": 74.83797257997507,
-    "MXN|decimal": 19.847112588284173,
-    "CZK|decimal": 21.523057748234315,
-    "BRL|decimal": 5.571749065226423,
-    "PLN|decimal": 3.7783963439966763,
-    "PHP|decimal": 48.378063980058165,
-    "ZAR|decimal": 14.241628583298713
-  },
-  "csrfTokenInput": "<input type='hidden' class='csrftoken' name='_le_csrf_token' value='WBjCfyIjtkXOwxy2-1-1618873744' />",
-  "debug": false,
-  "bannerOptions": null,
-  "csrfFormKey": {}
+  "csrfFormKey": "_le_csrf_token"
 }

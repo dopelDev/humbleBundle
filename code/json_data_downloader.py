@@ -2,12 +2,12 @@
 
 from bs4 import BeautifulSoup
 from json import dump, loads, load
-from threading import Thread
+from subprocess import call
 # scrappy 
 
 # obterner el json del html
-def load_data():
-    work_directory = '/home/dopel/projects/humbleBundle'
+def load_data(path : str):
+    work_directory = path 
     obj_file = open(work_directory + '/assetsNscript/assets/humbleBundle.html', mode='r')
     soup = BeautifulSoup(obj_file.read(), 'html.parser')
     data = soup.find_all('script', {'id':{'landingPage-json-data'}})
@@ -32,18 +32,22 @@ def remove_tag(ResultSet):
     return clean_text 
 
 # function para guardar el json sin tag
-def save_json(clean_text):
-    json = loads(remove_tag(data))
+def save_json(clean_text : str, path : str):
+    work_directory = path
+    json = loads(clean_text)
     obj_file = open(work_directory + '/cleanData/pretty.json', mode='w')
     dump(json, obj_file, indent=2)
 
-def load_decode_json():
-    work_directory = '/home/dopel/projects/humbleBundle'
+def load_decode_json(path : str):
+    work_directory = path 
     obj_file = open(work_directory + '/cleanData/pretty.json', mode='r')
     json_file = load(obj_file)
     obj_file.close()
     print(type(json_file))
     return json_file 
 
-def searcher(data):
+def download_html(path : str):
+    call(['python', path + '/assetsNscript/scripts/download.py']) 
 
+def searcher(data):
+    pass
