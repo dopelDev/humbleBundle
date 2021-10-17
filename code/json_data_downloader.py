@@ -53,9 +53,12 @@ def download_html(path : str):
 def cleanAssets(path : str):
     call(['python', path + '/assetsNscript/scripts/cleanAssets.py']) 
 
-def searcher(data)
+def searcher(data):
     pass
 
 # print categories
-def print_categories(json_file : dict):
+def print_categories(json_file : dict) -> list:
    return json_file.get('data').get('books').get('mosaic')[0].get('products')[0].keys()
+
+def get_products(json_file : dict) -> list:
+    return json_file.get('data').get('books').get('mosaic')[0].get('products')

@@ -15,40 +15,40 @@
   "bannerOptions": null,
   "exchangeRates": {
     "USD|decimal": 1.0,
-    "IDR|decimal": 14208.069811646794,
-    "BGN|decimal": 1.6898220148608951,
-    "ISK|decimal": 129.60082944530845,
-    "ILS|decimal": 3.2277518576118887,
-    "GBP|decimal": 0.733350613443926,
-    "DKK|decimal": 6.429237947122862,
-    "CAD|decimal": 1.2468463798168308,
-    "JPY|decimal": 112.92552272334542,
-    "HUF|decimal": 311.64679453948503,
-    "RON|decimal": 4.276222567824434,
-    "MYR|decimal": 4.170036288232245,
-    "SEK|decimal": 8.740539139450492,
-    "SGD|decimal": 1.353464662173838,
-    "HKD|decimal": 7.78028339381372,
-    "AUD|decimal": 1.3608951097287023,
-    "CHF|decimal": 0.9263867288750648,
-    "KRW|decimal": 1195.291169863487,
-    "CNY|decimal": 6.449282875410403,
-    "TRY|decimal": 8.961983756696043,
-    "HRK|decimal": 6.493433557974771,
-    "NZD|decimal": 1.44116122343183,
-    "THB|decimal": 33.864696734059095,
-    "EUR|decimal": 0.8640055296353897,
-    "NOK|decimal": 8.543286677034732,
-    "RUB|decimal": 71.68049075514084,
-    "INR|decimal": 75.45705892517712,
-    "MXN|decimal": 20.740539139450494,
-    "CZK|decimal": 21.94487644720926,
-    "BRL|decimal": 5.50535683428374,
-    "PLN|decimal": 3.9669085882149644,
-    "PHP|decimal": 50.9106618282357,
-    "ZAR|decimal": 14.956626922412303
+    "IDR|decimal": 14042.923633856231,
+    "BGN|decimal": 1.6857438372694362,
+    "ISK|decimal": 128.94328564040683,
+    "ILS|decimal": 3.2243578693328736,
+    "GBP|decimal": 0.7271849681089467,
+    "DKK|decimal": 6.412859851749698,
+    "CAD|decimal": 1.23616617824513,
+    "JPY|decimal": 114.333735562834,
+    "HUF|decimal": 310.0413721772108,
+    "RON|decimal": 4.263489053611447,
+    "MYR|decimal": 4.1579900017238405,
+    "SEK|decimal": 8.644026891915187,
+    "SGD|decimal": 1.3477848646785038,
+    "HKD|decimal": 7.779520772280641,
+    "AUD|decimal": 1.3480434407860713,
+    "CHF|decimal": 0.9247543526978107,
+    "KRW|decimal": 1181.873814859507,
+    "CNY|decimal": 6.435355973108085,
+    "TRY|decimal": 9.233925185312877,
+    "HRK|decimal": 6.473452852956386,
+    "NZD|decimal": 1.4174280296500603,
+    "THB|decimal": 33.32959834511291,
+    "EUR|decimal": 0.8619203585588692,
+    "NOK|decimal": 8.41449750043096,
+    "RUB|decimal": 71.22263402861576,
+    "INR|decimal": 74.95862782278917,
+    "MXN|decimal": 20.560420617134977,
+    "CZK|decimal": 21.895362868470954,
+    "BRL|decimal": 5.4848302016893635,
+    "PLN|decimal": 3.9341492846061024,
+    "PHP|decimal": 50.76969488019307,
+    "ZAR|decimal": 14.696086881572143
   },
-  "csrfTokenInput": "<input type='hidden' class='csrftoken' name='_le_csrf_token' value='Av-5rsEheKqQWy9K-1-1634025883' />",
+  "csrfTokenInput": "<input type='hidden' class='csrftoken' name='_le_csrf_token' value='BhTL8aka_-Xbt2kk-1-1634442460' />",
   "csrfToken": {},
   "baseSubscriptionMsrp|money": {
     "currency": "USD",
@@ -135,9 +135,9 @@
               "tile_logo": "https://hb.imgix.net/8097ba40e89f7a6cd17d80eaf6658325fd82c0ce.png?auto=compress,format&h=170&w=1200&s=58799dc326bdf0d52f3c64e5ee405f22",
               "tile_short_name": "Witchcraft, Magick, and Spirituality",
               "start_date|datetime": "2021-09-30T18:00:00",
-              "end_date|datetime": "2021-10-21T18:00:00",
+              "end_date|datetime": "2021-10-28T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 8666.0,
+              "bundles_sold|decimal": 10639.0,
               "tile_name": "Humble Book Bundle: Witchcraft, Magick, and Spirituality",
               "short_marketing_blurb": "There\u2019s more to life than meets the eye...",
               "tile_image_information": {
@@ -167,7 +167,7 @@
               "tile_logo_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/logos/unityfpsgamesandgamedevassets_bundle-logo-product.png",
+                  "gcs": "images/logos/thehuntercallwildcompletebundle_bundle-logo-product.png",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -179,17 +179,17 @@
                   }
                 }
               },
-              "machine_name": "unityfpsgamesandgamedevassets_softwarebundle",
-              "high_res_tile_image": "https://hb.imgix.net/c1c38342df6a8e74009ef22d094346aa89b83042.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=8ce29496d218324e3638ec017a937f21",
+              "machine_name": "thehuntercallwildcompletebundle_bundle",
+              "high_res_tile_image": "https://hb.imgix.net/8405a3f2419848116fe44065d10fc6198ae6c937.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=1f3b046f63af99a6d068e5d49d67cc33",
               "disable_hero_tile": false,
-              "marketing_blurb": "Get UFPS: Ultimate FPS, SCI FI CHARACTERS MEGA PACK VOL 2, Character Movement Fundamentals, Character Movement Fundamentals and more!",
+              "marketing_blurb": "Get <em>theHunter: Call of the Wild</em>, <em>theHunter: Call of the Wild - Bloodhound</em>, <em>theHunter: Call of the Wild - Rancho del Arroyo</em>, <em>theHunter: Call of the Wild - Te Awaroa National Park</em>, and more!",
               "hover_title": "Pay What You Want",
-              "product_url": "/software/unity-fps-games-and-game-dev-assets-software",
-              "tile_image": "https://hb.imgix.net/c1c38342df6a8e74009ef22d094346aa89b83042.jpg?auto=compress,format&fit=crop&h=353&w=616&s=894a8885294573b3a6ae419d1e982130",
+              "product_url": "/games/thehunter-call-wild-complete-bundle",
+              "tile_image": "https://hb.imgix.net/8405a3f2419848116fe44065d10fc6198ae6c937.jpg?auto=compress,format&fit=crop&h=353&w=616&s=26f08f08d3bce705609e69204a00edda",
               "high_res_tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/unityfpsgamesandgamedevassets_bundle-product.jpg",
+                  "gcs": "images/humble_home/thehuntercallwildcompletebundle_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -203,8 +203,8 @@
               },
               "hero_highlights": [
                 {
-                  "heading": "US$1,120 worth of awesome stuff",
-                  "tooltip": "Get software collectively valued at up to US$1,120."
+                  "heading": "US$135 worth of awesome stuff",
+                  "tooltip": "Get games collectively valued at up to US$135."
                 },
                 {
                   "heading": "Pay US$1 or more",
@@ -212,24 +212,24 @@
                 }
               ],
               "hover_highlights": [
-                "26 items",
-                "US$1,120 Value"
+                "22 games",
+                "US$135 Value"
               ],
               "fallback_store_sale_logo": "",
               "supports_partners": true,
-              "detailed_marketing_blurb": "Humble Bundle and Unity have joined forces to bring you top-notch tools and art packs for your next FPS project. Take advantage of massive savings on great assets, all while contributing to sustainable initiatives worldwide. Then, enter the<span style=\"color: #169fe3;\">&nbsp;<a style=\"color: #169fe3;\" href=\"https://play.unity.com/discover/showcases/2021-unity-x-humble-bundle-showcase\" target=\"_blank\">Unity x Humble Bundle Showcase</a></span> for a chance to share your creation on <a style=\"color: #169fe3;\"href=\"http://play.unity.com/\" target=\"_blank\">play.unity.com</a> and have it livestreamed on Twitch!",
-              "tile_logo": "https://hb.imgix.net/2ddd52ccc0a13c5c18b01dba87cb9e208f6bc7ca.png?auto=compress,format&h=170&w=1200&s=2ed16ed018d9b11415a10c7d0929733e",
-              "tile_short_name": "UNITY FPS Games and Game Dev Assets",
-              "start_date|datetime": "2021-09-16T18:00:00",
-              "end_date|datetime": "2021-10-14T18:00:00",
-              "tile_stamp": "software",
-              "bundles_sold|decimal": 28383.0,
-              "tile_name": "Humble Software Bundle: UNITY FPS Games and Game Dev Assets",
-              "short_marketing_blurb": "Call the shots.",
+              "detailed_marketing_blurb": "Prepare to experience the most realistic and immersive hunting simulator created in our newest bundle! We\u2019ve worked with Expansive Worlds to bring <em>theHunter: Call of the Wild</em>, and all its additional content, in one great package. Track your prey in <em>theHunter: Call of the Wild - Bloodhound</em>, <em>theHunter: Call of the Wild - Rancho del Arroyo</em>, <em>theHunter: Call of the Wild</em>, and <em>theHunter: Call of the Wild - Te Awaroa National Park</em>, and more. Plus, your purchase will support a charity of your choice!",
+              "tile_logo": "https://hb.imgix.net/24cd5292d684e77081689b68f90b1dcc1b86d562.png?auto=compress,format&h=170&w=1200&s=968aaa545e653531274b2da89da1eb12",
+              "tile_short_name": "theHunter: Call of the Wild Complete Bundle",
+              "start_date|datetime": "2021-10-15T18:00:00",
+              "end_date|datetime": "2021-10-29T18:00:00",
+              "tile_stamp": "games",
+              "bundles_sold|decimal": 20905.0,
+              "tile_name": "theHunter: Call of the Wild Complete Bundle",
+              "short_marketing_blurb": "The hunt is on!",
               "tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/unityfpsgamesandgamedevassets_bundle-product.jpg",
+                  "gcs": "images/humble_home/thehuntercallwildcompletebundle_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -244,8 +244,8 @@
               "type": "bundle",
               "highlights": [
                 "Pay What You Want",
-                "26 items",
-                "US$1,120 Value",
+                "22 games",
+                "US$135 Value",
                 "Support Charity"
               ]
             },
@@ -289,8 +289,8 @@
               },
               "hero_highlights": [
                 {
-                  "heading": "US$219 worth of awesome stuff",
-                  "tooltip": "Get games collectively valued at up to US$219."
+                  "heading": "US$228 worth of awesome stuff",
+                  "tooltip": "Get games collectively valued at up to US$228."
                 },
                 {
                   "heading": "Pay US$1 or more",
@@ -298,8 +298,8 @@
                 }
               ],
               "hover_highlights": [
-                "23 games",
-                "US$219 Value"
+                "25 games",
+                "US$228 Value"
               ],
               "fallback_store_sale_logo": "",
               "supports_partners": true,
@@ -309,7 +309,7 @@
               "start_date|datetime": "2021-10-08T18:00:00",
               "end_date|datetime": "2021-10-29T18:00:00",
               "tile_stamp": "games",
-              "bundles_sold|decimal": 22088.0,
+              "bundles_sold|decimal": 34682.0,
               "tile_name": "Play Pink, The Best of Asmodee Digital",
               "short_marketing_blurb": "Play Pink, Save Lives, Enjoy Asmodee Games!",
               "tile_image_information": {
@@ -330,8 +330,8 @@
               "type": "bundle",
               "highlights": [
                 "Pay What You Want",
-                "23 games",
-                "US$219 Value",
+                "25 games",
+                "US$228 Value",
                 "Support Charity"
               ]
             }
@@ -417,9 +417,9 @@
               "tile_logo": "https://hb.imgix.net/8097ba40e89f7a6cd17d80eaf6658325fd82c0ce.png?auto=compress,format&h=170&w=1200&s=58799dc326bdf0d52f3c64e5ee405f22",
               "tile_short_name": "Witchcraft, Magick, and Spirituality",
               "start_date|datetime": "2021-09-30T18:00:00",
-              "end_date|datetime": "2021-10-21T18:00:00",
+              "end_date|datetime": "2021-10-28T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 8666.0,
+              "bundles_sold|decimal": 10639.0,
               "tile_name": "Humble Book Bundle: Witchcraft, Magick, and Spirituality",
               "short_marketing_blurb": "There\u2019s more to life than meets the eye...",
               "tile_image_information": {
@@ -513,7 +513,7 @@
               "start_date|datetime": "2021-09-27T18:00:00",
               "end_date|datetime": "2021-10-18T18:00:00",
               "tile_stamp": "comics",
-              "bundles_sold|decimal": 2668.0,
+              "bundles_sold|decimal": 3186.0,
               "tile_name": "Humble Comic Bundle: James Bond and Beyond by Dynamite",
               "short_marketing_blurb": "The name\u2019s Bond...",
               "tile_image_information": {
@@ -607,7 +607,7 @@
               "start_date|datetime": "2021-10-04T18:00:00",
               "end_date|datetime": "2021-10-25T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 9578.0,
+              "bundles_sold|decimal": 12018.0,
               "tile_name": "Humble Book Bundle: Infrastructure and Ops by O'Reilly",
               "short_marketing_blurb": "Master the modern IT environment",
               "tile_image_information": {
@@ -637,7 +637,7 @@
               "tile_logo_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/logos/froggod5ewithphysical_bundle-logo-product.png",
+                  "gcs": "images/logos/homecookstoolkithearst_bundle-logo-product.png",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -649,17 +649,17 @@
                   }
                 }
               },
-              "machine_name": "froggod5ewithphysical_bookbundle",
-              "high_res_tile_image": "https://hb.imgix.net/322419ef9d7e901936efb9095dba263465e768bb.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=60955bbca9fb306aae8f6be1bef7df4c",
+              "machine_name": "homecookstoolkithearst_bookbundle",
+              "high_res_tile_image": "https://hb.imgix.net/14d42a60253d077f83f8989a2f61e78fd798bf01.jpg?auto=compress,format&fit=crop&h=600&w=1200&s=4485bedce8a1e9f102616b96c8f5fdc6",
               "disable_hero_tile": false,
-              "marketing_blurb": "Get <em>Tome of Alchemy</em>, <em>Treacherous Traps</em>, <em>the\u00a0Book of Lost Spells (2nd Printing) hardcover book</em>, and more!",
+              "marketing_blurb": "Get <em>Delish 13x9</em>, <em>Prevention Plant-Based Meals</em>, <em>Delish Air Fryer Made Easy</em>, and more!",
               "hover_title": "Pay What You Want",
-              "product_url": "/books/frog-god-5e-physical-books",
-              "tile_image": "https://hb.imgix.net/322419ef9d7e901936efb9095dba263465e768bb.jpg?auto=compress,format&fit=crop&h=353&w=616&s=a4033b174f1fdf2433154642747c9d63",
+              "product_url": "/books/home-cooks-toolkit-hearst-books",
+              "tile_image": "https://hb.imgix.net/14d42a60253d077f83f8989a2f61e78fd798bf01.jpg?auto=compress,format&fit=crop&h=353&w=616&s=6df2ee4f7d3526660770aed484951d34",
               "high_res_tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/froggod5ewithphysical_bundle-product.jpg",
+                  "gcs": "images/humble_home/homecookstoolkithearst_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -673,8 +673,8 @@
               },
               "hero_highlights": [
                 {
-                  "heading": "US$449 worth of awesome stuff",
-                  "tooltip": "Get ebooks collectively valued at up to US$449."
+                  "heading": "US$439 worth of awesome stuff",
+                  "tooltip": "Get ebooks collectively valued at up to US$439."
                 },
                 {
                   "heading": "Pay US$1 or more",
@@ -686,28 +686,28 @@
                 },
                 {
                   "heading": "PDF",
-                  "tooltip": "These ebooks come in PDF format to support many devices."
+                  "tooltip": "These ebooks come in PDF file type to support many devices."
                 }
               ],
               "hover_highlights": [
-                "32 books",
-                "US$449 Value"
+                "33 books",
+                "US$439 Value"
               ],
               "fallback_store_sale_logo": "",
               "supports_partners": true,
-              "detailed_marketing_blurb": "Sure, you might have the original sourcebooks. And sure, you might not have finished that one-shot that was only meant to last a session or two (we\u2019ve all been there). You might even be between campaigns and looking for something new. Wherever you find yourself in your 5th Edition sessions, you\u2019ve barely scratched the surface of what you can explore or imagine! Frog God Games have joined forces with Humble to deliver a bundle of spectacular value, all with the aim of expanding your 5e universe. Within the bundle, you\u2019ll discover ebooks like <em>Book of Lost Spells (2nd Printing)</em>, <em>Tome of Alchemy</em>, <em>The Red Opera</em>, and <em>Tokens of Horror 2020</em> that add anything from new towns and places to explore to entirely new spells and monsters to face off against!  Your purchase will also help support Hospice of the Northwest and a charity of your choice!",
-              "tile_logo": "https://hb.imgix.net/ecc99722630b9bd7ef3c981e1e5ed48bf59d8240.png?auto=compress,format&h=170&w=1200&s=89ffd2fee7b9bbe101124eb5957736f0",
-              "tile_short_name": "Tomes of Lost Magic for 5th Edition by Frog God Games",
-              "start_date|datetime": "2021-09-23T18:00:00",
-              "end_date|datetime": "2021-10-14T18:00:00",
+              "detailed_marketing_blurb": "Looking to refresh your recipe repertoire and get cooking advice from the pros? Our newest bundle with Hearst Specials features digital cookbooks from leading food brands like <em>Food Network Magazine</em>, <em>Good Housekeeping</em>, <em>Delish</em>, and more! Learn how to make the most of your favorite kitchen gadget with <em>Delish Easy Air Fryer</em> and <em>Good Housekeeping Sheet Pan Cooking</em>; or get inspiration for easy and delicious dinners from <em>Food Network Magazine 25-Minute Dinners</em> and <em>Quick & Simple One-Pan Meals</em>. It\u2019s never been easier for home cooks to put satisfying, crowd-pleasing meals on the table. As always, your purchase will support First Book!",
+              "tile_logo": "https://hb.imgix.net/3aa4c3ed34b14f604d2459a55429dabb3901ec49.png?auto=compress,format&h=170&w=1200&s=e6acf1fe3c17eea3e4b76cdc007c517e",
+              "tile_short_name": "The Home Cook's Toolkit by Hearst",
+              "start_date|datetime": "2021-10-14T18:00:00",
+              "end_date|datetime": "2021-11-04T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 6458.0,
-              "tile_name": "Humble RPG Book Bundle: Tomes of Lost Magic for 5th Edition by Frog God Games",
-              "short_marketing_blurb": "Expand your tabletop world, with Frog God Games!",
+              "bundles_sold|decimal": 2703.0,
+              "tile_name": "Humble Book Bundle: The Home Cook's Toolkit by Hearst",
+              "short_marketing_blurb": "Get over $400 worth of cookbooks from Food Network Magazine and more!",
               "tile_image_information": {
                 "config": {
                   "image_type": "gcs",
-                  "gcs": "images/humble_home/froggod5ewithphysical_bundle-product.jpg",
+                  "gcs": "images/humble_home/homecookstoolkithearst_bundle-product.jpg",
                   "imgix": {
                     "args": {},
                     "master_image": {
@@ -722,8 +722,8 @@
               "type": "bundle",
               "highlights": [
                 "Pay What You Want",
-                "32 books",
-                "US$449 Value",
+                "33 books",
+                "US$439 Value",
                 "Support Charity"
               ]
             },
@@ -795,7 +795,7 @@
               "start_date|datetime": "2021-10-11T18:00:00",
               "end_date|datetime": "2021-11-01T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 1872.0,
+              "bundles_sold|decimal": 4856.0,
               "tile_name": "Humble Book Bundle: The Ultimate DevOps Bundle by Packt",
               "short_marketing_blurb": "Upgrade your DevOps toolkit!",
               "tile_image_information": {
@@ -889,7 +889,7 @@
               "start_date|datetime": "2021-10-07T18:00:00",
               "end_date|datetime": "2021-10-28T18:00:00",
               "tile_stamp": "books",
-              "bundles_sold|decimal": 3183.0,
+              "bundles_sold|decimal": 4591.0,
               "tile_name": "AI & Machine Learning Toolkit",
               "short_marketing_blurb": "AI is everywhere!",
               "tile_image_information": {
