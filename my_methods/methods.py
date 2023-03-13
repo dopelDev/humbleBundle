@@ -1,9 +1,12 @@
-from requests import get
+import sys
+import json
+from requests import get, exceptions
 from bs4 import BeautifulSoup
 from json import loads
 from typing import Dict, Tuple, List
+from pandas import DataFrame, json_normalize
 
-def get_json():
+def get_json() -> Dict:
 
     """
         obtiene el tag de java_script_content 
@@ -12,8 +15,15 @@ def get_json():
     """
 
     URL = 'https://www.humbleBundle.com/books'
-    html = get(URL)
-    sopa = BeautifulSoup(html.text, 'html.parser')
+
+    try:
+        response = get(URL)
+        response.raise_for_status()
+    except exceptions.RequestException as e:
+        print(f'Error no se obtuvo respuesta 200 GET : {e}')
+        sys.exit()
+
+    sopa = BeautifulSoup(response.text, 'html.parser')
     java_script_content = sopa.find_all('script', {'id':{'landingPage-json-data'}})
     clean_data = remove_tag(java_script_content)
 
@@ -37,8 +47,7 @@ def remove_tag(java_script_content):
     return clean_text 
 
 
-def get_content(obj_json : Dict) -> Tuple[List, List]:
-    header =  obj_json.get('data').get('books').get('mosaic')[0].get('products')[0].keys()
-    content = obj_json.get('data').get('books').get('mosaic')[0].get('products')
+def get_content(object_json : Dict) -> DataFrame:
+    content = object_json.get('data').get('books').get('mosaic')[0].get('products')
 
-    return (header, content)
+    return json_normalize((content))
