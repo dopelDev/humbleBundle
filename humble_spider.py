@@ -1,5 +1,4 @@
 import sys
-import json
 from requests import get, exceptions
 from bs4 import BeautifulSoup
 from json import loads
