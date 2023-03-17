@@ -1,7 +1,6 @@
 import sys
 from requests import get, exceptions
 from bs4 import BeautifulSoup
-from json import loads
 from typing import Dict, Tuple, List
 from pandas import DataFrame, json_normalize
 

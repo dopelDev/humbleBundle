@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:lastest
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysqldb:/var/lib/mysql
+    env_file:
+      - ./devel_config_mysql.py
+    restart: always
+
+    panel:
+      image: phpmyadmin:apache
+      depends_on:
+        - db
+      env_file:
+        - ./development_config.py
+      ports:
+        - "$(PORT):80"
+      restart: always
+
+    humblescrapy:
+      build:
+        context: .
+        dockerfile: Dockerfile
+        depends_on:
+          - db
+
