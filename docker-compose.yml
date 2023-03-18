@@ -1,28 +1,36 @@
 version: "3.9"
 services:
   db:
-    image: mysql:lastest
+    image: mariadb:lastest
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - mysqldb:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     env_file:
-      - ./devel_config_mysql.py
+      - ./devel_config_mariadb.py
+    networks:
+      - red
     restart: always
 
-    panel:
-      image: phpmyadmin:apache
-      depends_on:
-        - db
+  panel:
+    image: phpmyadmin:apache
+    depends_on:
+      - db
+    env_file:
+      - ./development_config.py
+    ports:
+      - "$(PORT):80"
+    networks:
+      - red
+    restart: always
+
+  humblescrapy:
+    build:
+      context: .
+      dockerfile: Dockerfile
       env_file:
         - ./development_config.py
-      ports:
-        - "$(PORT):80"
-      restart: always
-
-    humblescrapy:
-      build:
-        context: .
-        dockerfile: Dockerfile
-        depends_on:
-          - db
-
+      depends_on:
+        - db
+networks:
+  red:
+    driver: bridge
