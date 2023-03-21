@@ -1,2 +1,3 @@
-FROM python:lastest
-COPY ./spider /usr/bin/spider
+FROM python:alpine
+WORKDIR /scripts
+COPY ./spider ./humblebundle
