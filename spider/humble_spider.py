@@ -6,12 +6,17 @@ import pandas as pd
 from json import loads
 
 """
-    obtiene el tag de java_script_content 
-    remueve el tag con remove_tag
-    retorna un Objeto json serializado
+    create a spider to get the json object from humble bundle
+    first step  get_json : get a json object
+    second step remove_tag : remove the tag from the json object
+    third step  get_content : return a pandas dataframe with the content of the json object serialized with pandas json_normalize
 """
 
 class HumbleSpider:
+
+    """
+        self.content is a raw json object
+    """
 
     def __init__(self):
         self.URL = 'https://www.humbleBundle.com/books'
@@ -47,6 +52,10 @@ class HumbleSpider:
         clean_text = dirty_text[count:-10]
         return clean_text 
 
+    """
+        return a pandas dataframe with the content of the json object
+    """
+
     def get_content(self, object_json : Dict) -> pd.DataFrame:
         content = object_json.get('data').get('books').get('mosaic')[0].get('products')
         return pd.json_normalize(content)
@@ -59,3 +68,11 @@ class HumbleSpider:
             url = urls_first_part + url
             urls.append(url)
         return urls
+
+"""
+    create a new spider and get the bundles information
+    
+    class BundleSpider(): get a list of urls and get the information of each bundle
+    def get_raw_data_bundle(self, List[str]) -> tbd
+"""
+
