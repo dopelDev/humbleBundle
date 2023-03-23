@@ -1,15 +1,34 @@
 import sys
 from requests import get, exceptions
 from bs4 import BeautifulSoup
-from typing import Dict
+from typing import Dict, NamedTuple
 import pandas as pd
 from json import loads
+from datetime import timedelta, date
+
+
+"""
+    Datatypes
+"""
+
+class Url(NamedTuple):
+    url: str
+    name: str
+class Bundle(NamedTuple):
+    name: str
+    price: float
+    description: str
+    url: str
+    books: list[str]
+    time_start: date
+    time_end: date
+    time_countdown: timedelta
 
 """
     create a spider to get the json object from humble bundle
     first step  get_json : get a json object
     second step remove_tag : remove the tag from the json object
-    third step  get_content : return a pandas dataframe with the content of the json object serialized with pandas json_normalize
+    third step get_content : return a pandas dataframe with the content of the json object serialized with pandas json_normalize
 """
 
 class HumbleSpider:
@@ -76,3 +95,27 @@ class HumbleSpider:
     def get_raw_data_bundle(self, List[str]) -> tbd
 """
 
+class BundleSpider():
+    
+        def __init__(self):
+            self.humble_spider = HumbleSpider()
+            self.urls = self.humble_spider.get_urls()
+            self.raw_data = self.get_raw_data_bundle(self.urls)
+    
+        def get_raw_data_bundle(self, urls : list) -> list:
+            raw_data = []
+            for url in urls:
+                try:
+                    response = get(url)
+                    response.raise_for_status()
+                except exceptions.RequestException as e:
+                    print(f'Error no se obtuvo respuesta 200 GET : {e}')
+                    sys.exit()
+                sopa = BeautifulSoup(response.text, 'html.parser')
+                java_script_content = sopa.find_all('script', {'id':{'landingPage-json-data'}})
+                clean_data = self.humble_spider.remove_tag(java_script_content)
+                raw_data.append(loads(clean_data))
+            return raw_data
+
+        def get_urls(self, list[str]):
+            return self.urls
