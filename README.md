@@ -1,8 +1,10 @@
 # Humble scrape
 
-#### TODO
-* **dockerizar**
-	* create a mysqldb at container
-* create a data class
-* hacer method push data
-* actualizar periodicamente el requirements.txt
+## Description:
+## Components:
+### ETL:
+Usare BeautifulSoup4 para hacer el webscrape.
+Usare Pandas para transform.
+
+### Database:
+Usare **postgres** con **SQLAlchemy** como **ORM** *Object Relational Mapping* y **Pydantic** para serializar y validar. 
