@@ -1,7 +1,7 @@
 import sys
 from requests import get, exceptions
 from bs4 import BeautifulSoup
-from typing import Dict, NamedTuple
+from typing import Dict, NamedTuple, List
 import pandas as pd
 from json import loads
 from datetime import timedelta, date
@@ -117,5 +117,5 @@ class BundleSpider():
                 raw_data.append(loads(clean_data))
             return raw_data
 
-        def get_urls(self, list[str]):
+        def get_urls(self, urls:List[str]):
             return self.urls
