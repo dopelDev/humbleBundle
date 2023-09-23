@@ -5,17 +5,14 @@ from typing import Dict
 import pandas as pd
 from json import loads
 
-"""
-    create a spider to get the json object from humble bundle
-    first step  get_json : get a json object
-    second step remove_tag : remove the tag from the json object
-    third step get_content : return a pandas dataframe with the content of the json object serialized with pandas json_normalize
-"""
 
 class HumbleSpider:
 
     """
-        self.content is a raw json object
+        create a spider to get the json object from humble bundle
+        first step  get_json : get a json object
+        second step remove_tag : remove the tag from the json object
+        third step get_content : return a pandas dataframe with the content of the json object serialized with pandas json_normalize
     """
 
     def __init__(self):
@@ -52,20 +49,17 @@ class HumbleSpider:
         clean_text = dirty_text[count:-10]
         return clean_text 
 
-    """
-        return a pandas dataframe with the content of the json object
-    """
-
     def get_content(self, object_json : Dict) -> pd.DataFrame:
-        content = object_json.get('data').get('books').get('mosaic')[0].get('products')
+        # return a pandas dataframe with the content of the json object
+        
+        try:
+            content = object_json['data']['books']['mosaic'][0]['products']
+        except KeyError as e:
+            print(f'Error no se encontro la llave : {e}')
+            sys.exit()
         return pd.json_normalize(content)
 
     def get_urls(self) -> list:
-        urls_second_part = self.content['product_url'].tolist()
         urls_first_part = 'https://www.humblebundle.com'
-        urls = []
-        for url in urls_second_part:
-            url = urls_first_part + url
-            urls.append(url)
+        urls = [urls_first_part + url for url in self.content['product_url'].tolist()]
         return urls
-
