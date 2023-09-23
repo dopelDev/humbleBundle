@@ -2,6 +2,9 @@
 
 ## Description:
 ## Components:
+### WebApp:
+- Flask
+
 ### ETL:
 - BeautifulSoup4
 - requests
