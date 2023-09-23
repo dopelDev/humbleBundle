@@ -12,3 +12,10 @@
 
 ### Database:
 Usare **postgres** con **SQLAlchemy** como **ORM** *(Object Relational Mapping)* y **Pydantic** para serializar y validar. 
+
+
+### TODO:
+**refactor**
+
+*method* remove_tag 
+    
