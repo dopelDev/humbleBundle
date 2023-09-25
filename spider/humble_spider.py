@@ -63,3 +63,6 @@ class HumbleSpider:
         urls_first_part = 'https://www.humblebundle.com'
         urls = [urls_first_part + url for url in self.content['product_url'].tolist()]
         return urls
+
+    def parser(self, url : str) -> Dict:
+        pass
