@@ -64,5 +64,10 @@ class HumbleSpider:
         urls = [urls_first_part + url for url in self.content['product_url'].tolist()]
         return urls
 
-    def parser(self, url : str) -> Dict:
+    def parser(self, content : pd.DataFrame) -> pd.DataFrame:
+        # return a pandas dataframe with the content of the json object
+        data = content.replace('', None)
+        data.dropna(axis=1, how='all', inplace=True)
+        data['start_date|datetime'] = pd.to_datetime(data['start_date|datetime'])
+        data['end_date|datetime'] = pd.to_datetime(data['end_date|datetime'])
         pass
