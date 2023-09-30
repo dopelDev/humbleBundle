@@ -58,11 +58,6 @@ class HumbleSpider:
             sys.exit()
         return pd.json_normalize(content)
 
-    def get_urls(self) -> list:
-        urls_first_part = 'https://www.humblebundle.com'
-        urls = [urls_first_part + url for url in self.content['product_url'].tolist()]
-        return urls
-
     def parser(self, content : pd.DataFrame) -> pd.DataFrame:
         # return a pandas dataframe with the content of the json object
         data = content.replace('', None)

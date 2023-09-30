@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import json
 
 Base = declarative_base()
 
@@ -40,3 +42,10 @@ class Bundle(Base):
     tile_image_information_config_gcs = Column(String)
     tile_image_information_config_imgix_master_image_image_type = Column(String)
 
+    def set_hero_highlights(self, hero_highlights):
+        self.hero_highlights = json.dumps(hero_highlights)
+
+DATABASE_URL = 'postgresql+psycopg2://postgres:postgres@192.168.18.58:5432/test'
+engine = create_engine(DATABASE_URL)
+Session = sessionmaker(bind=engine)
+session = Session()
