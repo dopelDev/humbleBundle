@@ -5,7 +5,6 @@ from typing import Dict
 import pandas as pd
 from json import loads
 
-
 class HumbleSpider:
 
     """
@@ -70,4 +69,4 @@ class HumbleSpider:
         data.dropna(axis=1, how='all', inplace=True)
         data['start_date|datetime'] = pd.to_datetime(data['start_date|datetime'])
         data['end_date|datetime'] = pd.to_datetime(data['end_date|datetime'])
-        pass
+        return data
