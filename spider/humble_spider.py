@@ -6,14 +6,12 @@ import pandas as pd
 from json import loads
 
 class HumbleSpider:
-
     """
         create a spider to get the json object from humble bundle
         first step  get_json : get a json object
         second step remove_tag : remove the tag from the json object
         third step get_content : return a pandas dataframe with the content of the json object serialized with pandas json_normalize
     """
-
     def __init__(self):
         self.URL = 'https://www.humbleBundle.com/books'
         self.json_object = self.get_json()
