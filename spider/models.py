@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Boolean, DateTime, Float, Boolean
-from sqlalchemy_utils import UUIDType
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 
@@ -8,7 +8,7 @@ Base = declarative_base()
 class Bundle(Base):
     __tablename__ = 'bundle'
 
-    id = Column(UUIDType(binary=False), primary_key=True, default=uuid4)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     machine_name = Column(String)
     high_res_tile_image = Column(String)
     disable_hero_tile = Column(Boolean)

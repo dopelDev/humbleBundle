@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
-from sqlalchemy.orm import sessionmaker
-from .settings import get_settings
-from .models import Base, Bundle
+from sqlalchemy.orm import Session
+from settings import get_settings
+from models import Base, Bundle
 
 settings = get_settings()
 
@@ -12,7 +12,7 @@ def get_session_factory(settings):
     if not database_exists(uri):
         create_database(uri)
     Base.metadata.create_all(engine)
-    session = sessionmaker(bind=engine)
+    session = Session(bind=engine)
     return session
 
 def parse_sql(data, session):
