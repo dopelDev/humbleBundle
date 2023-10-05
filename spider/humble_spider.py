@@ -3,7 +3,7 @@ from requests import get, exceptions
 from bs4 import BeautifulSoup
 from typing import Dict
 import pandas as pd
-from json import loads
+import json
 
 class HumbleSpider:
     """
@@ -28,7 +28,7 @@ class HumbleSpider:
         sopa = BeautifulSoup(response.text, 'html.parser')
         java_script_content = sopa.find_all('script', {'id':{'landingPage-json-data'}})
         clean_data = self.remove_tag(java_script_content)
-        return loads(clean_data) 
+        return json.loads(clean_data) 
 
     def remove_tag(self, java_script_content) -> str:
         dirty_text = str(java_script_content)
@@ -62,4 +62,6 @@ class HumbleSpider:
         data.dropna(axis=1, how='all', inplace=True)
         data['start_date|datetime'] = pd.to_datetime(data['start_date|datetime'])
         data['end_date|datetime'] = pd.to_datetime(data['end_date|datetime'])
+        data['hero_highlights'] = data['hero_highlights'].apply(json.dumps)
+        data['highlights'] = data['highlights'].apply(json.dumps)
         return data

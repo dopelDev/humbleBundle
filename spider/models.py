@@ -1,14 +1,14 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, create_engine
+from sqlalchemy import Column, String, Boolean, DateTime, Float, Boolean
+from sqlalchemy_utils import UUIDType
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import json
+from uuid import uuid4
 
 Base = declarative_base()
 
 class Bundle(Base):
     __tablename__ = 'bundle'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid4)
     machine_name = Column(String)
     high_res_tile_image = Column(String)
     disable_hero_tile = Column(Boolean)
@@ -42,10 +42,3 @@ class Bundle(Base):
     tile_image_information_config_gcs = Column(String)
     tile_image_information_config_imgix_master_image_image_type = Column(String)
 
-    def set_hero_highlights(self, hero_highlights):
-        self.hero_highlights = json.dumps(hero_highlights)
-
-DATABASE_URL = 'postgresql+psycopg2://postgres:postgres@192.168.18.58:5432/test'
-engine = create_engine(DATABASE_URL)
-Session = sessionmaker(bind=engine)
-session = Session()
