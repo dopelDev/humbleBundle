@@ -9,7 +9,7 @@ class Bundle(Base):
     __tablename__ = 'bundle'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    machine_name = Column(String)
+    machine_name = Column(String, unique=True)
     high_res_tile_image = Column(String)
     disable_hero_tile = Column(Boolean)
     marketing_blurb = Column(String)
