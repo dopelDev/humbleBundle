@@ -3,4 +3,5 @@ api/env/*
 =======
 env/*
 spider/__pycache__/*
+spider/exclude/*
 >>>>>>> devolpment
