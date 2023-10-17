@@ -20,3 +20,5 @@ Usare **postgres** con **SQLAlchemy** como **ORM** *(Object Relational Mapping)*
 *method* remove_tag 
     
 **add verification date with pydantic**
+
+**add logging**
