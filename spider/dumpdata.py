@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from settings import get_settings
 from models import Base, Bundle
 from datetime import datetime
+from hashlib import sha256
 
 settings = get_settings()
 
@@ -17,10 +18,12 @@ def get_session_factory(settings):
     return session
 
 def parse_sql(data, session):
-    try:
-        for _, row in data.iterrows():
-            with session:
+    for _, row in data.iterrows():
+        hash_id = generate_hashed_unique_id(row)
+        with session:
+            try:
                 bundle_instance = Bundle(
+                        hash_id = hash_id,
                         machine_name = row['machine_name'],
                         high_res_tile_image = row['high_res_tile_image'],
                         disable_hero_tile = row['disable_hero_tile'],
@@ -55,14 +58,19 @@ def parse_sql(data, session):
                         tile_image_information_config_imgix_master_image_image_type = row['tile_image_information.config.imgix.master_image.image_type']
                         )
                 session.add(bundle_instance)
-    except Exception as e:
-        session.rollback()
-        print(f'Error dump data: {e}')
-    finally:
-        session.close()
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                print(f'Error dump data: {e}')
+            finally:
+                session.close()
 
 def remove_outdated_bundles(session):
     current_time = datetime.now()
     with session:
         session.query(Bundle).filter(Bundle.end_date_datetime < current_time).delete()
         session.commit()
+
+def generate_hashed_unique_id(instance):
+    return sha256(instance.machine_name.encode('utf-8')).hexdigest()
+
