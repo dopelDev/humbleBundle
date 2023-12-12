@@ -74,3 +74,5 @@ def remove_outdated_bundles(session):
 def generate_hashed_unique_id(instance):
     return sha256(instance.machine_name.encode('utf-8')).hexdigest()
 
+def get_data(session):
+    return session.query(Bundle).all()

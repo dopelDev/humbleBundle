@@ -65,3 +65,7 @@ class HumbleSpider:
         data['hero_highlights'] = data['hero_highlights'].apply(json.dumps)
         data['highlights'] = data['highlights'].apply(json.dumps)
         return data
+
+class BundleSpider:
+    pass
+    
