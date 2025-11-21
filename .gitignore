@@ -1,6 +1,7 @@
-<<<<<<< HEAD
 api/env/*
-=======
 env/*
-spider/__pycache__/*
->>>>>>> devolpment
+**/__pycache__/
+__pycache__/
+.cursor/
+node_modules/
+*.tsbuildinfo
