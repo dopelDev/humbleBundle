@@ -1,0 +1,41 @@
+@use "@style/reset.scss";
+@use "@style/colors.scss";
+@use "@style/fonts.scss" as *;
+
+html,
+body {
+  font-family: $font-default, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+* {
+  font-family: inherit;
+}
+
+::selection {
+  background: rgba(255, 180, 87, 0.4);
+  color: var(--accent);
+}
+
+.theme-transition {
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--primary);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+

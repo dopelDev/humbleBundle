@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "monofur";
+  src: url("@assets/fonts/MonofurNerdFont-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+
+$font-default: "monofur", monospace !default;
+

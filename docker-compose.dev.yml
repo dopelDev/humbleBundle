@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  api:
+    image: python:3.11
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "pip install --quiet --upgrade pip &&
+             pip install --quiet -r requirements.txt &&
+             uvicorn api.main:app --host 0.0.0.0 --port 5002"
+    environment:
+      DB_PGUSER: postgres
+      DB_PGPASSWORD: postgres
+      DB_PGDATABASE: test
+      DB_PGHOST: postgres
+      DB_PGPORT: 5432
+    volumes:
+      - .:/app
+    ports:
+      - "5002:5002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+    driver: local
+

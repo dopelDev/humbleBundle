@@ -1,0 +1,72 @@
+@use "sass:color";
+
+// Light palette (referencias Carbon + Pollux)
+$light-purple: #844fc1;
+$light-gray: #6c7293;
+$light-green: #21bf06;
+$light-blue: #3b86d1;
+$light-deep-purple: #6929c4;
+$light-cyan: #1192e8;
+$light-teal: #005d5d;
+$light-magenta: #9f1853;
+$light-red: #fa4d56;
+
+// Dark palette (referencias Stellar Admin)
+$dark-bg-base: #181824;
+$dark-green: #38ce3c;
+$dark-pink: #ff4d6b;
+$dark-yellow: #ffde73;
+$dark-purple: #8e32e9;
+$dark-purple-soft: #844fc1;
+$dark-gray: #6c7293;
+$dark-teal: #21bf06;
+$dark-blue: #3b86d1;
+
+$bg: color.mix(#ffffff, $light-gray, $weight: 92%);
+$surface: color.mix(#ffffff, $light-blue, $weight: 88%);
+$text: color.mix(#000000, $light-teal, $weight: 20%);
+$muted: $light-gray;
+$primary: $light-cyan;
+$accent: $light-deep-purple;
+$highlight: $light-red;
+$support: $light-green;
+$info: $light-magenta;
+$border: rgba($light-teal, 0.16);
+
+$dark-bg: $dark-bg-base;
+$dark-surface: color.scale($dark-bg-base, $lightness: 6%);
+$dark-text: color.scale($dark-blue, $lightness: 70%);
+$dark-muted: color.mix($dark-gray, #ffffff, $weight: 40%);
+$dark-primary: color.scale($dark-purple, $lightness: 35%);
+$dark-accent: $dark-pink;
+$dark-highlight: $dark-yellow;
+$dark-support: $dark-green;
+$dark-info: color.scale($dark-purple-soft, $lightness: 20%);
+$dark-border: rgba($dark-blue, 0.3);
+
+:root {
+  --bg: #{$bg};
+  --surface: #{$surface};
+  --text: #{$text};
+  --muted: #{$muted};
+  --primary: #{$primary};
+  --accent: #{$accent};
+  --highlight: #{$highlight};
+  --support: #{$support};
+  --info: #{$info};
+  --border: #{$border};
+}
+
+body.dark {
+  --bg: #{$dark-surface};
+  --surface: #{$dark-bg};
+  --text: #{$dark-muted};
+  --muted: #{$dark-text};
+  --primary: #{$dark-accent};
+  --accent: #{$dark-primary};
+  --highlight: #{$dark-support};
+  --support: #{$dark-highlight};
+  --info: #{$dark-info};
+  --border: #{$dark-border};
+}
+
