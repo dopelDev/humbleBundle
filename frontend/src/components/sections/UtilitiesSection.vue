@@ -2,11 +2,13 @@
   <div class="utilities-section">
     <h2 class="section-title">Utilidades</h2>
     
+    <BundlesDataUtility />
     <LandingPageRawDataUtility />
   </div>
 </template>
 
 <script setup lang="ts">
+import BundlesDataUtility from "@/components/sections/utilities/BundlesDataUtility.vue";
 import LandingPageRawDataUtility from "@/components/sections/utilities/LandingPageRawDataUtility.vue";
 </script>
 
