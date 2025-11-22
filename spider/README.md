@@ -60,6 +60,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - **Utils** (`utils/transformers.py`): Funciones auxiliares de transformación
 
 ## Flujo general
+
 - **`cli/run_spider.py`**: punto de entrada. Carga configuración (`DB_*`), ejecuta `HumbleSpider`, elimina bundles expirados y guarda los nuevos/actualizados.
 - **`core/HumbleSpider`**: hace GET a `https://www.humblebundle.com/books`, lee el `<script id="landingPage-json-data">`, normaliza campos con pandas y Pydantic (`BundleRecord`), y para cada bundle consulta el detalle con `ImageUrlScraper`.
 - **`scrapers/ImageUrlScraper`**: descarga la página del bundle (`webpack-bundle-page-data`), extrae tiers, libros, imagen destacada y todas las URLs de imágenes encontradas en el HTML (soup + regex).
@@ -135,6 +136,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 ### Descripción de Entidades
 
 #### Bundle (Entidad Principal)
+
 - **Propósito**: Almacena todos los metadatos de un bundle de Humble Bundle
 - **Clave Primaria**: `id` (UUID generado automáticamente)
 - **Clave Única**: `machine_name` (identificador único del bundle)
@@ -147,6 +149,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
   - `verification_date`: Timestamp de cuando se verificó/actualizó el bundle
 
 #### ScrapedImageURL
+
 - **Propósito**: Almacena todas las URLs absolutas de imágenes encontradas en el HTML del bundle
 - **Clave Primaria**: `id` (UUID)
 - **Clave Foránea**: `bundle_id` → `Bundle.id` (CASCADE DELETE)
@@ -157,6 +160,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
   - `scraped_date`: Fecha de scraping (indexada)
 
 #### ImageURL
+
 - **Propósito**: Almacena URLs de imágenes específicas (featured o de libros) con su URL original y la real resuelta
 - **Clave Primaria**: `id` (UUID)
 - **Clave Foránea**: `bundle_id` → `Bundle.id` (CASCADE DELETE)
@@ -250,9 +254,11 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 ## Explicación por archivo
 
 ### CLI
+
 - `cli/run_spider.py`: script ejecutable. Orquesta el flujo completo: lee settings con `get_settings()`, instancia `HumbleSpider`, captura `HumbleSpiderError` para salir con código distinto de cero, borra bundles expirados con `remove_outdated_bundles` y persiste resultados con `persist_bundles`. Crea sesiones usando `get_session_factory`.
 
 ### Core
+
 - `core/spider.py`: clase `HumbleSpider`.
   - Constantes `URL`, `SCRIPT_ID`, listas de columnas JSON/fecha/texto.
   - `fetch_bundles()`: pipeline principal: obtiene payload, extrae productos, normaliza DataFrame, convierte a `BundleRecord`.
@@ -263,6 +269,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - `core/errors.py`: define excepciones de dominio `HumbleSpiderError` e `ImageUrlScraperError` (esta última hoy no se lanza desde `ImageUrlScraper`).
 
 ### Scrapers
+
 - `scrapers/image_scraper.py`: clase `ImageUrlScraper`.
   - `fetch_detail(product_path, machine_name)`: descarga la página de un bundle, busca el `<script id="webpack-bundle-page-data">` para leer `bundleData`, arma tiers (`_extract_price_tiers`), libros (`_extract_book_list`), msrp total, imagen destacada y guarda `raw_html`.
   - `_extract_jpg_urls_from_html_with_info()`: recorre HTML con BeautifulSoup + regex para recopilar todas las URLs de imágenes (absolutas) con metadatos de fuente (`img_tag`, `style`, `data_attr`, `json`, `regex`) y mantiene un mapeo filename→URL para resolver rutas relativas del JSON.
@@ -270,12 +277,14 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
   - Helpers: normalización de URLs relativas a absolutas, extracción de URLs desde JSON arbitrario, parseo de filename desde URL. Incluye dataclass `BundleDetail` y `ScrapedImageUrlInfo`.
 
 ### Schemas
+
 - `schemas/bundle.py`: modelo Pydantic `BundleRecord`.
   - Define todos los campos del bundle con aliases (ej. `start_date|datetime`), longitudes máximas y tipos (`HttpUrl`, `datetime`, `float`).
   - Validadores: convierten highlights a string, controlan no negativos en `bundles_sold_decimal`/`duration_days`.
   - `to_orm_payload()`: adapta el diccionario para la capa ORM (cambia `type`→`_type`, cast de URL a string).
 
 ### Base de datos
+
 - `database/models.py`: modelos SQLAlchemy.
   - `Bundle`: tabla principal con metadatos del bundle, tiers/libros en JSON, imagen destacada, HTML crudo, flags y relaciones a `ImageURL`/`ScrapedImageURL`.
   - `ScrapedImageURL`: guarda cada URL absoluta encontrada en el HTML de un bundle con info de fuente/atributo y fecha de scraping.
@@ -290,9 +299,11 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
   - `ensure_columns/ensure_image_url_table/ensure_scraped_image_url_table`: migraciones rápidas en SQL crudo para añadir columnas/tablas si faltan.
 
 ### Configuración
+
 - `config/settings.py`: clase `Settings` (pydantic-settings) con prefijo `DB_` y `.env` opcional; contiene credenciales y `sql_echo`.
 
 ### Utilidades
+
 - `utils/transformers.py`: helpers comunes.
   - `normalize_text`, `serialize_list`, `absolute_url`, `safe_float`.
   - Cálculo de `compute_duration_days` e `is_active` contra fechas UTC.
@@ -300,22 +311,28 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - `utils/__init__.py`: exporta helpers.
 
 ### Paquete raíz
+
 - `spider/__init__.py`: exporta clases/funciones principales para import fácil (`HumbleSpider`, modelos, schemas, settings, helpers de persistencia).
 
 ## Esquema de datos (PostgreSQL)
+
 - **bundle**: datos normalizados del listado + detalles (tiers, libros, imagen destacada, HTML raw, flags `is_active`/`duration_days`).
 - **scraped_image_url**: todas las URLs absolutas de imágenes encontradas en el HTML de cada bundle, con origen (`img_tag`, `style`, `data_attr`, `json`, `regex`).
 - **image_url**: URLs originales y “real paths” resueltos para imágenes destacadas y de libros, con tipo de match; se mantiene para análisis/validación posterior.
 
 ## Ejecución local
-1) Exporta variables o `.env` con `DB_USER`, `DB_PASSWORD`, `DB_DATABASE`, `DB_HOST`, `DB_PORT` (valores por defecto: postgres/postgres/test/localhost/5432).
-2) Ejecuta:
+
+1. Exporta variables o `.env` con `DB_USER`, `DB_PASSWORD`, `DB_DATABASE`, `DB_HOST`, `DB_PORT` (valores por defecto: postgres/postgres/test/localhost/5432).
+2. Ejecuta:
+
 ```bash
 python -m spider.cli.run_spider
 ```
+
 El flujo recreará tablas faltantes, borrará bundles expirados y hará upsert de los actuales.
 
 ## Consideraciones y limitaciones
+
 - Depende de la estructura actual de la página: `<script id="landingPage-json-data">` para el listado y `<script id="webpack-bundle-page-data">` en cada bundle. Cambios en el sitio pueden romper el parseo.
 - El detalle se descarga por bundle de forma secuencial; fallos de red devuelven `None` para ese bundle y se pierden `price_tiers/book_list/featured_image`.
 - Solo se persisten registros que pasan validación Pydantic (fechas válidas); bundles sin fechas válidas se descartan.
@@ -342,6 +359,7 @@ El flujo recreará tablas faltantes, borrará bundles expirados y hará upsert d
 - **Mantenimiento Automático**: Limpieza de bundles expirados y actualización de columnas faltantes
 
 ## Próximos pasos recomendados
+
 - Añadir reintentos/backoff/paralelización al fetch de detalle.
 - Incluir pruebas con fixtures de HTML/JSON reales para detectar cambios de estructura.
 - Migrar a un sistema de migraciones (Alembic) en lugar de SQL adhoc.
