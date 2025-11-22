@@ -1,7 +1,7 @@
 <template>
   <section id="contact" class="contact">
-    <h2>Contacto</h2>
-    <p>¿Tienes ideas o bugs para reportar? Escríbeme.</p>
+    <h2>{{ $t('contact.title') }}</h2>
+    <p>{{ $t('contact.description') }}</p>
     <div class="links">
       <a href="mailto:contact@dopeldev.com">contact@dopeldev.com</a>
       <a href="https://github.com/dopeldev" target="_blank" rel="noopener">

@@ -1,8 +1,8 @@
 <template>
   <div class="utility-card">
-    <h3 class="utility-title">Landing Page Raw Data</h3>
+    <h3 class="utility-title">{{ $t('rawDataUtility.title') }}</h3>
     <p class="utility-description">
-      Explora y visualiza el JSON raw de landingPage-json-data almacenado en la base de datos.
+      {{ $t('rawDataUtility.description') }}
     </p>
 
     <div v-show="error" class="error-message">
@@ -10,18 +10,18 @@
     </div>
 
     <div v-show="isListLoading" class="loading">
-      Cargando...
+      {{ $t('rawDataUtility.loading') }}
     </div>
 
     <div class="raw-data-container">
       <div class="records-section">
-        <h4>Registros almacenados</h4>
+        <h4>{{ $t('rawDataUtility.storedRecords') }}</h4>
         <button @click="loadData" class="refresh-button" :disabled="isListLoading">
-          {{ isListLoading ? "Cargando..." : "Actualizar lista" }}
+          {{ isListLoading ? $t('rawDataUtility.loading') : $t('rawDataUtility.updateList') }}
         </button>
         
         <div v-if="rawDataList.length === 0" class="empty-state">
-          No hay registros de raw data disponibles.
+          {{ $t('rawDataUtility.emptyState') }}
         </div>
         
         <div v-else class="records-list">
@@ -33,38 +33,38 @@
             <div class="record-content">
               <div class="record-header">
                 <div class="record-date-section">
-                  <span class="record-label">Fecha:</span>
+                  <span class="record-label">{{ $t('rawDataUtility.date') }}</span>
                   <span class="record-date">{{ formatDate(record.scraped_date) }}</span>
                 </div>
                 <div v-if="record.json_hash" class="record-hash-section">
-                  <span class="record-label">Hash:</span>
+                  <span class="record-label">{{ $t('rawDataUtility.hash') }}</span>
                   <span class="record-hash" :title="record.json_hash">
                     {{ record.json_hash.substring(0, 12) }}...
                   </span>
                 </div>
               </div>
               <div class="record-meta">
-                <span class="record-label">URL:</span>
+                <span class="record-label">{{ $t('rawDataUtility.url') }}</span>
                 <span class="record-source">{{ record.source_url }}</span>
               </div>
               <div v-if="record.json_version" class="record-version">
-                <span class="record-label">Versión:</span>
+                <span class="record-label">{{ $t('rawDataUtility.version') }}</span>
                 <span>{{ record.json_version }}</span>
               </div>
               <div class="record-actions">
                 <button 
                   @click.stop="openJsonInNewTab(record)" 
                   class="record-action-btn open-btn"
-                  title="Abrir JSON en nueva pestaña"
+                  :title="$t('rawDataUtility.openJsonTitle')"
                 >
-                  🔗 Abrir JSON
+                  {{ $t('rawDataUtility.openJson') }}
                 </button>
                 <button 
                   @click.stop="downloadRecordJson(record)" 
                   class="record-action-btn download-btn"
-                  title="Descargar JSON"
+                  :title="$t('rawDataUtility.downloadTitle')"
                 >
-                  ⬇ Descargar
+                  {{ $t('rawDataUtility.download') }}
                 </button>
               </div>
             </div>
@@ -74,34 +74,34 @@
 
       <div v-if="selectedRecord || isDetailLoading" class="json-section">
         <div class="json-header">
-          <h4>JSON Data</h4>
+          <h4>{{ $t('rawDataUtility.jsonData') }}</h4>
           <div class="json-actions">
-            <button @click="copyJson" class="action-button" :disabled="isDetailLoading || !selectedRecord">Copiar JSON</button>
-            <button @click="downloadJson" class="action-button" :disabled="isDetailLoading || !selectedRecord">Descargar JSON</button>
-            <span v-show="copySuccess" class="copy-feedback">Copiado</span>
+            <button @click="copyJson" class="action-button" :disabled="isDetailLoading || !selectedRecord">{{ $t('rawDataUtility.copyJson') }}</button>
+            <button @click="downloadJson" class="action-button" :disabled="isDetailLoading || !selectedRecord">{{ $t('rawDataUtility.downloadJson') }}</button>
+            <span v-show="copySuccess" class="copy-feedback">{{ $t('rawDataUtility.copied') }}</span>
           </div>
         </div>
-        <div v-show="isDetailLoading" class="detail-loading">Cargando detalle...</div>
+        <div v-show="isDetailLoading" class="detail-loading">{{ $t('rawDataUtility.loadingDetail') }}</div>
         <div v-if="selectedRecord">
           <div class="json-meta">
             <div class="meta-item">
-              <strong>Fecha:</strong> {{ formatDate(selectedRecord.scraped_date) }}
+              <strong>{{ $t('rawDataUtility.date') }}</strong> {{ formatDate(selectedRecord.scraped_date) }}
             </div>
             <div class="meta-item">
-              <strong>URL:</strong> {{ selectedRecord.source_url }}
+              <strong>{{ $t('rawDataUtility.url') }}</strong> {{ selectedRecord.source_url }}
             </div>
             <div v-if="selectedRecord.json_hash" class="meta-item">
-              <strong>Hash:</strong> {{ selectedRecord.json_hash }}
+              <strong>{{ $t('rawDataUtility.hash') }}</strong> {{ selectedRecord.json_hash }}
             </div>
             <div class="meta-item">
-              <strong>Tamaño:</strong> {{ formatJsonSize(formattedJson) }}
+              <strong>{{ $t('rawDataUtility.size') }}</strong> {{ formatJsonSize(formattedJson) }}
             </div>
           </div>
           <div class="json-viewer">
             <pre class="json-content"><code>{{ formattedJson }}</code></pre>
           </div>
         </div>
-        <div v-else class="detail-loading">Selecciona un registro para ver el detalle.</div>
+        <div v-else class="detail-loading">{{ $t('rawDataUtility.selectRecord') }}</div>
       </div>
     </div>
 
@@ -110,8 +110,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRawData } from "@/composables/useRawData";
 import type { LandingPageRawData } from "@/types/rawData";
+
+const { locale } = useI18n();
 
 const {
   rawDataList,
@@ -134,7 +137,8 @@ const formattedJson = computed(() => {
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
-  return date.toLocaleString("es-ES", {
+  const dateLocale = locale.value === 'es' ? 'es-ES' : 'en-US';
+  return date.toLocaleString(dateLocale, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",

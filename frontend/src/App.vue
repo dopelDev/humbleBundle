@@ -1,36 +1,33 @@
 <template>
   <div class="app-shell">
     <DarkButton />
+    <LanguageSwitcher />
     
     <section class="intro">
       <ProfileCard />
       <div class="status-card">
-        <p class="eyebrow">Humble ETL</p>
-        <h1>Explora los bundles de libros en tiempo real.</h1>
-        <p>
-          Este frontend reutiliza la estética de <strong>simpleAbout</strong> y se
-          conecta al backend FastAPI que normaliza los bundles públicos de Humble
-          Bundle.
-        </p>
+        <p class="eyebrow">{{ $t('app.eyebrow') }}</p>
+        <h1>{{ $t('app.title') }}</h1>
+        <p v-html="$t('app.description')"></p>
         <div class="stats" v-show="!loading">
-          <span><strong>{{ bundles.length }}</strong> bundles totales</span>
-          <span><strong>{{ activeBundles.length }}</strong> activos</span>
+          <span><strong>{{ bundles.length }}</strong> {{ $t('app.stats.totalBundles') }}</span>
+          <span><strong>{{ activeBundles.length }}</strong> {{ $t('app.stats.active') }}</span>
         </div>
         <div class="last-update" v-show="lastUpdate">
-          <span>Última actualización: {{ formatDate(lastUpdate) }}</span>
+          <span>{{ $t('app.lastUpdate') }} {{ formatDate(lastUpdate) }}</span>
         </div>
         <button class="refresh" @click="runETL" :disabled="loading">
-          {{ loading ? "Actualizando..." : "Actualizar datos" }}
+          {{ loading ? $t('app.buttons.updating') : $t('app.buttons.updateData') }}
         </button>
         <p v-show="error" class="error">{{ error }}</p>
         
         <div v-if="etlResult" class="etl-result">
-          <h4>Resultado de actualización:</h4>
+          <h4>{{ $t('app.etlResult.title') }}</h4>
           <ul>
-            <li><strong>{{ etlResult.bundles_processed }}</strong> bundles procesados</li>
-            <li><strong>{{ etlResult.images_downloaded }}</strong> imágenes descargadas</li>
-            <li><strong>{{ etlResult.bundle_images_downloaded }}</strong> imágenes de bundles</li>
-            <li><strong>{{ etlResult.book_images_downloaded }}</strong> imágenes de libros</li>
+            <li><strong>{{ etlResult.bundles_processed }}</strong> {{ $t('app.etlResult.bundlesProcessed') }}</li>
+            <li><strong>{{ etlResult.images_downloaded }}</strong> {{ $t('app.etlResult.imagesDownloaded') }}</li>
+            <li><strong>{{ etlResult.bundle_images_downloaded }}</strong> {{ $t('app.etlResult.bundleImagesDownloaded') }}</li>
+            <li><strong>{{ etlResult.book_images_downloaded }}</strong> {{ $t('app.etlResult.bookImagesDownloaded') }}</li>
           </ul>
         </div>
       </div>
@@ -43,14 +40,14 @@
           :class="{ active: activeTab === 'bundles' }"
           @click="activeTab = 'bundles'"
         >
-          Bundles Activos
+          {{ $t('app.tabs.activeBundles') }}
         </button>
         <button
           class="tab-button"
           :class="{ active: activeTab === 'tests' }"
           @click="activeTab = 'tests'"
         >
-          Tests y Utilidades
+          {{ $t('app.tabs.testsAndUtilities') }}
         </button>
       </div>
 
@@ -73,7 +70,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import DarkButton from "@components/header/components/DarkButton.vue";
+import LanguageSwitcher from "@components/header/components/LanguageSwitcher.vue";
 import ProfileCard from "@components/cards/ProfileCard.vue";
 import DesktopMain from "@components/main/DesktopMain.vue";
 import MobileMain from "@components/main/MobileMain.vue";
@@ -84,6 +83,7 @@ import UtilitiesSection from "@components/sections/UtilitiesSection.vue";
 import { useResponsiveQueryEvent } from "@composables/useResponsiveQueryEvent";
 import { useBundles } from "@composables/useBundles";
 
+const { locale } = useI18n();
 const { isMobile } = useResponsiveQueryEvent();
 const { bundles, featured, activeBundles, loading, error, lastUpdate, etlResult, refresh, runETL } =
   useBundles();
@@ -91,7 +91,8 @@ const { bundles, featured, activeBundles, loading, error, lastUpdate, etlResult,
 const activeTab = ref<'bundles' | 'tests'>('bundles');
 
 const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('es-ES', {
+  const dateLocale = locale.value === 'es' ? 'es-ES' : 'en-US';
+  return new Intl.DateTimeFormat(dateLocale, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

@@ -1,8 +1,8 @@
 <template>
   <div class="utility-card">
-    <h3 class="utility-title">Bundles Procesados</h3>
+    <h3 class="utility-title">{{ $t('bundlesUtility.title') }}</h3>
     <p class="utility-description">
-      Explora y visualiza los bundles procesados y almacenados en la base de datos.
+      {{ $t('bundlesUtility.description') }}
     </p>
 
     <div v-show="error" class="error-message">
@@ -10,7 +10,7 @@
     </div>
 
     <div v-show="loading" class="loading">
-      Cargando bundles...
+      {{ $t('bundlesUtility.loading') }}
     </div>
 
     <div v-if="!loading && !error" class="bundles-container">
@@ -18,37 +18,37 @@
       <div class="stats-section">
         <div class="stat-card">
           <div class="stat-value">{{ bundles.length }}</div>
-          <div class="stat-label">Total Bundles</div>
+          <div class="stat-label">{{ $t('bundlesUtility.stats.totalBundles') }}</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">{{ activeBundles.length }}</div>
-          <div class="stat-label">Activos</div>
+          <div class="stat-label">{{ $t('bundlesUtility.stats.active') }}</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">{{ inactiveBundles.length }}</div>
-          <div class="stat-label">Inactivos</div>
+          <div class="stat-label">{{ $t('bundlesUtility.stats.inactive') }}</div>
         </div>
       </div>
 
       <!-- Filtros -->
       <div class="filters-section">
         <div class="filter-group">
-          <label class="filter-label">Estado:</label>
+          <label class="filter-label">{{ $t('bundlesUtility.filters.status') }}</label>
           <select v-model="statusFilter" class="filter-select">
-            <option value="all">Todos</option>
-            <option value="active">Activos</option>
-            <option value="inactive">Inactivos</option>
+            <option value="all">{{ $t('bundlesUtility.filters.all') }}</option>
+            <option value="active">{{ $t('bundlesUtility.filters.active') }}</option>
+            <option value="inactive">{{ $t('bundlesUtility.filters.inactive') }}</option>
           </select>
         </div>
         <button @click="loadData" class="refresh-button" :disabled="loading">
-          {{ loading ? "Cargando..." : "Actualizar" }}
+          {{ loading ? $t('bundlesUtility.buttons.loading') : $t('bundlesUtility.buttons.update') }}
         </button>
       </div>
 
       <!-- Lista de bundles -->
       <div class="bundles-list">
         <div v-if="filteredBundles.length === 0" class="empty-state">
-          No hay bundles que coincidan con los filtros seleccionados.
+          {{ $t('bundlesUtility.emptyState') }}
         </div>
         
         <div
@@ -64,10 +64,10 @@
               </h4>
               <div class="bundle-meta">
                 <span v-if="bundle.is_active" class="bundle-status active">
-                  ✓ Activo
+                  {{ $t('bundlesUtility.bundle.active') }}
                 </span>
                 <span v-else class="bundle-status inactive">
-                  ⊗ Inactivo
+                  {{ $t('bundlesUtility.bundle.inactive') }}
                 </span>
                 <span v-if="bundle.verification_date" class="bundle-date">
                   📅 {{ formatDate(bundle.verification_date) }}
@@ -82,31 +82,31 @@
           <div v-show="expandedBundles === bundle.id" class="bundle-details">
             <div class="details-grid">
               <div class="detail-item">
-                <strong>ID:</strong> {{ bundle.id }}
+                <strong>{{ $t('bundlesUtility.bundle.id') }}</strong> {{ bundle.id }}
               </div>
               <div class="detail-item">
-                <strong>Machine Name:</strong> {{ bundle.machine_name }}
+                <strong>{{ $t('bundlesUtility.bundle.machineName') }}</strong> {{ bundle.machine_name }}
               </div>
               <div v-if="bundle.product_url" class="detail-item">
-                <strong>URL:</strong>
+                <strong>{{ $t('bundlesUtility.bundle.url') }}</strong>
                 <a :href="bundle.product_url" target="_blank" rel="noopener">
                   {{ bundle.product_url }}
                 </a>
               </div>
               <div v-if="bundle.start_date_datetime" class="detail-item">
-                <strong>Inicio:</strong> {{ formatDate(bundle.start_date_datetime) }}
+                <strong>{{ $t('bundlesUtility.bundle.start') }}</strong> {{ formatDate(bundle.start_date_datetime) }}
               </div>
               <div v-if="bundle.end_date_datetime" class="detail-item">
-                <strong>Fin:</strong> {{ formatDate(bundle.end_date_datetime) }}
+                <strong>{{ $t('bundlesUtility.bundle.end') }}</strong> {{ formatDate(bundle.end_date_datetime) }}
               </div>
               <div v-if="bundle.duration_days" class="detail-item">
-                <strong>Duración:</strong> {{ bundle.duration_days }} días
+                <strong>{{ $t('bundlesUtility.bundle.duration') }}</strong> {{ bundle.duration_days }} {{ $t('bundlesUtility.bundle.days') }}
               </div>
               <div v-if="bundle.msrp_total" class="detail-item">
-                <strong>MSRP Total:</strong> ${{ bundle.msrp_total.toFixed(2) }}
+                <strong>{{ $t('bundlesUtility.bundle.msrpTotal') }}</strong> ${{ bundle.msrp_total.toFixed(2) }}
               </div>
               <div v-if="bundle.price_tiers && bundle.price_tiers.length > 0" class="detail-item full-width">
-                <strong>Precios:</strong>
+                <strong>{{ $t('bundlesUtility.bundle.prices') }}</strong>
                 <div class="price-tiers">
                   <div
                     v-for="(tier, idx) in bundle.price_tiers"
@@ -121,7 +121,7 @@
                 </div>
               </div>
               <div v-if="bundle.book_list && bundle.book_list.length > 0" class="detail-item full-width">
-                <strong>Libros ({{ bundle.book_list.length }}):</strong>
+                <strong>{{ $t('bundlesUtility.bundle.books') }} ({{ bundle.book_list.length }}):</strong>
                 <div 
                   class="books-preview"
                   :class="{ expanded: expandedBooks.has(bundle.id) }"
@@ -138,13 +138,13 @@
                     v-if="bundle.book_list.length > 5 && !expandedBooks.has(bundle.id)" 
                     class="more-books clickable"
                   >
-                    +{{ bundle.book_list.length - 5 }} más (click para expandir)
+                    +{{ bundle.book_list.length - 5 }} {{ $t('bundlesUtility.bundle.moreBooks') }}
                   </div>
                   <div 
                     v-if="expandedBooks.has(bundle.id) && bundle.book_list.length > 5" 
                     class="more-books clickable"
                   >
-                    (click para colapsar)
+                    {{ $t('bundlesUtility.bundle.collapseBooks') }}
                   </div>
                 </div>
               </div>
@@ -154,13 +154,13 @@
                 @click.stop="viewBundleJson(bundle)"
                 class="action-btn view-btn"
               >
-                🔍 Ver JSON
+                {{ $t('bundlesUtility.bundle.viewJson') }}
               </button>
               <button
                 @click.stop="downloadBundleJson(bundle)"
                 class="action-btn download-btn"
               >
-                ⬇ Descargar JSON
+                {{ $t('bundlesUtility.bundle.downloadJson') }}
               </button>
             </div>
           </div>
@@ -172,8 +172,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import { useBundles } from "@/composables/useBundles";
 import type { Bundle } from "@/types/bundle";
+
+const { locale } = useI18n();
 
 const { bundles, loading, error, refresh } = useBundles();
 
@@ -212,7 +215,8 @@ const filteredBundles = computed(() => {
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
-  return date.toLocaleString("es-ES", {
+  const dateLocale = locale.value === 'es' ? 'es-ES' : 'en-US';
+  return date.toLocaleString(dateLocale, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",

@@ -2,7 +2,7 @@
   <article class="bundle-card" :id="`bundle-${bundle.id}`" @click="openModal">
     <h3>{{ bundle.tile_short_name ?? bundle.tile_name }}</h3>
     <p class="meta">
-      {{ bundle.category }} • Termina {{
+      {{ bundle.category }} • {{ $t('bundleCard.ends') }} {{
         formatDate(bundle.end_date_datetime)
       }}
     </p>
@@ -13,7 +13,7 @@
       </span>
     </div>
     <a class="link" :href="bundle.product_url" target="_blank" rel="noopener" @click.stop>
-      Ver bundle →
+      {{ $t('bundleCard.viewBundle') }}
     </a>
   </article>
 
@@ -28,11 +28,13 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { Bundle } from "@/types/bundle";
 import BookModal from "./BookModal.vue";
 
 defineProps<{ bundle: Bundle }>();
 
+const { locale } = useI18n();
 const showModal = ref(false);
 
 const openModal = () => {
@@ -45,7 +47,8 @@ const closeModal = () => {
 
 const formatDate = (value?: string) => {
   if (!value) return "—";
-  return new Date(value).toLocaleDateString("es-PE", {
+  const dateLocale = locale.value === 'es' ? 'es-PE' : 'en-US';
+  return new Date(value).toLocaleDateString(dateLocale, {
     month: "short",
     day: "numeric"
   });

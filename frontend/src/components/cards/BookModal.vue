@@ -3,7 +3,7 @@
     <div class="modal-content" @click.stop>
       <div class="modal-header">
         <h2>{{ bundle.tile_short_name ?? bundle.tile_name }}</h2>
-        <button class="close-btn" @click="$emit('close')" aria-label="Cerrar">
+        <button class="close-btn" @click="$emit('close')" :aria-label="$t('bookModal.close')">
           ×
         </button>
       </div>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div v-else class="no-books">
-          <p>No hay libros disponibles para este bundle.</p>
+          <p>{{ $t('bookModal.noBooks') }}</p>
         </div>
       </div>
 
@@ -60,7 +60,7 @@
           target="_blank"
           rel="noopener"
         >
-          Ver bundle en Humble →
+          {{ $t('bookModal.viewBundle') }}
         </a>
       </div>
     </div>

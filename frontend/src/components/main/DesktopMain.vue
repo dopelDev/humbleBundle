@@ -3,7 +3,7 @@
     <FeaturedBundle :bundle="featured" />
 
     <section id="bundles" class="grid">
-      <h2>Bundles activos</h2>
+      <h2>{{ $t('main.activeBundles') }}</h2>
       <div class="grid-list">
         <BundleCard v-for="bundle in bundles" :key="bundle.id" :bundle="bundle" />
       </div>

@@ -1,22 +1,22 @@
 # Humble Scrape
 
-Pipeline ETL + API + frontend para obtener los bundles públicos de [Humble Bundle Books](https://www.humblebundle.com/books), normalizarlos y almacenarlos en PostgreSQL.
+ETL pipeline + API + frontend to fetch public bundles from [Humble Bundle Books](https://www.humblebundle.com/books), normalize them and store them in PostgreSQL.
 
-## Stack principal
-- Python 3.13 (recomendado 3.12+)
-- BeautifulSoup4 + Requests para scraping
-- Pandas + Pydantic + Pydantic Settings para normalización y configuración
+## Main Stack
+- Python 3.13 (3.12+ recommended)
+- BeautifulSoup4 + Requests for scraping
+- Pandas + Pydantic + Pydantic Settings for normalization and configuration
 - SQLAlchemy 2 + PostgreSQL/asyncpg
-- FastAPI + Uvicorn para la API
-- Vue 3 + Vite + TypeScript para la interfaz
+- FastAPI + Uvicorn for the API
+- Vue 3 + Vite + TypeScript for the interface
 
-## Requisitos
-1. PostgreSQL accesible (`postgres:postgres@localhost:5432/test` por defecto).
-2. Python 3.12 o 3.13 con `venv` y `pip` actualizado.
-3. Node.js 20+ (para el frontend).
-4. (Opcional) Docker + Docker Compose para levantar Postgres + API.
+## Requirements
+1. Accessible PostgreSQL (`postgres:postgres@localhost:5432/test` by default).
+2. Python 3.12 or 3.13 with `venv` and updated `pip`.
+3. Node.js 20+ (for the frontend).
+4. (Optional) Docker + Docker Compose to run Postgres + API.
 
-## Configuración backend
+## Backend Setup
 ```bash
 git clone <repo>
 cd humbleBundle
@@ -25,7 +25,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Variables de entorno (.env)
+### Environment Variables (.env)
 ```env
 DB_PGUSER=postgres
 DB_PGPASSWORD=postgres
@@ -35,86 +35,86 @@ DB_PGPORT=5432
 DB_SQL_ECHO=false
 ```
 
-## Makefile rápido
-- `make etl` – Ejecutar el pipeline ETL (usa `python -m spider.cli.run_spider`).
-- `make api` – Levantar FastAPI con Uvicorn usando el entorno virtual.
-- `make compose-up` / `make compose-down` – Levantar o apagar los servicios declarados en `docker-compose.dev.yml`.
-- `make recreate-db` – Dropear y recrear todas las tablas.
-- `make recreate-volumes` – Borrar volúmenes Docker (`pgdata`, `images`).
-- `make clean-network` – Limpiar redes huérfanas creadas por Compose.
+## Quick Makefile
+- `make etl` – Run the ETL pipeline (uses `python -m spider.cli.run_spider`).
+- `make api` – Start FastAPI with Uvicorn using the virtual environment.
+- `make compose-up` / `make compose-down` – Start or stop services declared in `docker-compose.dev.yml`.
+- `make recreate-db` – Drop and recreate all tables.
+- `make recreate-volumes` – Delete Docker volumes (`pgdata`, `images`).
+- `make clean-network` – Clean orphaned networks created by Compose.
 
-## Ejecutar el ETL por CLI
+## Run ETL via CLI
 ```bash
 source .venv/bin/activate
 python -m spider.cli.run_spider
-# o
+# or
 make etl
 ```
-El comando:
-1. Obtiene el JSON embebido en la landing de Humble Bundle.
-2. Normaliza los productos con Pandas, enriquece cada bundle con detalle individual (tiers de precio, lista de libros, MSRP, featured image) y valida con Pydantic.
-3. Elimina bundles expirados y hace `upserts` en la tabla `bundle`, registrando también las URLs de imágenes encontradas.
+The command:
+1. Fetches the JSON embedded in Humble Bundle's landing page.
+2. Normalizes products with Pandas, enriches each bundle with individual details (price tiers, book list, MSRP, featured image) and validates with Pydantic.
+3. Removes expired bundles and performs `upserts` in the `bundle` table, also recording the image URLs found.
 
-## API FastAPI
+## FastAPI API
 ```bash
 source .venv/bin/activate
 uvicorn api.main:app --reload
-# o
+# or
 make api
 ```
-Endpoints clave:
-- `GET /health`: estado del servicio.
-- `GET /bundles`: listado completo ordenado por fecha de cierre.
-- `GET /bundles/{bundle_id}`: detalle por UUID.
-- `GET /bundles/by-machine-name/{machine_name}`: retrocompatibilidad por `machine_name`.
-- `GET /bundles/featured`: bundle destacado según MSRP total y ventas.
-- `POST /etl/run`: dispara el spider, elimina bundles expirados y persiste el resultado.
+Key endpoints:
+- `GET /health`: service status.
+- `GET /bundles`: complete list ordered by closing date.
+- `GET /bundles/{bundle_id}`: details by UUID.
+- `GET /bundles/by-machine-name/{machine_name}`: backward compatibility by `machine_name`.
+- `GET /bundles/featured`: featured bundle according to total MSRP and sales.
+- `POST /etl/run`: triggers the spider, removes expired bundles and persists the result.
 
-La API monta `/images` para servir archivos estáticos desde `images/bundles` e `images/books`, útil al desplegar con Docker.
+The API mounts `/images` to serve static files from `images/bundles` and `images/books`, useful when deploying with Docker.
 
 ## Docker Compose (dev)
-`docker-compose.dev.yml` incluye:
-- PostgreSQL 16 + volumen `pgdata`.
-- Servicio `api` basado en `python:3.11` que instala `requirements.txt` y expone FastAPI en `0.0.0.0:5002`.
+`docker-compose.dev.yml` includes:
+- PostgreSQL 16 + `pgdata` volume.
+- `api` service based on `python:3.11` that installs `requirements.txt` and exposes FastAPI on `0.0.0.0:5002`.
 
 ```bash
 docker compose -f docker-compose.dev.yml up -d
-# o
+# or
 make compose-up
 ```
 
 ## Frontend (Vue + Vite)
-La carpeta `frontend/` contiene una SPA que replica el look & feel del sitio original y consume la API.
+The `frontend/` folder contains a SPA that replicates the original site's look & feel and consumes the API.
 ```bash
 cd frontend
 npm install
 npm run dev # http://localhost:3002
 ```
-Variables disponibles:
+Available variables:
 ```bash
 VITE_API_BASE_URL=http://127.0.0.1:5002
 ```
-Consulta `frontend/README.md` para scripts (`build`, `preview`), temas claro/oscuro y estructura de componentes.
+See `frontend/README.md` for scripts (`build`, `preview`), light/dark themes and component structure.
 
-## Arquitectura del repositorio
-- `spider/`: módulo ETL.
-  - `core/`: clase `HumbleSpider` y excepciones custom.
-  - `scrapers/`: obtiene detalles de cada bundle (tiers, libros, imágenes).
-  - `database/`: modelo SQLAlchemy `Bundle`, sesiones y helpers de persistencia (`persist_bundles`, `remove_outdated_bundles`, `recreate_database`).
-  - `schemas/`: modelos Pydantic (`BundleRecord`).
-  - `utils/`: transformaciones (normalización de texto, URLs absolutas, métricas).
-  - `config/`: settings basados en Pydantic Settings.
+## Repository Architecture
+- `spider/`: ETL module.
+  - `core/`: `HumbleSpider` class and custom exceptions.
+  - `scrapers/`: fetches details for each bundle (tiers, books, images).
+  - `database/`: SQLAlchemy `Bundle` model, sessions and persistence helpers (`persist_bundles`, `remove_outdated_bundles`, `recreate_database`).
+  - `schemas/`: Pydantic models (`BundleRecord`).
+  - `utils/`: transformations (text normalization, absolute URLs, metrics).
+  - `config/`: settings based on Pydantic Settings.
   - `cli/`: entrypoint `run_spider.py`.
-- `api/`: FastAPI con dependencias sync/async, schemas de respuesta y montaje de `/images`.
-- `scripts/`: utilidades CLI como `recreate_db.py`.
-- `frontend/`: SPA en Vue 3 + Vite (componentes responsive, composables, tipografías custom).
-- `docs/`: notas técnicas (`data_profile.md`, `frontend-style-stack.md`, `image-urls-pattern.md`).
-- `images/`: buckets locales (`images/bundles`, `images/books`) que también se montan como volumen en Docker.
-- `Makefile` y `docker-compose.dev.yml`: automatizaciones principales para desarrollo.
+- `api/`: FastAPI with sync/async dependencies, response schemas and `/images` mounting.
+- `scripts/`: CLI utilities like `recreate_db.py`.
+- `frontend/`: SPA in Vue 3 + Vite (responsive components, composables, custom typography).
+- `docs/`: technical notes (`data_profile.md`, `frontend-style-stack.md`, `image-urls-pattern.md`).
+- `images/`: local buckets (`images/bundles`, `images/books`) that are also mounted as volumes in Docker.
+- `Makefile` and `docker-compose.dev.yml`: main development automations.
 
-## Próximos pasos sugeridos
-- Añadir pruebas unitarias/integración para spider, persistencia y API.
-- Extender la cobertura del frontend (tests de componentes y composables).
-- Automatizar ejecuciones periódicas del ETL (cron, Celery o similar) y añadir autenticación básica en la API.
-- Generar snapshots históricos en `docs/` y versionar los datasets resultantes.
-- Si cambias el modelo, recrea la base (`make recreate-db`) o los volúmenes Docker antes de reejecutar el pipeline.
+## Suggested Next Steps
+- Add unit/integration tests for spider, persistence and API.
+- Extend frontend coverage (component and composable tests).
+- Automate periodic ETL executions (cron, Celery or similar) and add basic authentication to the API.
+- Generate historical snapshots in `docs/` and version the resulting datasets.
+- If you change the model, recreate the database (`make recreate-db`) or Docker volumes before re-running the pipeline.

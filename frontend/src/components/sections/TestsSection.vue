@@ -1,6 +1,6 @@
 <template>
   <div class="tests-section">
-    <h2 class="section-title">Tests</h2>
+    <h2 class="section-title">{{ $t('tests.title') }}</h2>
     <div class="tests-grid">
     </div>
   </div>

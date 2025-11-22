@@ -2,7 +2,7 @@
   <main class="mobile-main">
     <FeaturedBundle :bundle="featured" />
     <section id="bundles">
-      <h2>Bundles</h2>
+      <h2>{{ $t('main.bundles') }}</h2>
       <div class="stack">
         <BundleCard v-for="bundle in bundles" :key="bundle.id" :bundle="bundle" />
       </div>

@@ -9,7 +9,7 @@
       {{ isDarkMode ? "🌙" : "☀️" }}
     </span>
     <span class="dark-mode-btn__label">
-      {{ isDarkMode ? "Modo oscuro" : "Modo claro" }}
+      {{ isDarkMode ? $t('darkMode.dark') : $t('darkMode.light') }}
     </span>
     <span class="dark-mode-btn__track" aria-hidden="true">
       <span
@@ -44,6 +44,7 @@ const { isDarkMode, toggleDarkMode } = useDarkMode();
   box-shadow: 0 2px 8px var(--shadow-black-light);
   cursor: pointer;
   transition: all 0.25s ease;
+  z-index: 1000;
 
   &:hover {
     background: var(--border);

@@ -2,13 +2,12 @@
   <section class="profile">
     <div class="profile-image"></div>
     <div class="profile-name">
-      <h2>Humble Tracker</h2>
-      <p>Bundles de libros en tiempo real</p>
+      <h2>{{ $t('profile.name') }}</h2>
+      <p>{{ $t('profile.tagline') }}</p>
     </div>
     <div class="profile-description">
       <p>
-        Frontend inspirado en simpleAbout con dark mode, responsive y consumo del
-        ETL FastAPI para mostrar los bundles vigentes y el destacado semanal.
+        {{ $t('profile.description') }}
       </p>
     </div>
   </section>

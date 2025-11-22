@@ -1,6 +1,6 @@
 <template>
   <div class="utilities-section">
-    <h2 class="section-title">Utilidades</h2>
+    <h2 class="section-title">{{ $t('utilities.title') }}</h2>
     
     <BundlesDataUtility />
     <LandingPageRawDataUtility />

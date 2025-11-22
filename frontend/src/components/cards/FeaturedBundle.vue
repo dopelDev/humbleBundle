@@ -8,9 +8,9 @@
         loading="lazy"
       />
       <div class="hero-info">
-        <p class="eyebrow">Destacado</p>
+        <p class="eyebrow">{{ $t('featured.eyebrow') }}</p>
         <h2>{{ bundle.tile_name }}</h2>
-        <p class="msrp">MSRP estimado: ${{ bundle.msrp_total ?? "—" }}</p>
+        <p class="msrp">{{ $t('featured.estimatedMsrp') }} ${{ bundle.msrp_total ?? "—" }}</p>
         <div class="chip-group">
           <span
             v-for="tier in bundle.price_tiers?.slice(0, 3)"
@@ -26,12 +26,12 @@
           target="_blank"
           rel="noopener"
         >
-          Ver en Humble →
+          {{ $t('featured.viewOnHumble') }}
         </a>
       </div>
     </div>
     <div class="book-preview" v-if="bundle.book_list?.length">
-      <h3>Incluye títulos como</h3>
+      <h3>{{ $t('featured.includesTitles') }}</h3>
       <ul>
         <li v-for="book in bundle.book_list.slice(0, 6)" :key="book.machine_name">
           {{ book.title }}
