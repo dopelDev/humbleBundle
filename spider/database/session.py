@@ -10,6 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 def build_database_uri(settings: Settings) -> str:
+    """
+    Construye la URI de conexión a la base de datos PostgreSQL.
+    
+    Args:
+        settings: Configuración con los parámetros de conexión.
+        
+    Returns:
+        URI de conexión en formato postgresql+psycopg://
+    """
     return (
         f'postgresql+psycopg://{settings.pguser}:{settings.pgpassword}'
         f'@{settings.pghost}:{settings.pgport}/{settings.pgdatabase}'
@@ -17,6 +26,18 @@ def build_database_uri(settings: Settings) -> str:
 
 
 def get_session_factory(settings: Settings):
+    """
+    Crea y configura una factory de sesiones de SQLAlchemy.
+    
+    Crea la base de datos si no existe, verifica y crea las tablas necesarias,
+    y asegura que todas las columnas y tablas relacionadas estén presentes.
+    
+    Args:
+        settings: Configuración con los parámetros de conexión a la BD.
+        
+    Returns:
+        sessionmaker configurado para crear sesiones de SQLAlchemy.
+    """
     uri = build_database_uri(settings)
     engine = create_engine(uri, echo=settings.sql_echo, future=True)
     if not database_exists(engine.url):
@@ -51,10 +72,8 @@ def get_session_factory(settings: Settings):
                 logger.warning('Asumiendo que las tablas ya existen y continuando...')
     
     # Importar aquí para evitar importaciones circulares
-    from .persistence import ensure_columns, ensure_image_url_table, ensure_scraped_image_url_table
+    from .persistence import ensure_columns, ensure_landing_page_raw_data_table
     
     ensure_columns(engine)
-    ensure_image_url_table(engine)
-    ensure_scraped_image_url_table(engine)
+    ensure_landing_page_raw_data_table(engine)
     return sessionmaker(bind=engine, expire_on_commit=False, class_=Session)
-

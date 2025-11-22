@@ -66,7 +66,7 @@ const formatDate = (value?: string) => {
 
   &:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 24px var(--shadow-black-medium);
   }
 
   h3 {

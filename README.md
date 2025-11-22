@@ -100,7 +100,7 @@ Consulta `frontend/README.md` para scripts (`build`, `preview`), temas claro/osc
 - `spider/`: módulo ETL.
   - `core/`: clase `HumbleSpider` y excepciones custom.
   - `scrapers/`: obtiene detalles de cada bundle (tiers, libros, imágenes).
-  - `database/`: modelos SQLAlchemy (`Bundle`, `ImageURL`, `ScrapedImageURL`), sesiones y helpers de persistencia (`persist_bundles`, `remove_outdated_bundles`, `recreate_database`).
+  - `database/`: modelo SQLAlchemy `Bundle`, sesiones y helpers de persistencia (`persist_bundles`, `remove_outdated_bundles`, `recreate_database`).
   - `schemas/`: modelos Pydantic (`BundleRecord`).
   - `utils/`: transformaciones (normalización de texto, URLs absolutas, métricas).
   - `config/`: settings basados en Pydantic Settings.

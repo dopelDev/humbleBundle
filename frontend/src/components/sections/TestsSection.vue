@@ -2,7 +2,6 @@
   <div class="tests-section">
     <h2 class="section-title">Tests</h2>
     <div class="tests-grid">
-      <!-- Placeholder for future test cards -->
     </div>
   </div>
 </template>

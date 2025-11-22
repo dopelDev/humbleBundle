@@ -63,8 +63,8 @@ const getImageUrl = (imageUrl: string | null | undefined): string => {
 .featured {
   background: linear-gradient(
     135deg,
-    rgba(255, 180, 87, 0.18),
-    rgba(102, 184, 255, 0.15)
+    var(--gradient-orange),
+    var(--gradient-blue)
   );
   border-radius: 24px;
   padding: 32px;
@@ -84,7 +84,7 @@ const getImageUrl = (imageUrl: string | null | undefined): string => {
     width: 100%;
     border-radius: 16px;
     object-fit: cover;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 24px var(--shadow-black-medium);
   }
 
   .eyebrow {

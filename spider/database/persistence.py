@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Iterable, List
+from typing import Iterable
 
 import logging
 from sqlalchemy import create_engine, inspect, text
@@ -10,75 +10,45 @@ from sqlalchemy.dialects.postgresql import insert
 
 from ..config.settings import Settings
 from ..schemas.bundle import BundleRecord
-from .models import Base, Bundle
+from ..schemas.raw_data import LandingPageRawDataRecord
+from .models import Base, Bundle, LandingPageRawData
 from .session import build_database_uri
 
 logger = logging.getLogger(__name__)
 
 
-def ensure_scraped_image_url_table(engine) -> None:
-    """Verifica y crea la tabla scraped_image_url si no existe."""
-    from sqlalchemy import inspect, text
+def ensure_landing_page_raw_data_table(engine) -> None:
+    """
+    Verifica y crea la tabla landing_page_raw_data si no existe.
     
+    Args:
+        engine: Motor de SQLAlchemy para ejecutar las consultas.
+    """
     inspector = inspect(engine)
     table_names = inspector.get_table_names()
     
-    if 'scraped_image_url' not in table_names:
-        logger.info('Creando tabla scraped_image_url...')
+    if 'landing_page_raw_data' not in table_names:
+        logger.info('Creando tabla landing_page_raw_data...')
         try:
             with engine.begin() as connection:
                 connection.execute(text("""
-                    CREATE TABLE scraped_image_url (
+                    CREATE TABLE landing_page_raw_data (
                         id UUID NOT NULL,
-                        bundle_id UUID NOT NULL,
-                        url VARCHAR NOT NULL,
-                        source VARCHAR,
-                        attribute VARCHAR,
+                        json_data JSONB NOT NULL,
                         scraped_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-                        PRIMARY KEY (id),
-                        FOREIGN KEY (bundle_id) REFERENCES bundle (id) ON DELETE CASCADE
+                        source_url VARCHAR NOT NULL,
+                        json_hash VARCHAR,
+                        json_version VARCHAR,
+                        PRIMARY KEY (id)
                     )
                 """))
-                connection.execute(text('CREATE INDEX ix_scraped_image_url_bundle_id ON scraped_image_url (bundle_id)'))
-                connection.execute(text('CREATE INDEX ix_scraped_image_url_scraped_date ON scraped_image_url (scraped_date)'))
-                logger.info('Tabla scraped_image_url creada exitosamente')
+                connection.execute(text('CREATE INDEX ix_landing_page_raw_data_scraped_date ON landing_page_raw_data (scraped_date)'))
+                connection.execute(text('CREATE INDEX ix_landing_page_raw_data_json_hash ON landing_page_raw_data (json_hash)'))
+                logger.info('Tabla landing_page_raw_data creada exitosamente')
         except Exception as exc:
-            logger.warning('Error creando tabla scraped_image_url (puede que ya exista): %s', exc)
+            logger.warning('Error creando tabla landing_page_raw_data (puede que ya exista): %s', exc)
     else:
-        logger.debug('La tabla scraped_image_url ya existe')
-
-
-def ensure_image_url_table(engine) -> None:
-    """Verifica y crea la tabla image_url si no existe."""
-    inspector = inspect(engine)
-    table_names = inspector.get_table_names()
-    
-    if 'image_url' not in table_names:
-        logger.info('Creando tabla image_url...')
-        try:
-            with engine.begin() as connection:
-                connection.execute(text("""
-                    CREATE TABLE image_url (
-                        id UUID NOT NULL,
-                        bundle_id UUID NOT NULL,
-                        image_type VARCHAR NOT NULL,
-                        book_machine_name VARCHAR,
-                        original_url VARCHAR NOT NULL,
-                        real_path VARCHAR,
-                        match_type VARCHAR,
-                        verification_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-                        PRIMARY KEY (id),
-                        FOREIGN KEY (bundle_id) REFERENCES bundle (id) ON DELETE CASCADE
-                    )
-                """))
-                connection.execute(text('CREATE INDEX ix_image_url_bundle_id ON image_url (bundle_id)'))
-                connection.execute(text('CREATE INDEX ix_image_url_image_type ON image_url (image_type)'))
-                connection.execute(text('CREATE INDEX ix_image_url_book_machine_name ON image_url (book_machine_name)'))
-                logger.info('Tabla image_url creada exitosamente')
-        except Exception as exc:
-            logger.warning('Error creando tabla image_url (puede que ya exista): %s', exc)
-    else:
-        logger.debug('La tabla image_url ya existe')
+        logger.debug('La tabla landing_page_raw_data ya existe')
 
 
 def ensure_columns(engine) -> None:
@@ -121,9 +91,18 @@ def ensure_columns(engine) -> None:
 
 
 def persist_bundles(records: Iterable[BundleRecord], session: Session) -> None:
-    from ..scrapers.image_scraper import ScrapedImageUrlInfo
-    from .models import ScrapedImageURL
+    """
+    Persiste los bundles en la base de datos.
     
+    Inserta o actualiza los bundles usando machine_name como clave única.
+    
+    Args:
+        records: Iterable de BundleRecord a persistir.
+        session: Sesión de SQLAlchemy para la transacción.
+        
+    Raises:
+        RuntimeError: Si ocurre un error al guardar los bundles en la BD.
+    """
     payloads = [record.to_orm_payload() for record in records]
     if not payloads:
         return
@@ -140,41 +119,43 @@ def persist_bundles(records: Iterable[BundleRecord], session: Session) -> None:
     except SQLAlchemyError as exc:
         session.rollback()
         raise RuntimeError(f'Error guardando bundles: {exc}') from exc
+
+
+def persist_landing_page_raw_data(record: LandingPageRawDataRecord, session: Session) -> None:
+    """
+    Persiste el raw data de landingPage-json-data en la base de datos.
     
-    # Guardar las URLs scrapeadas después de persistir los bundles
+    Inserta un nuevo registro con el JSON raw obtenido del script
+    landingPage-json-data junto con su metadata.
+    
+    Args:
+        record: LandingPageRawDataRecord con el JSON y metadata a persistir.
+        session: Sesión de SQLAlchemy para la transacción.
+        
+    Raises:
+        RuntimeError: Si ocurre un error al guardar el raw data en la BD.
+    """
+    payload = record.to_orm_payload()
     try:
-        # Obtener los bundles actualizados/creados para tener sus IDs
-        machine_names = [payload['machine_name'] for payload in payloads]
-        bundles = session.query(Bundle).filter(Bundle.machine_name.in_(machine_names)).all()
-        bundle_map = {bundle.machine_name: bundle.id for bundle in bundles}
-        
-        # Eliminar URLs scrapeadas anteriores de estos bundles
-        for bundle_id in bundle_map.values():
-            session.query(ScrapedImageURL).filter(ScrapedImageURL.bundle_id == bundle_id).delete()
-        
-        # Guardar las nuevas URLs scrapeadas
-        for record in records:
-            scraped_urls: List[ScrapedImageUrlInfo] = getattr(record, '_scraped_image_urls', None)
-            if scraped_urls:
-                bundle_id = bundle_map.get(record.machine_name)
-                if bundle_id:
-                    for url_info in scraped_urls:
-                        scraped_url = ScrapedImageURL(
-                            bundle_id=bundle_id,
-                            url=url_info.url,
-                            source=url_info.source,
-                            attribute=url_info.attribute,
-                        )
-                        session.add(scraped_url)
-        
+        landing_page_raw_data = LandingPageRawData(**payload)
+        session.add(landing_page_raw_data)
         session.commit()
-        logger.info(f'Guardadas URLs scrapeadas para {len([r for r in records if getattr(r, "_scraped_image_urls", None)])} bundles')
-    except Exception as exc:
+        logger.info('Raw data de landingPage guardado exitosamente')
+    except SQLAlchemyError as exc:
         session.rollback()
-        logger.warning(f'Error guardando URLs scrapeadas: {exc}')
+        raise RuntimeError(f'Error guardando raw data de landingPage: {exc}') from exc
 
 
 def remove_outdated_bundles(session: Session) -> None:
+    """
+    Elimina los bundles que han expirado de la base de datos.
+    
+    Un bundle se considera expirado si su fecha de fin (end_date_datetime)
+    es anterior a la fecha/hora actual.
+    
+    Args:
+        session: Sesión de SQLAlchemy para la transacción.
+    """
     current_time = datetime.utcnow()
     session.query(Bundle).filter(Bundle.end_date_datetime < current_time).delete(synchronize_session=False)
     session.commit()
@@ -203,7 +184,5 @@ def recreate_database(settings: Settings, drop_existing: bool = True) -> None:
     # Usar checkfirst=True para evitar conflictos
     Base.metadata.create_all(engine, checkfirst=True)
     ensure_columns(engine)
-    ensure_image_url_table(engine)
-    ensure_scraped_image_url_table(engine)
+    ensure_landing_page_raw_data_table(engine)
     logger.info('Base de datos recreada exitosamente')
-

@@ -5,8 +5,8 @@
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["node"]
+    "types": ["node"],
+    "outDir": "./.tsbuild"
   },
   "include": ["vite.config.ts"]
 }
-

@@ -36,3 +36,14 @@ class ETLRunResponse(BaseModel):
     images_info: list[dict[str, str]] = []
 
 
+class LandingPageRawDataResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    json_data: Dict[str, Any]
+    scraped_date: datetime
+    source_url: str
+    json_hash: Optional[str] = None
+    json_version: Optional[str] = None
+
+

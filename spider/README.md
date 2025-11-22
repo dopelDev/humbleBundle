@@ -28,7 +28,7 @@ spider/
 │
 ├── database/                # Capa de persistencia
 │   ├── __init__.py
-│   ├── models.py            # Modelos SQLAlchemy (Bundle, ScrapedImageURL, ImageURL)
+│   ├── models.py            # Modelos SQLAlchemy (Bundle, LandingPageRawData)
 │   ├── persistence.py       # Funciones de persistencia (persist_bundles, etc.)
 │   └── session.py           # Fábrica de sesiones SQLAlchemy
 │
@@ -54,7 +54,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - **CLI** (`cli/run_spider.py`): Punto de entrada que orquesta el flujo completo
 - **Core** (`core/spider.py`): Clase `HumbleSpider` que maneja la extracción y transformación
 - **Scrapers** (`scrapers/image_scraper.py`): Enriquecimiento de datos con detalles de cada bundle
-- **Schemas** (`schemas/bundle.py`): Validación de datos con Pydantic
+- **Schemas** (`schemas/`): Validación de datos con Pydantic (`BundleRecord`, `LandingPageRawDataRecord`)
 - **Database** (`database/`): Modelos ORM, persistencia y gestión de sesiones
 - **Config** (`config/settings.py`): Configuración basada en variables de entorno
 - **Utils** (`utils/transformers.py`): Funciones auxiliares de transformación
@@ -64,9 +64,11 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - **`cli/run_spider.py`**: punto de entrada. Carga configuración (`DB_*`), ejecuta `HumbleSpider`, elimina bundles expirados y guarda los nuevos/actualizados.
 - **`core/HumbleSpider`**: hace GET a `https://www.humblebundle.com/books`, lee el `<script id="landingPage-json-data">`, normaliza campos con pandas y Pydantic (`BundleRecord`), y para cada bundle consulta el detalle con `ImageUrlScraper`.
 - **`scrapers/ImageUrlScraper`**: descarga la página del bundle (`webpack-bundle-page-data`), extrae tiers, libros, imagen destacada y todas las URLs de imágenes encontradas en el HTML (soup + regex).
-- **Persistencia**: `database/persistence.py` hace upsert de los bundles (clave `machine_name`), recrea columnas faltantes, y guarda las URLs de imágenes scrapeadas asociadas al bundle.
+- **Persistencia**: `database/persistence.py` hace upsert de los bundles (clave `machine_name`), recrea columnas faltantes y permite archivar el JSON bruto de `landingPage-json-data`.
 
-## Diagrama ER (Modelo de Datos)
+## Modelo de Datos
+
+### Tabla bundle
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -108,68 +110,24 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 │     msrp_total                  FLOAT                           │
 │     raw_html                    TEXT                            │
 └─────────────────────────────────────────────────────────────────┘
-                              │
-                              │ 1:N
-                              │ (CASCADE DELETE)
-                              ├──────────────────────────────┐
-                              │                              │
-                              ▼                              ▼
-┌──────────────────────────────────┐    ┌──────────────────────────────────┐
-│     SCRAPED_IMAGE_URL            │    │         IMAGE_URL                │
-├──────────────────────────────────┤    ├──────────────────────────────────┤
-│ PK  id                  UUID     │    │ PK  id                  UUID     │
-│ FK  bundle_id           UUID     │    │ FK  bundle_id           UUID     │
-│     url                 VARCHAR  │    │     image_type          VARCHAR  │
-│     source              VARCHAR  │    │     book_machine_name   VARCHAR  │
-│     attribute           VARCHAR  │    │     original_url        VARCHAR  │
-│     scraped_date        TIMESTAMP│    │     real_path           VARCHAR  │
-│                              │    │     match_type            VARCHAR  │
-│                              │    │     verification_date      TIMESTAMP│
-└──────────────────────────────┘    └──────────────────────────────────┘
 ```
 
-### Relaciones
+### Tabla landing_page_raw_data
 
-- **Bundle (1) ──< (N) ScrapedImageURL**: Un bundle tiene muchas URLs scrapeadas. Borrado en cascada.
-- **Bundle (1) ──< (N) ImageURL**: Un bundle tiene muchas URLs de imágenes. Borrado en cascada.
+```
+┌────────────────────────────────────────────────┐
+│             LANDING_PAGE_RAW_DATA              │
+├────────────────────────────────────────────────┤
+│ PK  id              UUID                       │
+│     json_data       JSONB      NOT NULL        │
+│     scraped_date    TIMESTAMP  (INDEX)         │
+│     source_url      VARCHAR    NOT NULL        │
+│     json_hash       VARCHAR    (INDEX)         │
+│     json_version    VARCHAR                    │
+└────────────────────────────────────────────────┘
+```
 
-### Descripción de Entidades
-
-#### Bundle (Entidad Principal)
-
-- **Propósito**: Almacena todos los metadatos de un bundle de Humble Bundle
-- **Clave Primaria**: `id` (UUID generado automáticamente)
-- **Clave Única**: `machine_name` (identificador único del bundle)
-- **Campos Importantes**:
-  - `machine_name`: Identificador único del bundle (indexado)
-  - `start_date_datetime`, `end_date_datetime`: Fechas de inicio y fin del bundle (indexadas)
-  - `is_active`: Bandera calculada según las fechas (indexada)
-  - `price_tiers`, `book_list`: Datos estructurados en formato JSONB
-  - `raw_html`: HTML completo del bundle para tests y análisis
-  - `verification_date`: Timestamp de cuando se verificó/actualizó el bundle
-
-#### ScrapedImageURL
-
-- **Propósito**: Almacena todas las URLs absolutas de imágenes encontradas en el HTML del bundle
-- **Clave Primaria**: `id` (UUID)
-- **Clave Foránea**: `bundle_id` → `Bundle.id` (CASCADE DELETE)
-- **Campos**:
-  - `url`: URL absoluta de la imagen (imgix, CDN, etc.)
-  - `source`: Origen de la URL (`img_tag`, `style`, `data_attr`, `json`, `regex`)
-  - `attribute`: Atributo específico si aplica (`src`, `data-src`, `background-image`, etc.)
-  - `scraped_date`: Fecha de scraping (indexada)
-
-#### ImageURL
-
-- **Propósito**: Almacena URLs de imágenes específicas (featured o de libros) con su URL original y la real resuelta
-- **Clave Primaria**: `id` (UUID)
-- **Clave Foránea**: `bundle_id` → `Bundle.id` (CASCADE DELETE)
-- **Campos**:
-  - `image_type`: Tipo de imagen (`featured_image` o `book_image`)
-  - `book_machine_name`: Machine name del libro (solo para `book_image`)
-  - `original_url`: URL original del JSON
-  - `real_path`: URL real encontrada en el HTML
-  - `match_type`: Tipo de match (`exact`, `filename`, `path_segment`, `partial`, o `None`)
+La tabla `bundle` almacena los metadatos enriquecidos de cada bundle, y `landing_page_raw_data` guarda el JSON bruto del script `landingPage-json-data` con su metadata (fecha, hash, versión) para trazabilidad y auditoría.
 
 ## Flujo de Datos Completo
 
@@ -211,7 +169,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 │         │   └─> Regex para .jpg/.jpeg                               │
 │         ├─> Resuelve URLs relativas → absolutas                     │
 │         ├─> Extrae price_tiers, book_list, featured_image          │
-│         └─> Guarda raw_html y scraped_image_urls                    │
+│         └─> Guarda raw_html                                         │
 └─────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -228,10 +186,6 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 │ persist_bundles(records, session)                                   │
 │   ├─> UPSERT en tabla 'bundle' (ON CONFLICT machine_name)          │
 │   │   └─> Actualiza todos los campos excepto 'id'                   │
-│   │                                                               │
-│   └─> Para cada bundle:                                             │
-│       ├─> Elimina ScrapedImageURL anteriores                        │
-│       └─> Inserta nuevas ScrapedImageURL con metadatos             │
 │                                                                      │
 │ remove_outdated_bundles(session)                                    │
 │   └─> DELETE bundles donde end_date_datetime < NOW()               │
@@ -245,11 +199,8 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - `bundle.start_date_datetime` (INDEX)
 - `bundle.end_date_datetime` (INDEX)
 - `bundle.is_active` (INDEX)
-- `scraped_image_url.bundle_id` (INDEX)
-- `scraped_image_url.scraped_date` (INDEX)
-- `image_url.bundle_id` (INDEX)
-- `image_url.image_type` (INDEX)
-- `image_url.book_machine_name` (INDEX)
+- `landing_page_raw_data.scraped_date` (INDEX)
+- `landing_page_raw_data.json_hash` (INDEX)
 
 ## Explicación por archivo
 
@@ -262,19 +213,20 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 - `core/spider.py`: clase `HumbleSpider`.
   - Constantes `URL`, `SCRIPT_ID`, listas de columnas JSON/fecha/texto.
   - `fetch_bundles()`: pipeline principal: obtiene payload, extrae productos, normaliza DataFrame, convierte a `BundleRecord`.
+  - `get_raw_data_record()`: expone el último JSON bruto (`landingPage-json-data`) con hash y metadata listo para persistir en `landing_page_raw_data`.
   - `_fetch_raw_payload()`: hace GET al listado y parsea el script JSON embebido, levantando `HumbleSpiderError` si falta.
   - `_extract_products()`: navega el JSON `data.books.mosaic[0].products` y lanza excepción si la estructura cambia.
   - `_normalize_products()`: usa pandas para limpiar, convertir fechas a UTC, serializar campos JSON, normalizar texto, absolutizar URLs y calcular `duration_days`/`is_active`.
-  - `_to_records()`: itera filas, pide detalle por bundle, fusiona `price_tiers`, `book_list`, `featured_image`, `msrp_total`, `raw_html` y URLs scrapeadas; valida con Pydantic y descarta registros inválidos con logging.
+  - `_to_records()`: itera filas, pide detalle por bundle, fusiona `price_tiers`, `book_list`, `featured_image`, `msrp_total` y `raw_html`; valida con Pydantic y descarta registros inválidos con logging.
 - `core/errors.py`: define excepciones de dominio `HumbleSpiderError` e `ImageUrlScraperError` (esta última hoy no se lanza desde `ImageUrlScraper`).
 
 ### Scrapers
 
 - `scrapers/image_scraper.py`: clase `ImageUrlScraper`.
   - `fetch_detail(product_path, machine_name)`: descarga la página de un bundle, busca el `<script id="webpack-bundle-page-data">` para leer `bundleData`, arma tiers (`_extract_price_tiers`), libros (`_extract_book_list`), msrp total, imagen destacada y guarda `raw_html`.
-  - `_extract_jpg_urls_from_html_with_info()`: recorre HTML con BeautifulSoup + regex para recopilar todas las URLs de imágenes (absolutas) con metadatos de fuente (`img_tag`, `style`, `data_attr`, `json`, `regex`) y mantiene un mapeo filename→URL para resolver rutas relativas del JSON.
+  - `_extract_jpg_urls_from_html_with_info()`: recorre HTML con BeautifulSoup + regex para recopilar URLs de imágenes absolutas y mantener un mapeo filename→URL que ayuda a resolver rutas relativas del JSON.
   - `_resolve_image_url()`: intenta resolver una URL parcial (del JSON) contra el mapeo de URLs encontradas; como fallback, construye URL absoluta con `BASE_URL`.
-  - Helpers: normalización de URLs relativas a absolutas, extracción de URLs desde JSON arbitrario, parseo de filename desde URL. Incluye dataclass `BundleDetail` y `ScrapedImageUrlInfo`.
+  - Helpers: normalización de URLs relativas a absolutas, extracción de URLs desde JSON arbitrario, parseo de filename desde URL. Incluye dataclass `BundleDetail`.
 
 ### Schemas
 
@@ -282,21 +234,24 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
   - Define todos los campos del bundle con aliases (ej. `start_date|datetime`), longitudes máximas y tipos (`HttpUrl`, `datetime`, `float`).
   - Validadores: convierten highlights a string, controlan no negativos en `bundles_sold_decimal`/`duration_days`.
   - `to_orm_payload()`: adapta el diccionario para la capa ORM (cambia `type`→`_type`, cast de URL a string).
+- `schemas/raw_data.py`: modelo Pydantic `LandingPageRawDataRecord`.
+  - Guarda el JSON bruto del script `landingPage-json-data` con `scraped_date`, `source_url`, hash (`json_hash`) y campo de versión opcional.
+  - `to_orm_payload()`: devuelve el diccionario listo para persistir en `landing_page_raw_data`.
 
 ### Base de datos
 
 - `database/models.py`: modelos SQLAlchemy.
-  - `Bundle`: tabla principal con metadatos del bundle, tiers/libros en JSON, imagen destacada, HTML crudo, flags y relaciones a `ImageURL`/`ScrapedImageURL`.
-  - `ScrapedImageURL`: guarda cada URL absoluta encontrada en el HTML de un bundle con info de fuente/atributo y fecha de scraping.
-  - `ImageURL`: almacena URLs originales y real_path resueltas para imágenes (featured/book), con tipo de match y fecha de verificación.
+  - `Bundle`: tabla principal con metadatos del bundle, tiers/libros en JSON, imagen destacada y HTML crudo.
+  - `LandingPageRawData`: almacena el JSON bruto del script `landingPage-json-data` con hash y metadata de scraping.
 - `database/session.py`: fábrica de sesión.
   - Construye URI con settings, crea la BD si no existe, verifica existencia de `bundle` vía SQL simple, usa `Base.metadata.create_all(checkfirst=True)` como fallback.
-  - Llama a `ensure_columns`, `ensure_image_url_table`, `ensure_scraped_image_url_table` para mantener el esquema mínimo.
+  - Llama a `ensure_columns` y `ensure_landing_page_raw_data_table` para mantener el esquema mínimo.
 - `database/persistence.py`: operaciones de persistencia y mantenimiento.
-  - `persist_bundles`: upsert (ON CONFLICT machine_name) de bundles; luego limpia e inserta URLs scrapeadas (`ScrapedImageURL`) asociadas a los bundles recién cargados.
+  - `persist_bundles`: upsert (ON CONFLICT machine_name) de bundles.
+  - `persist_landing_page_raw_data`: inserta el JSON bruto de landingPage con metadata.
   - `remove_outdated_bundles`: borra bundles con `end_date_datetime` en el pasado.
   - `recreate_database`: recrea la base opcionalmente borrando la existente; crea tablas y columnas auxiliares.
-  - `ensure_columns/ensure_image_url_table/ensure_scraped_image_url_table`: migraciones rápidas en SQL crudo para añadir columnas/tablas si faltan.
+  - `ensure_columns` y `ensure_landing_page_raw_data_table`: migraciones rápidas en SQL crudo para añadir columnas/tablas si faltan.
 
 ### Configuración
 
@@ -317,8 +272,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 ## Esquema de datos (PostgreSQL)
 
 - **bundle**: datos normalizados del listado + detalles (tiers, libros, imagen destacada, HTML raw, flags `is_active`/`duration_days`).
-- **scraped_image_url**: todas las URLs absolutas de imágenes encontradas en el HTML de cada bundle, con origen (`img_tag`, `style`, `data_attr`, `json`, `regex`).
-- **image_url**: URLs originales y “real paths” resueltos para imágenes destacadas y de libros, con tipo de match; se mantiene para análisis/validación posterior.
+- **landing_page_raw_data**: snapshots del JSON bruto de `landingPage-json-data` con fecha de scraping, URL fuente, hash y versión opcional.
 
 ## Ejecución local
 
@@ -330,6 +284,8 @@ python -m spider.cli.run_spider
 ```
 
 El flujo recreará tablas faltantes, borrará bundles expirados y hará upsert de los actuales.
+
+El JSON bruto (`landingPage-json-data`) de la fase de extracción puede almacenarse en `landing_page_raw_data` combinando `HumbleSpider.get_raw_data_record()` con `persist_landing_page_raw_data()`.
 
 ## Consideraciones y limitaciones
 
@@ -346,7 +302,7 @@ El flujo recreará tablas faltantes, borrará bundles expirados y hará upsert d
 2. **Normalización Robusta**: Uso de pandas para limpieza y Pydantic para validación estricta
 3. **Enriquecimiento de Datos**: Scraping detallado de cada bundle con resolución inteligente de URLs de imágenes
 4. **Persistencia Eficiente**: UPSERT con ON CONFLICT para actualizar sin duplicados
-5. **Trazabilidad**: Almacenamiento de HTML raw y metadatos de URLs scrapeadas para análisis posterior
+5. **Trazabilidad**: Almacenamiento de HTML raw y snapshots del `landingPage-json-data` con hash para análisis posterior
 6. **Configuración Flexible**: Settings basados en variables de entorno con valores por defecto sensatos
 7. **Manejo de Errores**: Excepciones específicas del dominio y logging detallado
 

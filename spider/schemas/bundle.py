@@ -6,6 +6,13 @@ from pydantic.config import ConfigDict
 
 
 class BundleRecord(BaseModel):
+    """
+    Schema Pydantic para validar y representar un bundle de Humble Bundle.
+    
+    Contiene todos los campos de un bundle incluyendo metadatos, fechas,
+    imágenes, precios, lista de libros y HTML raw. Los campos opcionales
+    pueden ser None si no están disponibles en los datos originales.
+    """
     model_config = ConfigDict(
         populate_by_name=True,
         str_strip_whitespace=True,
@@ -84,6 +91,18 @@ class BundleRecord(BaseModel):
     @field_validator('hero_highlights', 'hover_highlights', 'highlights', mode='before')
     @classmethod
     def ensure_string(cls, value):
+        """
+        Valida que los campos de highlights sean strings.
+        
+        Convierte el valor a string si no es None. Se aplica a los campos
+        hero_highlights, hover_highlights y highlights.
+        
+        Args:
+            value: Valor a validar (puede ser cualquier tipo).
+            
+        Returns:
+            String del valor o None si el valor es None.
+        """
         if value is None:
             return value
         return str(value)
@@ -91,6 +110,19 @@ class BundleRecord(BaseModel):
     @field_validator('bundles_sold_decimal', 'duration_days', mode='before')
     @classmethod
     def ensure_non_negative(cls, value):
+        """
+        Valida que los valores numéricos sean no negativos.
+        
+        Convierte el valor a float y verifica que sea >= 0. Si el valor
+        es negativo o no se puede convertir, retorna None. Se aplica a
+        bundles_sold_decimal y duration_days.
+        
+        Args:
+            value: Valor a validar (puede ser cualquier tipo).
+            
+        Returns:
+            Float no negativo o None si el valor es inválido o negativo.
+        """
         if value is None:
             return None
         try:
@@ -100,6 +132,16 @@ class BundleRecord(BaseModel):
         return value if value >= 0 else None
 
     def to_orm_payload(self) -> dict:
+        """
+        Convierte el BundleRecord a un diccionario compatible con ORM.
+        
+        Realiza las transformaciones necesarias para que el payload sea
+        compatible con el modelo SQLAlchemy Bundle, incluyendo renombrar
+        campos y convertir tipos.
+        
+        Returns:
+            Diccionario con los datos del bundle listos para persistir en BD.
+        """
         payload = self.model_dump()
         payload['_type'] = payload.pop('type_value')
         if payload.get('product_url'):

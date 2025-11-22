@@ -1,4 +1,4 @@
-.PHONY: etl api compose-up compose-down recreate-db recreate-volumes clean-network help
+.PHONY: etl api compose-up compose-down recreate-db recreate-volumes clean-network frontend-build frontend-dev api-rebuild help
 
 VENV_BIN=.venv/bin
 PROJECT_NAME=$(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
@@ -9,7 +9,7 @@ etl:
 	@$(VENV_BIN)/python -m spider.cli.run_spider
 
 api:
-	@$(VENV_BIN)/uvicorn api.main:app --reload
+	@$(COMPOSE_CMD) restart api
 
 compose-up:
 	@$(COMPOSE_CMD) up -d
@@ -18,8 +18,10 @@ compose-down:
 	@$(COMPOSE_CMD) down
 
 recreate-db:
-	@echo "Recreando base de datos..."
-	@$(VENV_BIN)/python -c "from spider.database.persistence import recreate_database; from spider.config.settings import get_settings; recreate_database(get_settings())"
+	@echo "Recreando base de datos vía Docker (drop de volumen pgdata)..."
+	@$(COMPOSE_CMD) down -v --remove-orphans
+	@docker volume rm -f $(PROJECT_NAME)_pgdata >/dev/null 2>&1 || true
+	@$(COMPOSE_CMD) up -d postgres
 
 recreate-volumes:
 	@echo "Eliminando volúmenes..."
@@ -36,13 +38,25 @@ clean-network:
 		echo "La red no existe o ya fue eliminada."; \
 	fi
 
+frontend-build:
+	@cd frontend && npm run build
+
+frontend-dev:
+	@cd frontend && npm run dev
+
+api-rebuild:
+	@echo "Rebuild + restart del servicio API..."
+	@$(COMPOSE_CMD) up -d --build api
+
 help:
 	@echo "Comandos disponibles:"
 	@echo "  make etl              - Ejecutar ETL para descargar bundles"
 	@echo "  make api              - Iniciar servidor API"
 	@echo "  make compose-up       - Levantar contenedores Docker"
 	@echo "  make compose-down     - Detener contenedores Docker"
-	@echo "  make recreate-db      - Recrear base de datos (eliminar y crear tablas)"
+	@echo "  make recreate-db      - Dropea volumen pgdata y levanta postgres limpio"
 	@echo "  make recreate-volumes - Eliminar volúmenes Docker (pgdata e images)"
 	@echo "  make clean-network    - Eliminar la red Docker del proyecto"
-
+	@echo "  make frontend-build   - Ejecutar 'npm run build' en frontend/"
+	@echo "  make frontend-dev     - Ejecutar 'npm run dev' en frontend/"
+	@echo "  make api-rebuild      - Rebuild y restart del contenedor API"

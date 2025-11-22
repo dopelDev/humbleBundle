@@ -44,6 +44,23 @@ $dark-support: $dark-green;
 $dark-info: color.scale($dark-purple-soft, $lightness: 20%);
 $dark-border: rgba($dark-blue, 0.3);
 
+// Colores adicionales para componentes específicos
+$image-bg-light: #d0d0d0;
+$image-bg-dark: #2a2a2a;
+$error-red: #ff4444;
+$error-red-light: #e63946;
+$button-blue: #4a90e2;
+$button-green: #28a745;
+$gradient-orange: rgba(255, 180, 87, 0.18);
+$gradient-blue: rgba(102, 184, 255, 0.15);
+$shadow-black: rgba(0, 0, 0, 0.1);
+$shadow-black-light: rgba(0, 0, 0, 0.08);
+$shadow-black-medium: rgba(0, 0, 0, 0.15);
+$shadow-black-dark: rgba(0, 0, 0, 0.3);
+$overlay-black: rgba(0, 0, 0, 0.6);
+$error-bg: rgba(255, 0, 0, 0.1);
+$error-border: rgba(255, 0, 0, 0.3);
+
 :root {
   --bg: #{$bg};
   --surface: #{$surface};
@@ -55,6 +72,20 @@ $dark-border: rgba($dark-blue, 0.3);
   --support: #{$support};
   --info: #{$info};
   --border: #{$border};
+  --image-bg: #{$image-bg-light};
+  --error-red: #{$error-red};
+  --error-red-light: #{$error-red-light};
+  --button-blue: #{$button-blue};
+  --button-green: #{$button-green};
+  --gradient-orange: #{$gradient-orange};
+  --gradient-blue: #{$gradient-blue};
+  --shadow-black: #{$shadow-black};
+  --shadow-black-light: #{$shadow-black-light};
+  --shadow-black-medium: #{$shadow-black-medium};
+  --shadow-black-dark: #{$shadow-black-dark};
+  --overlay-black: #{$overlay-black};
+  --error-bg: #{$error-bg};
+  --error-border: #{$error-border};
 }
 
 body.dark {
@@ -68,5 +99,6 @@ body.dark {
   --support: #{$dark-highlight};
   --info: #{$dark-info};
   --border: #{$dark-border};
+  --image-bg: #{$image-bg-dark};
 }
 

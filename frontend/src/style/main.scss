@@ -15,7 +15,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 180, 87, 0.4);
+  background: var(--gradient-orange);
   color: var(--accent);
 }
 

@@ -41,13 +41,13 @@ const { isDarkMode, toggleDarkMode } = useDarkMode();
   border: 1px solid var(--border);
   font-weight: 500;
   font-size: 0.95rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px var(--shadow-black-light);
   cursor: pointer;
   transition: all 0.25s ease;
 
   &:hover {
     background: var(--border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--shadow-black);
   }
 
   &:focus-visible {

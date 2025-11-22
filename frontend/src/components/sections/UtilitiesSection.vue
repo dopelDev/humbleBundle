@@ -2,12 +2,12 @@
   <div class="utilities-section">
     <h2 class="section-title">Utilidades</h2>
     
-    <!-- Placeholder for future utility components -->
+    <LandingPageRawDataUtility />
   </div>
 </template>
 
 <script setup lang="ts">
-// Stub component - diseño mantenido para uso futuro
+import LandingPageRawDataUtility from "@/components/sections/utilities/LandingPageRawDataUtility.vue";
 </script>
 
 <style scoped lang="scss">

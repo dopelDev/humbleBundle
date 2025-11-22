@@ -11,15 +11,15 @@ from sqlalchemy.orm import Session
 import logging
 
 from spider.database.session import get_session_factory as build_session_factory
-from spider.database.persistence import persist_bundles, remove_outdated_bundles
+from spider.database.persistence import persist_bundles, remove_outdated_bundles, persist_landing_page_raw_data
 from spider.core.spider import HumbleSpider
 from spider.core.errors import HumbleSpiderError
-from spider.database.models import Bundle
+from spider.database.models import Bundle, LandingPageRawData
 from spider.config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
-from api.schemas import BundleResponse, ETLRunResponse
+from api.schemas import BundleResponse, ETLRunResponse, LandingPageRawDataResponse
 
 settings = get_settings()
 SessionFactory = None
@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all, checkfirst=True)
     
     # Asegurar que las columnas existan (funciona mejor con sync)
-    from spider.database.persistence import ensure_columns, ensure_image_url_table, ensure_scraped_image_url_table
+    from spider.database.persistence import ensure_columns, ensure_landing_page_raw_data_table
     from sqlalchemy import create_engine
     sync_engine = create_engine(
         f'postgresql+psycopg://{settings.pguser}:{settings.pgpassword}@{settings.pghost}:{settings.pgport}/{settings.pgdatabase}',
@@ -51,8 +51,7 @@ async def lifespan(app: FastAPI):
     )
     try:
         ensure_columns(sync_engine)
-        ensure_image_url_table(sync_engine)
-        ensure_scraped_image_url_table(sync_engine)
+        ensure_landing_page_raw_data_table(sync_engine)
     finally:
         sync_engine.dispose()
     
@@ -192,6 +191,11 @@ def trigger_etl(db: Session = Depends(get_db)):
     remove_outdated_bundles(db)
     persist_bundles(records, db)
     
+    # Guardar raw data de landingPage
+    raw_data_record = spider.get_raw_data_record()
+    if raw_data_record:
+        persist_landing_page_raw_data(raw_data_record, db)
+    
     return ETLRunResponse(
         bundles_processed=len(records),
         cleanup_ran=True,
@@ -201,5 +205,38 @@ def trigger_etl(db: Session = Depends(get_db)):
         images_info=[]
     )
 
+
+@app.get('/landing-page-raw-data', response_model=list[LandingPageRawDataResponse], tags=['raw-data'])
+async def list_landing_page_raw_data(db: AsyncSession = Depends(get_async_db)):
+    """Lista todos los registros de raw data ordenados por fecha descendente."""
+    result = await db.execute(
+        select(LandingPageRawData).order_by(LandingPageRawData.scraped_date.desc())
+    )
+    raw_data_list = result.scalars().all()
+    return raw_data_list
+
+
+@app.get('/landing-page-raw-data/latest', response_model=LandingPageRawDataResponse, tags=['raw-data'])
+async def get_latest_landing_page_raw_data(db: AsyncSession = Depends(get_async_db)):
+    """Obtiene el registro más reciente de raw data."""
+    result = await db.execute(
+        select(LandingPageRawData).order_by(LandingPageRawData.scraped_date.desc()).limit(1)
+    )
+    raw_data = result.scalar_one_or_none()
+    if not raw_data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No hay raw data almacenado')
+    return raw_data
+
+
+@app.get('/landing-page-raw-data/{raw_data_id}', response_model=LandingPageRawDataResponse, tags=['raw-data'])
+async def get_landing_page_raw_data(raw_data_id: UUID, db: AsyncSession = Depends(get_async_db)):
+    """Obtiene un registro específico de raw data por su ID."""
+    result = await db.execute(
+        select(LandingPageRawData).filter(LandingPageRawData.id == raw_data_id)
+    )
+    raw_data = result.scalar_one_or_none()
+    if not raw_data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Raw data no encontrado')
+    return raw_data
 
 

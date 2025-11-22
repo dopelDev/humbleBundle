@@ -3,7 +3,7 @@
     <DarkButton />
     
     <section class="intro">
-      <MobileProfile v-if="isMobile" />
+      <ProfileCard />
       <div class="status-card">
         <p class="eyebrow">Humble ETL</p>
         <h1>Explora los bundles de libros en tiempo real.</h1>
@@ -12,17 +12,17 @@
           conecta al backend FastAPI que normaliza los bundles públicos de Humble
           Bundle.
         </p>
-        <div class="stats" v-if="!loading">
+        <div class="stats" v-show="!loading">
           <span><strong>{{ bundles.length }}</strong> bundles totales</span>
           <span><strong>{{ activeBundles.length }}</strong> activos</span>
         </div>
-        <div class="last-update" v-if="lastUpdate">
+        <div class="last-update" v-show="lastUpdate">
           <span>Última actualización: {{ formatDate(lastUpdate) }}</span>
         </div>
         <button class="refresh" @click="runETL" :disabled="loading">
           {{ loading ? "Actualizando..." : "Actualizar datos" }}
         </button>
-        <p v-if="error" class="error">{{ error }}</p>
+        <p v-show="error" class="error">{{ error }}</p>
         
         <div v-if="etlResult" class="etl-result">
           <h4>Resultado de actualización:</h4>
@@ -36,7 +36,6 @@
       </div>
     </section>
 
-    <!-- Tabs Navigation -->
     <section class="tabs-container">
       <div class="tabs-nav">
         <button
@@ -55,7 +54,6 @@
         </button>
       </div>
 
-      <!-- Tab Content: Bundles -->
       <div v-show="activeTab === 'bundles'" class="tab-content">
         <component
           :is="isMobile ? MobileMain : DesktopMain"
@@ -65,7 +63,6 @@
         <ContactSection />
       </div>
 
-      <!-- Tab Content: Tests -->
       <div v-show="activeTab === 'tests'" class="tab-content">
         <TestsSection />
         <UtilitiesSection />
@@ -77,7 +74,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DarkButton from "@components/header/components/DarkButton.vue";
-import MobileProfile from "@components/mobile/ProfileCard.vue";
+import ProfileCard from "@components/cards/ProfileCard.vue";
 import DesktopMain from "@components/main/DesktopMain.vue";
 import MobileMain from "@components/main/MobileMain.vue";
 import ContactSection from "@components/sections/ContactSection.vue";
@@ -156,12 +153,12 @@ const formatDate = (date: Date) => {
       border: none;
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px var(--shadow-black);
 
       &:hover:not(:disabled) {
         background: var(--accent);
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 8px var(--shadow-black-medium);
       }
 
       &:disabled {
@@ -178,7 +175,7 @@ const formatDate = (date: Date) => {
     }
 
     .error {
-      color: #e63946;
+      color: var(--error-red-light);
       font-size: 0.9rem;
     }
 

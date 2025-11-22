@@ -54,7 +54,18 @@ def _normalize_image_url(url: str, base_url: str) -> Optional[str]:
 
 
 def _is_image_url(url: str) -> bool:
-    """Verifica si una URL parece ser de una imagen."""
+    """
+    Verifica si una URL parece ser de una imagen.
+    
+    Comprueba si la URL termina con una extensión de imagen conocida
+    (.jpg, .jpeg, .png, .webp, .gif) o contiene 'imgix' en la URL.
+    
+    Args:
+        url: URL a verificar.
+        
+    Returns:
+        True si la URL parece ser de una imagen, False en caso contrario.
+    """
     if not url:
         return False
     url_lower = url.lower()
@@ -94,30 +105,41 @@ def _extract_filename_from_url(url: str) -> Optional[str]:
 
 
 @dataclass
-class ScrapedImageUrlInfo:
-    """Información de una URL de imagen scrapeada del HTML."""
-    url: str
-    source: str  # 'img_tag', 'style', 'data_attr', 'json', 'regex'
-    attribute: Optional[str] = None  # 'src', 'data-src', 'background-image', etc.
-
-
-@dataclass
 class BundleDetail:
     price_tiers: List[Dict[str, Any]]
     book_list: List[Dict[str, Any]]
     featured_image: Optional[str]
     msrp_total: Optional[float]
     raw_html: Optional[str] = None  # HTML raw del bundle
-    scraped_image_urls: List[ScrapedImageUrlInfo] = None  # URLs absolutas scrapeadas del HTML
 
 
 class ImageUrlScraper:
     BASE_URL = 'https://www.humblebundle.com'
 
     def __init__(self, session: Session | None = None) -> None:
+        """
+        Inicializa el scraper de URLs de imágenes.
+        
+        Args:
+            session: Sesión de requests a usar. Si es None, se crea una nueva.
+        """
         self.session = session or Session()
 
     def fetch_detail(self, product_path: str | None, machine_name: str | None = None) -> Optional[BundleDetail]:
+        """
+        Obtiene los detalles completos de un bundle desde su página.
+        
+        Realiza scraping de la página del bundle para extraer información
+        sobre precios, lista de libros e imágenes resolviendo las rutas
+        encontradas en el HTML.
+        
+        Args:
+            product_path: Ruta o URL del producto. Puede ser relativa o absoluta.
+            machine_name: Nombre de máquina del bundle (opcional, no se usa actualmente).
+            
+        Returns:
+            BundleDetail con la información extraída o None si hay un error.
+        """
         if not product_path:
             return None
         url = product_path if product_path.startswith('http') else f'{self.BASE_URL}{product_path}'
@@ -145,7 +167,7 @@ class ImageUrlScraper:
             return None
         
         # Extraer URLs de imágenes JPG del HTML usando BeautifulSoup
-        image_urls_map, scraped_urls_info = self._extract_jpg_urls_from_html_with_info(soup, response.text)
+        image_urls_map = self._extract_jpg_urls_from_html_with_info(soup, response.text)
         
         tier_pricing = bundle_data.get('tier_pricing_data', {})
         tier_display = bundle_data.get('tier_display_data', {})
@@ -168,7 +190,6 @@ class ImageUrlScraper:
             featured_image=featured_image,
             msrp_total=msrp_total,
             raw_html=raw_html,
-            scraped_image_urls=scraped_urls_info or [],
         )
 
     @staticmethod
@@ -188,6 +209,22 @@ class ImageUrlScraper:
         return tiers
 
     def _extract_book_list(self, tier_items, display, image_urls_map: Dict[str, str] = None) -> List[Dict[str, Any]]:
+        """
+        Extrae la lista de libros del bundle desde los datos del JSON.
+        
+        Construye la lista de libros con sus metadatos, precios, imágenes
+        y la información de a qué tier pertenece cada libro.
+        
+        Args:
+            tier_items: Diccionario con información de los items por tier.
+            display: Diccionario con información de visualización de los tiers.
+            image_urls_map: Mapeo de nombres de archivo a URLs absolutas
+                extraídas del HTML. Si es None, se usa un diccionario vacío.
+                
+        Returns:
+            Lista de diccionarios, cada uno representando un libro con sus
+            metadatos (machine_name, title, msrp, preview, image, content_type, tiers).
+        """
         if image_urls_map is None:
             image_urls_map = {}
         
@@ -249,24 +286,22 @@ class ImageUrlScraper:
         Extrae URLs de imágenes JPG del HTML usando BeautifulSoup (método legacy).
         Mantenido para compatibilidad.
         """
-        image_urls_map, _ = ImageUrlScraper._extract_jpg_urls_from_html_with_info(soup, html_content)
-        return image_urls_map
+        return ImageUrlScraper._extract_jpg_urls_from_html_with_info(soup, html_content)
     
     @staticmethod
-    def _extract_jpg_urls_from_html_with_info(soup: BeautifulSoup, html_content: str) -> tuple[Dict[str, str], List[ScrapedImageUrlInfo]]:
+    def _extract_jpg_urls_from_html_with_info(soup: BeautifulSoup, html_content: str) -> Dict[str, str]:
         """
         Extrae URLs de imágenes JPG del HTML usando BeautifulSoup.
-        Retorna tanto el mapeo (para compatibilidad) como la lista de URLs scrapeadas con info.
+        Retorna un mapeo filename -> URL absoluta encontrado en el HTML.
         
         Args:
             soup: Objeto BeautifulSoup del HTML parseado
             html_content: Contenido HTML como string
             
         Returns:
-            Tupla: (diccionario mapeo, lista de URLs scrapeadas con información)
+            Diccionario mapeo para localizar imágenes por filename.
         """
         image_urls_map: Dict[str, str] = {}
-        scraped_urls: List[ScrapedImageUrlInfo] = []
         seen_urls: set[str] = set()
         
         # 1. Buscar en etiquetas <img> - SOLO URLs absolutas
@@ -282,12 +317,6 @@ class ImageUrlScraper:
                             absolute_url = ImageUrlScraper._get_absolute_url_from_html(u)
                             if absolute_url and absolute_url not in seen_urls:
                                 seen_urls.add(absolute_url)
-                                scraped_urls.append(ScrapedImageUrlInfo(
-                                    url=absolute_url,
-                                    source='img_tag',
-                                    attribute='srcset'
-                                ))
-                                # Para el mapeo (compatibilidad)
                                 filename = _extract_filename_from_url(absolute_url)
                                 if filename:
                                     image_urls_map[filename] = absolute_url
@@ -295,12 +324,6 @@ class ImageUrlScraper:
                         absolute_url = ImageUrlScraper._get_absolute_url_from_html(url)
                         if absolute_url and absolute_url not in seen_urls:
                             seen_urls.add(absolute_url)
-                            scraped_urls.append(ScrapedImageUrlInfo(
-                                url=absolute_url,
-                                source='img_tag',
-                                attribute=attr
-                            ))
-                            # Para el mapeo (compatibilidad)
                             filename = _extract_filename_from_url(absolute_url)
                             if filename:
                                 image_urls_map[filename] = absolute_url
@@ -316,12 +339,6 @@ class ImageUrlScraper:
                 absolute_url = ImageUrlScraper._get_absolute_url_from_html(url)
                 if absolute_url and absolute_url not in seen_urls:
                     seen_urls.add(absolute_url)
-                    scraped_urls.append(ScrapedImageUrlInfo(
-                        url=absolute_url,
-                        source='style',
-                        attribute='background-image'
-                    ))
-                    # Para el mapeo
                     filename = _extract_filename_from_url(absolute_url)
                     if filename:
                         image_urls_map[filename] = absolute_url
@@ -335,12 +352,6 @@ class ImageUrlScraper:
                 absolute_url = ImageUrlScraper._get_absolute_url_from_html(url)
                 if absolute_url and absolute_url not in seen_urls:
                     seen_urls.add(absolute_url)
-                    scraped_urls.append(ScrapedImageUrlInfo(
-                        url=absolute_url,
-                        source='data_attr',
-                        attribute=attr
-                    ))
-                    # Para el mapeo
                     filename = _extract_filename_from_url(absolute_url)
                     if filename:
                         image_urls_map[filename] = absolute_url
@@ -355,12 +366,6 @@ class ImageUrlScraper:
                     absolute_url = ImageUrlScraper._get_absolute_url_from_html(url)
                     if absolute_url and absolute_url not in seen_urls:
                         seen_urls.add(absolute_url)
-                        scraped_urls.append(ScrapedImageUrlInfo(
-                            url=absolute_url,
-                            source='json',
-                            attribute=None
-                        ))
-                        # Para el mapeo
                         filename = _extract_filename_from_url(absolute_url)
                         if filename:
                             image_urls_map[filename] = absolute_url
@@ -390,18 +395,12 @@ class ImageUrlScraper:
                         url_lower = absolute_url.lower()
                         if '.jpg' in url_lower or '.jpeg' in url_lower:
                             seen_urls.add(absolute_url)
-                            scraped_urls.append(ScrapedImageUrlInfo(
-                                url=absolute_url,
-                                source='regex',
-                                attribute=None
-                            ))
-                            # Para el mapeo
                             filename = _extract_filename_from_url(absolute_url)
                             if filename:
                                 image_urls_map[filename] = absolute_url
         
-        logger.debug(f'Encontradas {len(scraped_urls)} URLs absolutas scrapeadas del HTML')
-        return image_urls_map, scraped_urls
+        logger.debug(f'Encontradas {len(image_urls_map)} URLs absolutas scrapeadas del HTML')
+        return image_urls_map
     
     @staticmethod
     def _extract_urls_from_json(obj, urls: Optional[set] = None) -> set:
@@ -483,4 +482,3 @@ class ImageUrlScraper:
             return float(amount)
         except (TypeError, ValueError):
             return None
-

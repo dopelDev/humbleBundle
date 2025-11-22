@@ -8,6 +8,16 @@
         </button>
       </div>
 
+      <div v-if="bundle.featured_image" class="bundle-image-section">
+        <div class="bundle-image-wrapper">
+          <img 
+            :src="getImageUrl(bundle.featured_image)" 
+            :alt="bundle.tile_name || 'Bundle image'" 
+            class="bundle-image"
+          />
+        </div>
+      </div>
+
       <div class="modal-body">
         <div v-if="bundle.book_list && bundle.book_list.length > 0" class="books-list">
           <div
@@ -31,7 +41,7 @@
               </button>
             </div>
             <div
-              v-if="expandedBooks.has(book.machine_name) && book.image"
+              v-show="expandedBooks.has(book.machine_name) && book.image"
               class="book-expanded-image"
             >
               <img :src="getImageUrl(book.image)" :alt="book.title || 'Book cover'" class="expanded-book-image" />
@@ -100,7 +110,7 @@ const handleOverlayClick = (event: MouseEvent) => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-black);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,7 +137,7 @@ const handleOverlayClick = (event: MouseEvent) => {
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px var(--shadow-black-dark);
   border: 1px solid var(--border);
   overflow: hidden;
   animation: slideUp 0.3s ease;
@@ -175,6 +185,42 @@ const handleOverlayClick = (event: MouseEvent) => {
       background: var(--surface);
     }
   }
+}
+
+.bundle-image-section {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--background);
+}
+
+.bundle-image-wrapper {
+  width: 100%;
+  max-width: 400px;
+  background: var(--image-bg);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px var(--shadow-black);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// En modo oscuro, usar un fondo más oscuro
+:global(body.dark) .bundle-image-wrapper,
+:global(body[data-theme="dark"]) .bundle-image-wrapper {
+  background: var(--image-bg);
+}
+
+.bundle-image {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .modal-body {
@@ -318,7 +364,7 @@ const handleOverlayClick = (event: MouseEvent) => {
   max-width: 100%;
   max-height: 400px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--shadow-black-medium);
   object-fit: contain;
 }
 
@@ -360,6 +406,19 @@ const handleOverlayClick = (event: MouseEvent) => {
   .modal-body,
   .modal-footer {
     padding: 16px;
+  }
+
+  .bundle-image-section {
+    padding: 16px;
+  }
+
+  .bundle-image-wrapper {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .bundle-image {
+    max-height: 200px;
   }
 
   .book-info {
