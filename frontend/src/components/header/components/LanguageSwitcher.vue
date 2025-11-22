@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
@@ -26,9 +26,24 @@ const { locale } = useI18n();
 const currentLocale = computed(() => locale.value);
 
 const toggleLanguage = () => {
+  const appShell = document.querySelector('.app-shell') as HTMLElement;
+  
+  if (!appShell) return;
+  
+  // Add class to trigger animation BEFORE changing locale
+  appShell.classList.add('locale-changing');
+  
+  // Force a reflow to ensure the class is applied
+  void appShell.offsetHeight;
+  
+  // Change locale
   locale.value = locale.value === "en" ? "es" : "en";
-  // Persist language preference in localStorage
   localStorage.setItem("preferred-language", locale.value);
+  
+  // Remove animation class after transition completes
+  setTimeout(() => {
+    appShell.classList.remove('locale-changing');
+  }, 500); // Match animation duration (0.5s)
 };
 </script>
 
@@ -36,7 +51,7 @@ const toggleLanguage = () => {
 .language-switcher-btn {
   position: fixed;
   top: 24px;
-  right: 220px;
+  right: 240px;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-shell">
+  <div class="app-shell" :class="`locale-${locale}`">
     <DarkButton />
     <LanguageSwitcher />
     
@@ -14,7 +14,7 @@
           <span><strong>{{ activeBundles.length }}</strong> {{ $t('app.stats.active') }}</span>
         </div>
         <div class="last-update" v-show="lastUpdate">
-          <span>{{ $t('app.lastUpdate') }} {{ formatDate(lastUpdate) }}</span>
+          <span>{{ $t('app.lastUpdate') }} {{ lastUpdate ? formatDate(lastUpdate) : '' }}</span>
         </div>
         <button class="refresh" @click="runETL" :disabled="loading">
           {{ loading ? $t('app.buttons.updating') : $t('app.buttons.updateData') }}

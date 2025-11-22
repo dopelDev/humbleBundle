@@ -30,6 +30,65 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+// Language transition animations
+// Keyframe animation for language change
+@keyframes languageFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Apply transition to text elements that contain translations
+.app-shell h1,
+.app-shell h2,
+.app-shell h3,
+.app-shell h4,
+.app-shell h5,
+.app-shell h6,
+.app-shell p,
+.app-shell span,
+.app-shell button,
+.app-shell label,
+.app-shell a,
+.app-shell li,
+.app-shell div {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+// Exclude certain elements from transition
+.app-shell .language-switcher-btn,
+.app-shell .language-switcher-btn *,
+.app-shell .dark-mode-btn,
+.app-shell .dark-mode-btn *,
+.app-shell img,
+.app-shell svg,
+.app-shell .dark-mode-btn__thumb {
+  transition: none !important;
+}
+
+// Apply animation when locale is changing - target all text content
+.app-shell.locale-changing {
+  h1, h2, h3, h4, h5, h6,
+  p,
+  span:not(.language-switcher-btn__icon):not(.language-switcher-btn__label):not(.dark-mode-btn__icon):not(.dark-mode-btn__thumb),
+  button:not(.language-switcher-btn):not(.dark-mode-btn),
+  label,
+  a,
+  li,
+  div:not(.language-switcher-btn):not(.dark-mode-btn):not(.dark-mode-btn__track) {
+    animation: languageFade 0.5s ease-in-out !important;
+  }
+}
+
 a {
   color: var(--primary);
   transition: color 0.2s ease;
