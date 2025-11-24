@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Float, JSON, String
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import Boolean, Column, DateTime, Float, JSON, String, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 
@@ -17,7 +16,7 @@ class Bundle(Base):
     __tablename__ = 'bundle'
     __table_args__ = ()
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
+    id = Column(String, primary_key=True, default=lambda: str(uuid4()), index=True)
     machine_name = Column(String, unique=True, index=True, nullable=False)
     high_res_tile_image = Column(String)
     disable_hero_tile = Column(Boolean)
@@ -54,8 +53,8 @@ class Bundle(Base):
     duration_days = Column(Float)
     is_active = Column(Boolean, default=False, index=True)
     price_tiers = Column(JSON)
-    book_list = Column(JSON)
-    featured_image = Column(String)
+    book_list = Column(JSON)  # Lista de libros con sus imágenes (image URLs extraídas de div.img-container)
+    featured_image = Column(String)  # URL de imagen destacada extraída de div.img-container
     msrp_total = Column(Float)
     raw_html = Column(String)  # HTML raw del bundle para tests
 
@@ -71,8 +70,8 @@ class LandingPageRawData(Base):
     __tablename__ = 'landing_page_raw_data'
     __table_args__ = ()
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
-    json_data = Column(JSONB, nullable=False)
+    id = Column(String, primary_key=True, default=lambda: str(uuid4()), index=True)
+    json_data = Column(JSON, nullable=False)
     scraped_date = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     source_url = Column(String, nullable=False)
     json_hash = Column(String, nullable=True, index=True)

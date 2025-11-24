@@ -1,8 +1,24 @@
 export default {
   app: {
-    eyebrow: 'Humble ETL',
-    title: 'Explora los bundles de libros en tiempo real.',
-    description: 'Este frontend reutiliza la estética de <strong>simpleAbout</strong> y se conecta al backend FastAPI que normaliza los bundles públicos de Humble Bundle.',
+    eyebrow: 'Humble Tracker',
+    title: 'Book bundles in real time',
+    description: 'Pipeline ETL + API v1.0 + frontend para obtener bundles públicos de Humble Bundle Books, normalizarlos y almacenarlos en SQLite. Construido con Python 3.13, FastAPI, Vue 3 y SQLite.',
+    techStack: {
+      title: 'Stack Tecnológico',
+      backend: 'Backend: Python 3.13, FastAPI, SQLAlchemy, SQLite',
+      frontend: 'Frontend: Vue 3, Vite, TypeScript',
+      scraping: 'Scraping: BeautifulSoup4, Requests, Pandas',
+    },
+    endpoints: {
+      title: 'Endpoints de la API',
+      health: 'GET /health - Estado del servicio',
+      bundles: 'GET /bundles - Lista completa de bundles',
+      bundleById: 'GET /bundles/{id} - Detalles del bundle por ID',
+      bundleByName: 'GET /bundles/by-machine-name/{name} - Bundle por machine name',
+      featured: 'GET /bundles/featured - Bundle destacado',
+      etl: 'POST /etl/run - Ejecutar pipeline ETL',
+      rawData: 'GET /landing-page-raw-data - Registros de datos raw',
+    },
     stats: {
       totalBundles: 'bundles totales',
       active: 'activos',
@@ -15,9 +31,6 @@ export default {
     etlResult: {
       title: 'Resultado de actualización:',
       bundlesProcessed: 'bundles procesados',
-      imagesDownloaded: 'imágenes descargadas',
-      bundleImagesDownloaded: 'imágenes de bundles',
-      bookImagesDownloaded: 'imágenes de libros',
     },
     tabs: {
       activeBundles: 'Bundles Activos',
@@ -25,9 +38,9 @@ export default {
     },
   },
   profile: {
-    name: 'Humble Tracker',
-    tagline: 'Bundles de libros en tiempo real',
-    description: 'Frontend inspirado en simpleAbout con dark mode, responsive y consumo del ETL FastAPI para mostrar los bundles vigentes y el destacado semanal.',
+    name: 'dopeldev',
+    tagline: 'Full Stack Developer',
+    description: 'Desarrollador apasionado por crear soluciones innovadoras. Especializado en desarrollo web moderno con Vue, React, Python y FastAPI.',
   },
   featured: {
     eyebrow: 'Destacado',
@@ -43,17 +56,20 @@ export default {
     close: 'Cerrar',
     noBooks: 'No hay libros disponibles para este bundle.',
     viewBundle: 'Ver bundle en Humble →',
+    machineName: 'Machine Name',
+    title: 'Título',
+    msrp: 'MSRP',
+    contentType: 'Tipo de Contenido',
+    tiers: 'Tiers',
+    preview: 'Preview',
   },
   main: {
     activeBundles: 'Bundles activos',
     bundles: 'Bundles',
   },
-  contact: {
-    title: 'Contacto',
-    description: '¿Tienes ideas o bugs para reportar? Escríbeme.',
-  },
   tests: {
-    title: 'Tests',
+    title: 'Tests y Utilidades',
+    empty: 'No hay tests disponibles actualmente.',
   },
   utilities: {
     title: 'Utilidades',
@@ -130,4 +146,3 @@ export default {
     downloadTitle: 'Descargar JSON',
   },
 };
-

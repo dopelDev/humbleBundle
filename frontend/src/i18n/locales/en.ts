@@ -1,8 +1,24 @@
 export default {
   app: {
-    eyebrow: 'Humble ETL',
-    title: 'Explore book bundles in real time.',
-    description: 'This frontend reuses the <strong>simpleAbout</strong> aesthetic and connects to the FastAPI backend that normalizes public Humble Bundle bundles.',
+    eyebrow: 'Humble Tracker',
+    title: 'Book bundles in real time',
+    description: 'ETL pipeline + API v1.0 + frontend to fetch public bundles from Humble Bundle Books, normalize them and store them in SQLite. Built with Python 3.13, FastAPI, Vue 3, and SQLite.',
+    techStack: {
+      title: 'Tech Stack',
+      backend: 'Backend: Python 3.13, FastAPI, SQLAlchemy, SQLite',
+      frontend: 'Frontend: Vue 3, Vite, TypeScript',
+      scraping: 'Scraping: BeautifulSoup4, Requests, Pandas',
+    },
+    endpoints: {
+      title: 'API Endpoints',
+      health: 'GET /health - Service status',
+      bundles: 'GET /bundles - Complete bundle list',
+      bundleById: 'GET /bundles/{id} - Bundle details by ID',
+      bundleByName: 'GET /bundles/by-machine-name/{name} - Bundle by machine name',
+      featured: 'GET /bundles/featured - Featured bundle',
+      etl: 'POST /etl/run - Trigger ETL pipeline',
+      rawData: 'GET /landing-page-raw-data - Raw data records',
+    },
     stats: {
       totalBundles: 'total bundles',
       active: 'active',
@@ -15,9 +31,6 @@ export default {
     etlResult: {
       title: 'Update result:',
       bundlesProcessed: 'bundles processed',
-      imagesDownloaded: 'images downloaded',
-      bundleImagesDownloaded: 'bundle images downloaded',
-      bookImagesDownloaded: 'book images downloaded',
     },
     tabs: {
       activeBundles: 'Active Bundles',
@@ -25,9 +38,9 @@ export default {
     },
   },
   profile: {
-    name: 'Humble Tracker',
-    tagline: 'Book bundles in real time',
-    description: 'Frontend inspired by simpleAbout with dark mode, responsive design and FastAPI ETL consumption to display active bundles and the weekly featured bundle.',
+    name: 'dopeldev',
+    tagline: 'Full Stack Developer',
+    description: 'Passionate developer creating innovative solutions. Specialized in modern web development with Vue, React, Python and FastAPI.',
   },
   featured: {
     eyebrow: 'Featured',
@@ -43,17 +56,20 @@ export default {
     close: 'Close',
     noBooks: 'No books available for this bundle.',
     viewBundle: 'View bundle on Humble →',
+    machineName: 'Machine Name',
+    title: 'Title',
+    msrp: 'MSRP',
+    contentType: 'Content Type',
+    tiers: 'Tiers',
+    preview: 'Preview',
   },
   main: {
     activeBundles: 'Active bundles',
     bundles: 'Bundles',
   },
-  contact: {
-    title: 'Contact',
-    description: 'Have ideas or bugs to report? Write to me.',
-  },
   tests: {
-    title: 'Tests',
+    title: 'Tests and Utilities',
+    empty: 'No tests available at the moment.',
   },
   utilities: {
     title: 'Utilities',
@@ -130,4 +146,3 @@ export default {
     downloadTitle: 'Download JSON',
   },
 };
-

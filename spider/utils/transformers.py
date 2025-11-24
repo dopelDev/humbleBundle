@@ -52,6 +52,7 @@ def serialize_list(value: Any) -> Optional[str]:
 def absolute_url(value: Optional[str], base: str = BASE_URL) -> Optional[str]:
     """
     Convierte una URL relativa a una URL absoluta.
+    Valida que el valor sea una URL válida y no un tamaño de archivo u otro valor inválido.
     
     Si la URL ya es absoluta (empieza con http:// o https://), la retorna
     tal cual. Si es relativa, la combina con la URL base.
@@ -61,13 +62,26 @@ def absolute_url(value: Optional[str], base: str = BASE_URL) -> Optional[str]:
         base: URL base para construir URLs absolutas. Por defecto BASE_URL.
         
     Returns:
-        URL absoluta o None si el valor es None o vacío.
+        URL absoluta o None si el valor es None, vacío o no es una URL válida.
     """
     if not value:
         return None
-    if value.startswith('http://') or value.startswith('https://'):
-        return value
-    return f'{base.rstrip("/")}/{value.lstrip("/")}'
+    
+    # Validar que no sea un tamaño de archivo u otro valor inválido
+    value_str = str(value).strip()
+    
+    # Detectar tamaños de archivo (MB, KB, GB, etc.)
+    import re
+    size_pattern = r'^\d+\.?\d*\s*(MB|KB|GB|TB|PB|EB|ZB|YB|B)\s*$'
+    if re.match(size_pattern, value_str, re.IGNORECASE):
+        return None
+    
+    # Si ya es una URL absoluta, retornarla directamente
+    if value_str.startswith('http://') or value_str.startswith('https://'):
+        return value_str
+    
+    # Si es relativa, combinarla con la URL base
+    return f'{base.rstrip("/")}/{value_str.lstrip("/")}'
 
 
 def safe_float(value: Any) -> Optional[float]:

@@ -4,7 +4,7 @@ Módulo spider para scraping y procesamiento de bundles de Humble Bundle.
 
 # Exportaciones principales para mantener compatibilidad
 from .core.spider import HumbleSpider
-from .core.errors import HumbleSpiderError, ImageUrlScraperError
+from .core.errors import HumbleSpiderError
 from .database.models import Base, Bundle, LandingPageRawData
 from .schemas.bundle import BundleRecord
 from .schemas.raw_data import LandingPageRawDataRecord
@@ -23,7 +23,6 @@ __all__ = [
     # Core
     'HumbleSpider',
     'HumbleSpiderError',
-    'ImageUrlScraperError',
     # Database
     'Base',
     'Bundle',

@@ -4,23 +4,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     """
-    Configuración de la aplicación para conexión a base de datos.
+    Configuración de la aplicación para conexión a base de datos SQLite.
     
     Atributos:
-        pguser: Usuario de PostgreSQL. Por defecto 'postgres'.
-        pgpassword: Contraseña de PostgreSQL. Por defecto 'postgres'.
-        pgdatabase: Nombre de la base de datos. Por defecto 'test'.
-        pghost: Host de PostgreSQL. Por defecto 'localhost'.
-        pgport: Puerto de PostgreSQL. Por defecto 5432.
+        db_path: Ruta al archivo de base de datos SQLite. Por defecto 'humble_bundle.db'.
         sql_echo: Si True, imprime las consultas SQL. Por defecto False.
     
-    Las variables de entorno deben tener el prefijo 'DB_' (ej: DB_PGUSER).
+    Las variables de entorno deben tener el prefijo 'DB_' (ej: DB_DB_PATH).
     """
-    pguser: str = 'postgres'
-    pgpassword: str = 'postgres'
-    pgdatabase: str = 'test'
-    pghost: str = 'localhost'
-    pgport: int = 5432
+    db_path: str = 'humble_bundle.db'
     sql_echo: bool = False
 
     model_config = SettingsConfigDict(

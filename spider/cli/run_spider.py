@@ -1,8 +1,13 @@
+import sys
 from ..core.spider import HumbleSpider
 from ..core.errors import HumbleSpiderError
 from ..config.settings import get_settings
 from ..database.session import get_session_factory
-from ..database.persistence import persist_bundles, remove_outdated_bundles, persist_landing_page_raw_data
+from ..database.persistence import (
+    persist_bundles,
+    remove_outdated_bundles,
+    persist_landing_page_raw_data,
+)
 
 
 def main() -> None:
@@ -19,7 +24,7 @@ def main() -> None:
     spider = HumbleSpider()
     
     try:
-        print('Iniciando spider...')
+        print('Iniciando HumbleSpider...')
         records = spider.fetch_bundles()
         print(f'Bundles obtenidos: {len(records)}')
     except HumbleSpiderError as exc:
@@ -43,4 +48,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-

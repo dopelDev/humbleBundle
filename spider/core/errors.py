@@ -5,6 +5,3 @@ class HumbleSpiderError(RuntimeError):
     """Errores controlados del spider."""
 
 
-class ImageUrlScraperError(RuntimeError):
-    """Errores al scrapear URLs de imágenes."""
-

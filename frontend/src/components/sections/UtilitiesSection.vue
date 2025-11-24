@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import BundlesDataUtility from "@/components/sections/utilities/BundlesDataUtility.vue";
-import LandingPageRawDataUtility from "@/components/sections/utilities/LandingPageRawDataUtility.vue";
+import BundlesDataUtility from "@/components/sections/BundlesDataUtility.vue";
+import LandingPageRawDataUtility from "@/components/sections/LandingPageRawDataUtility.vue";
 </script>
 
 <style scoped lang="scss">

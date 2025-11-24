@@ -8,7 +8,32 @@
       <div class="status-card">
         <p class="eyebrow">{{ $t('app.eyebrow') }}</p>
         <h1>{{ $t('app.title') }}</h1>
-        <p v-html="$t('app.description')"></p>
+        <p class="project-description">{{ $t('app.description') }}</p>
+        
+        <div class="project-info">
+          <div class="tech-stack">
+            <h3>{{ $t('app.techStack.title') }}</h3>
+            <ul>
+              <li>{{ $t('app.techStack.backend') }}</li>
+              <li>{{ $t('app.techStack.frontend') }}</li>
+              <li>{{ $t('app.techStack.scraping') }}</li>
+            </ul>
+          </div>
+          
+          <div class="endpoints">
+            <h3>{{ $t('app.endpoints.title') }}</h3>
+            <ul>
+              <li><code>{{ $t('app.endpoints.health') }}</code></li>
+              <li><code>{{ $t('app.endpoints.bundles') }}</code></li>
+              <li><code>{{ $t('app.endpoints.bundleById') }}</code></li>
+              <li><code>{{ $t('app.endpoints.bundleByName') }}</code></li>
+              <li><code>{{ $t('app.endpoints.featured') }}</code></li>
+              <li><code>{{ $t('app.endpoints.etl') }}</code></li>
+              <li><code>{{ $t('app.endpoints.rawData') }}</code></li>
+            </ul>
+          </div>
+        </div>
+        
         <div class="stats" v-show="!loading">
           <span><strong>{{ bundles.length }}</strong> {{ $t('app.stats.totalBundles') }}</span>
           <span><strong>{{ activeBundles.length }}</strong> {{ $t('app.stats.active') }}</span>
@@ -25,9 +50,6 @@
           <h4>{{ $t('app.etlResult.title') }}</h4>
           <ul>
             <li><strong>{{ etlResult.bundles_processed }}</strong> {{ $t('app.etlResult.bundlesProcessed') }}</li>
-            <li><strong>{{ etlResult.images_downloaded }}</strong> {{ $t('app.etlResult.imagesDownloaded') }}</li>
-            <li><strong>{{ etlResult.bundle_images_downloaded }}</strong> {{ $t('app.etlResult.bundleImagesDownloaded') }}</li>
-            <li><strong>{{ etlResult.book_images_downloaded }}</strong> {{ $t('app.etlResult.bookImagesDownloaded') }}</li>
           </ul>
         </div>
       </div>
@@ -57,7 +79,6 @@
           :bundles="activeBundles"
           :featured="featured"
         />
-        <ContactSection />
       </div>
 
       <div v-show="activeTab === 'tests'" class="tab-content">
@@ -76,7 +97,6 @@ import LanguageSwitcher from "@components/header/components/LanguageSwitcher.vue
 import ProfileCard from "@components/cards/ProfileCard.vue";
 import DesktopMain from "@components/main/DesktopMain.vue";
 import MobileMain from "@components/main/MobileMain.vue";
-import ContactSection from "@components/sections/ContactSection.vue";
 import TestsSection from "@components/sections/TestsSection.vue";
 import UtilitiesSection from "@components/sections/UtilitiesSection.vue";
 
@@ -85,7 +105,7 @@ import { useBundles } from "@composables/useBundles";
 
 const { locale } = useI18n();
 const { isMobile } = useResponsiveQueryEvent();
-const { bundles, featured, activeBundles, loading, error, lastUpdate, etlResult, refresh, runETL } =
+const { bundles, featured, activeBundles, loading, error, lastUpdate, etlResult, runETL } =
   useBundles();
 
 const activeTab = ref<'bundles' | 'tests'>('bundles');
@@ -129,6 +149,56 @@ const formatDate = (date: Date) => {
     h1 {
       font-size: 2rem;
       color: var(--accent);
+    }
+
+    .project-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .project-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+
+      h3 {
+        margin: 0 0 12px 0;
+        font-size: 1rem;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+        list-style: disc;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.85rem;
+        color: var(--text);
+
+        li {
+          line-height: 1.5;
+
+          code {
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monofur Nerd Font', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            border: 1px solid var(--border);
+          }
+        }
+      }
     }
 
     .stats {

@@ -1,5 +1,5 @@
 """Módulos de scraping."""
 
-from .image_scraper import ImageUrlScraper, BundleDetail
+from .bundle_detail_scraper import BundleDetailScraper, BundleDetails
 
-__all__ = ['ImageUrlScraper', 'BundleDetail']
+__all__ = ['BundleDetailScraper', 'BundleDetails']

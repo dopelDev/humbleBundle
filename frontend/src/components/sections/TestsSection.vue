@@ -2,12 +2,12 @@
   <div class="tests-section">
     <h2 class="section-title">{{ $t('tests.title') }}</h2>
     <div class="tests-grid">
+      <p class="empty-state">{{ $t('tests.empty') }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Stub component - diseño mantenido para uso futuro
 </script>
 
 <style scoped lang="scss">
@@ -25,6 +25,13 @@
   .tests-grid {
     display: grid;
     gap: 24px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 1rem;
   }
 }
 

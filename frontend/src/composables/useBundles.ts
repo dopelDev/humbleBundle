@@ -5,16 +5,6 @@ import { get, postLong, isAxiosError } from "@api/client";
 interface ETLRunResponse {
   bundles_processed: number;
   cleanup_ran: boolean;
-  images_downloaded: number;
-  bundle_images_downloaded: number;
-  book_images_downloaded: number;
-  images_info: Array<{
-    url?: string;
-    path?: string;
-    category?: string;
-    identifier?: string;
-    cached?: boolean;
-  }>;
 }
 
 export function useBundles() {
@@ -33,17 +23,29 @@ export function useBundles() {
     loading.value = true;
     error.value = null;
     try {
-      const [all, feat] = await Promise.all([
-        get<Bundle[]>("/bundles"),
-        get<Bundle>("/bundles/featured"),
-      ]);
+      // Cargar bundles primero
+      const all = await get<Bundle[]>("/bundles");
       bundles.value = all;
-      featured.value = feat;
+      
+      // Intentar cargar featured, pero no fallar si no existe (404)
+      try {
+        const feat = await get<Bundle>("/bundles/featured");
+        featured.value = feat;
+      } catch (featErr) {
+        // Si es 404, simplemente no hay featured bundle (es normal si no hay bundles)
+        if (isAxiosError(featErr) && featErr.response?.status === 404) {
+          featured.value = null;
+        } else {
+          // Si es otro error, loguearlo pero no romper la carga
+          console.warn("Error cargando featured bundle:", featErr);
+          featured.value = null;
+        }
+      }
       
       // Obtener la fecha de verificación más reciente
       const allDates = [
         ...all.map(b => b.verification_date).filter(Boolean) as string[],
-        feat?.verification_date
+        featured.value?.verification_date
       ].filter(Boolean) as string[];
       
       if (allDates.length > 0) {
@@ -107,4 +109,3 @@ export function useBundles() {
     runETL,
   };
 }
-

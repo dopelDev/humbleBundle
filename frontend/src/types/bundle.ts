@@ -26,6 +26,7 @@ export interface Bundle {
   tile_short_name?: string;
   category?: string;
   tile_stamp?: string;
+  tile_logo?: string | null;
   product_url?: string;
   duration_days?: number | null;
   is_active?: boolean;

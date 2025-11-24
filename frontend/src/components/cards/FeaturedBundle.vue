@@ -6,6 +6,7 @@
         :src="getImageUrl(bundle.featured_image)"
         :alt="bundle.tile_name"
         loading="lazy"
+        @error="handleImageError"
       />
       <div class="hero-info">
         <p class="eyebrow">{{ $t('featured.eyebrow') }}</p>
@@ -50,12 +51,25 @@ defineProps<{
 
 // Obtener URL de imagen directamente desde Humble Bundle
 // Las URLs vienen completas desde el backend, no necesitan construcción adicional
+// 
+// Las imágenes se extraen SOLO de divs con clase "img-container" con esta estructura:
+// <div class="img-container" style="margin-bottom: unset; margin-top: unset; top: unset;">
+//     <img data-lazy="https://hb.imgix.net/..." src="https://hb.imgix.net/..." ...>
+// </div>
+// Esto asegura mayor precisión al extraer solo las imágenes relevantes de los bundles.
 const getImageUrl = (imageUrl: string | null | undefined): string => {
   if (!imageUrl) return '';
   
   // Las URLs del backend son absolutas (https://www.humblebundle.com/... o https://hb.imgix.net/...)
   // Solo retornamos la URL tal cual
   return imageUrl;
+};
+
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement;
+  // Ocultar la imagen si falla al cargar
+  img.style.display = 'none';
+  console.warn('Error cargando imagen del bundle:', img.src);
 };
 </script>
 

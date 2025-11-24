@@ -1,4 +1,3 @@
-from uuid import UUID
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -11,7 +10,11 @@ from sqlalchemy.orm import Session
 import logging
 
 from spider.database.session import get_session_factory as build_session_factory
-from spider.database.persistence import persist_bundles, remove_outdated_bundles, persist_landing_page_raw_data
+from spider.database.persistence import (
+    persist_bundles,
+    remove_outdated_bundles,
+    persist_landing_page_raw_data,
+)
 from spider.core.spider import HumbleSpider
 from spider.core.errors import HumbleSpiderError
 from spider.database.models import Bundle, LandingPageRawData
@@ -19,15 +22,22 @@ from spider.config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
-from api.schemas import BundleResponse, ETLRunResponse, LandingPageRawDataResponse
+from api.schemas import (
+    BundleResponse,
+    ETLRunResponse,
+    LandingPageRawDataResponse,
+)
 
 settings = get_settings()
 SessionFactory = None
 AsyncSessionFactory = None
 
 def get_async_engine():
-    """Creates the async engine for FastAPI."""
-    uri = f'postgresql+asyncpg://{settings.pguser}:{settings.pgpassword}@{settings.pghost}:{settings.pgport}/{settings.pgdatabase}'
+    """Creates the async engine for FastAPI using SQLite."""
+    from pathlib import Path
+    db_path = Path(settings.db_path)
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    uri = f'sqlite+aiosqlite:///{db_path.absolute()}'
     return create_async_engine(uri, echo=settings.sql_echo, future=True)
 
 @asynccontextmanager
@@ -44,10 +54,14 @@ async def lifespan(app: FastAPI):
     # Ensure columns exist (works better with sync)
     from spider.database.persistence import ensure_columns, ensure_landing_page_raw_data_table
     from sqlalchemy import create_engine
+    from pathlib import Path
+    db_path = Path(settings.db_path)
+    db_path.parent.mkdir(parents=True, exist_ok=True)
     sync_engine = create_engine(
-        f'postgresql+psycopg://{settings.pguser}:{settings.pgpassword}@{settings.pghost}:{settings.pgport}/{settings.pgdatabase}',
+        f'sqlite:///{db_path.absolute()}',
         echo=settings.sql_echo,
-        future=True
+        future=True,
+        connect_args={'check_same_thread': False}
     )
     try:
         ensure_columns(sync_engine)
@@ -66,7 +80,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title='Humble Bundle ETL API',
     version='1.0.0',
-    description='API to trigger the ETL and query stored bundles.',
+    description='API v1.0 - Scraper original de Humble Bundle. Trigger ETL and query stored bundles.',
     lifespan=lifespan
 )
 
@@ -86,11 +100,12 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-# Montar directorio de imágenes estáticas
+# Montar directorio de imágenes estáticas (local development)
 import os
 from pathlib import Path
 
-images_dir = Path("/app/images")
+# Usar ruta relativa al directorio del proyecto
+images_dir = Path(__file__).parent.parent / "images"
 # Crear directorios si no existen
 images_dir.mkdir(parents=True, exist_ok=True)
 (images_dir / "bundles").mkdir(parents=True, exist_ok=True)
@@ -129,7 +144,7 @@ async def get_async_db():
 
 @app.get('/health', tags=['health'])
 async def healthcheck():
-    return {'status': 'ok', 'database': settings.pgdatabase}
+    return {'status': 'ok', 'database': settings.db_path}
 
 
 @app.get('/bundles/featured', response_model=BundleResponse, tags=['bundles'])
@@ -156,7 +171,7 @@ async def list_bundles(db: AsyncSession = Depends(get_async_db)):
 
 
 @app.get('/bundles/{bundle_id}', response_model=BundleResponse, tags=['bundles'])
-async def get_bundle(bundle_id: UUID, db: AsyncSession = Depends(get_async_db)):
+async def get_bundle(bundle_id: str, db: AsyncSession = Depends(get_async_db)):
     """Gets a bundle by its UUID."""
     result = await db.execute(
         select(Bundle).filter(Bundle.id == bundle_id)
@@ -181,7 +196,7 @@ async def get_bundle_by_machine_name(machine_name: str, db: AsyncSession = Depen
 
 @app.post('/etl/run', response_model=ETLRunResponse, tags=['etl'])
 def trigger_etl(db: Session = Depends(get_db)):
-    """Executes the complete ETL: downloads bundles, downloads images and saves to the database."""
+    """Executes the ETL: downloads bundles and saves to the database."""
     spider = HumbleSpider()
     try:
         records = spider.fetch_bundles()
@@ -198,11 +213,7 @@ def trigger_etl(db: Session = Depends(get_db)):
     
     return ETLRunResponse(
         bundles_processed=len(records),
-        cleanup_ran=True,
-        images_downloaded=0,
-        bundle_images_downloaded=0,
-        book_images_downloaded=0,
-        images_info=[]
+        cleanup_ran=True
     )
 
 
@@ -229,7 +240,7 @@ async def get_latest_landing_page_raw_data(db: AsyncSession = Depends(get_async_
 
 
 @app.get('/landing-page-raw-data/{raw_data_id}', response_model=LandingPageRawDataResponse, tags=['raw-data'])
-async def get_landing_page_raw_data(raw_data_id: UUID, db: AsyncSession = Depends(get_async_db)):
+async def get_landing_page_raw_data(raw_data_id: str, db: AsyncSession = Depends(get_async_db)):
     """Gets a specific raw data record by its ID."""
     result = await db.execute(
         select(LandingPageRawData).filter(LandingPageRawData.id == raw_data_id)

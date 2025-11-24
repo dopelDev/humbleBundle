@@ -5,8 +5,6 @@ import logging
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from sqlalchemy_utils import create_database, database_exists, drop_database
-from sqlalchemy.dialects.postgresql import insert
 
 from ..config.settings import Settings
 from ..schemas.bundle import BundleRecord
@@ -33,9 +31,9 @@ def ensure_landing_page_raw_data_table(engine) -> None:
             with engine.begin() as connection:
                 connection.execute(text("""
                     CREATE TABLE landing_page_raw_data (
-                        id UUID NOT NULL,
-                        json_data JSONB NOT NULL,
-                        scraped_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                        id VARCHAR NOT NULL,
+                        json_data TEXT NOT NULL,
+                        scraped_date TIMESTAMP NOT NULL,
                         source_url VARCHAR NOT NULL,
                         json_hash VARCHAR,
                         json_version VARCHAR,
@@ -67,17 +65,19 @@ def ensure_columns(engine) -> None:
     
     statements = []
     if 'duration_days' not in columns:
-        statements.append('ALTER TABLE bundle ADD COLUMN duration_days DOUBLE PRECISION')
+        statements.append('ALTER TABLE bundle ADD COLUMN duration_days REAL')
     if 'is_active' not in columns:
-        statements.append('ALTER TABLE bundle ADD COLUMN is_active BOOLEAN DEFAULT FALSE')
+        statements.append('ALTER TABLE bundle ADD COLUMN is_active BOOLEAN DEFAULT 0')
     if 'price_tiers' not in columns:
-        statements.append('ALTER TABLE bundle ADD COLUMN price_tiers JSONB')
+        statements.append('ALTER TABLE bundle ADD COLUMN price_tiers TEXT')
     if 'book_list' not in columns:
-        statements.append('ALTER TABLE bundle ADD COLUMN book_list JSONB')
+        statements.append('ALTER TABLE bundle ADD COLUMN book_list TEXT')
     if 'featured_image' not in columns:
         statements.append('ALTER TABLE bundle ADD COLUMN featured_image VARCHAR')
+    if 'tile_logo' not in columns:
+        statements.append('ALTER TABLE bundle ADD COLUMN tile_logo VARCHAR')
     if 'msrp_total' not in columns:
-        statements.append('ALTER TABLE bundle ADD COLUMN msrp_total DOUBLE PRECISION')
+        statements.append('ALTER TABLE bundle ADD COLUMN msrp_total REAL')
     if 'raw_html' not in columns:
         statements.append('ALTER TABLE bundle ADD COLUMN raw_html TEXT')
     
@@ -92,9 +92,10 @@ def ensure_columns(engine) -> None:
 
 def persist_bundles(records: Iterable[BundleRecord], session: Session) -> None:
     """
-    Persiste los bundles en la base de datos.
+    Persiste los bundles en la base de datos SQLite.
     
     Inserta o actualiza los bundles usando machine_name como clave única.
+    Para SQLite, usa INSERT OR REPLACE.
     
     Args:
         records: Iterable de BundleRecord a persistir.
@@ -103,22 +104,24 @@ def persist_bundles(records: Iterable[BundleRecord], session: Session) -> None:
     Raises:
         RuntimeError: Si ocurre un error al guardar los bundles en la BD.
     """
-    payloads = [record.to_orm_payload() for record in records]
-    if not payloads:
-        return
-    stmt = insert(Bundle).values(payloads)
-    update_columns = {
-        column.name: getattr(stmt.excluded, column.name)
-        for column in Bundle.__table__.columns
-        if column.name not in ('id',)
-    }
-    stmt = stmt.on_conflict_do_update(index_elements=['machine_name'], set_=update_columns)
-    try:
-        session.execute(stmt)
-        session.commit()
-    except SQLAlchemyError as exc:
-        session.rollback()
-        raise RuntimeError(f'Error guardando bundles: {exc}') from exc
+    for record in records:
+        payload = record.to_orm_payload()
+        try:
+            # Buscar si ya existe un bundle con el mismo machine_name
+            existing = session.query(Bundle).filter(Bundle.machine_name == payload['machine_name']).first()
+            if existing:
+                # Actualizar el bundle existente
+                for key, value in payload.items():
+                    if key != 'id':  # No actualizar el ID
+                        setattr(existing, key, value)
+            else:
+                # Insertar nuevo bundle
+                bundle = Bundle(**payload)
+                session.add(bundle)
+            session.commit()
+        except SQLAlchemyError as exc:
+            session.rollback()
+            raise RuntimeError(f'Error guardando bundles: {exc}') from exc
 
 
 def persist_landing_page_raw_data(record: LandingPageRawDataRecord, session: Session) -> None:
@@ -163,22 +166,22 @@ def remove_outdated_bundles(session: Session) -> None:
 
 def recreate_database(settings: Settings, drop_existing: bool = True) -> None:
     """
-    Elimina y recrea la base de datos.
+    Elimina y recrea la base de datos SQLite.
     
     Args:
         settings: Configuración de la base de datos
         drop_existing: Si True, elimina la base de datos existente antes de crearla
     """
+    from pathlib import Path
+    
+    db_path = Path(settings.db_path)
+    
+    if drop_existing and db_path.exists():
+        logger.info('Eliminando base de datos existente: %s', settings.db_path)
+        db_path.unlink()
+    
     uri = build_database_uri(settings)
-    engine = create_engine(uri, echo=settings.sql_echo, future=True)
-    
-    if drop_existing and database_exists(engine.url):
-        logger.info('Eliminando base de datos existente: %s', settings.pgdatabase)
-        drop_database(engine.url)
-    
-    if not database_exists(engine.url):
-        logger.info('Creando base de datos: %s', settings.pgdatabase)
-        create_database(engine.url)
+    engine = create_engine(uri, echo=settings.sql_echo, future=True, connect_args={'check_same_thread': False})
     
     logger.info('Creando tablas...')
     # Usar checkfirst=True para evitar conflictos

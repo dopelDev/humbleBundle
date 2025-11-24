@@ -118,11 +118,8 @@ const { locale } = useI18n();
 
 const {
   rawDataList,
-  currentRawData,
-  loading,
   error,
   fetchRawDataList,
-  fetchRawDataById,
 } = useRawData();
 
 const selectedRecord = ref<LandingPageRawData | null>(null);

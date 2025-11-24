@@ -14,6 +14,8 @@
             :src="getImageUrl(bundle.featured_image)" 
             :alt="bundle.tile_name || 'Bundle image'" 
             class="bundle-image"
+            loading="lazy"
+            @error="handleImageError"
           />
         </div>
       </div>
@@ -28,23 +30,46 @@
           >
             <div class="book-info" @click="toggleBook(book.machine_name)">
               <div class="book-header">
-                <div class="book-image-wrapper" v-if="book.image">
-                  <img :src="getImageUrl(book.image)" :alt="book.title || 'Book cover'" class="book-image" />
+                <div class="book-icon">📖</div>
+                <div class="book-details">
+                  <h4 class="book-title">{{ book.title || book.machine_name }}</h4>
+                  <p class="book-machine-name">{{ book.machine_name }}</p>
                 </div>
-                <div class="book-image-placeholder" v-else>
-                  <span class="placeholder-icon">📖</span>
-                </div>
-                <h4 class="book-title">{{ book.title }}</h4>
               </div>
               <button class="expand-btn" :aria-expanded="expandedBooks.has(book.machine_name)">
                 <span class="expand-icon">{{ expandedBooks.has(book.machine_name) ? '−' : '+' }}</span>
               </button>
             </div>
             <div
-              v-show="expandedBooks.has(book.machine_name) && book.image"
-              class="book-expanded-image"
+              v-show="expandedBooks.has(book.machine_name)"
+              class="book-expanded-info"
             >
-              <img :src="getImageUrl(book.image)" :alt="book.title || 'Book cover'" class="expanded-book-image" />
+              <div class="book-info-grid">
+                <div class="info-item" v-if="book.machine_name">
+                  <span class="info-label">{{ $t('bookModal.machineName') }}:</span>
+                  <span class="info-value">{{ book.machine_name }}</span>
+                </div>
+                <div class="info-item" v-if="book.title">
+                  <span class="info-label">{{ $t('bookModal.title') }}:</span>
+                  <span class="info-value">{{ book.title }}</span>
+                </div>
+                <div class="info-item" v-if="book.msrp !== null && book.msrp !== undefined">
+                  <span class="info-label">{{ $t('bookModal.msrp') }}:</span>
+                  <span class="info-value">${{ book.msrp }}</span>
+                </div>
+                <div class="info-item" v-if="book.content_type">
+                  <span class="info-label">{{ $t('bookModal.contentType') }}:</span>
+                  <span class="info-value">{{ book.content_type }}</span>
+                </div>
+                <div class="info-item" v-if="book.tiers && book.tiers.length > 0">
+                  <span class="info-label">{{ $t('bookModal.tiers') }}:</span>
+                  <span class="info-value">{{ book.tiers.join(', ') }}</span>
+                </div>
+                <div class="info-item" v-if="book.preview">
+                  <span class="info-label">{{ $t('bookModal.preview') }}:</span>
+                  <span class="info-value">{{ JSON.stringify(book.preview) }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -91,6 +116,12 @@ const toggleBook = (machineName: string) => {
 
 // Obtener URL de imagen directamente desde Humble Bundle
 // Las URLs vienen completas desde el backend, no necesitan construcción adicional
+// 
+// Las imágenes se extraen SOLO de divs con clase "img-container" con esta estructura:
+// <div class="img-container" style="margin-bottom: unset; margin-top: unset; top: unset;">
+//     <img data-lazy="https://hb.imgix.net/..." src="https://hb.imgix.net/..." ...>
+// </div>
+// Esto asegura mayor precisión al extraer solo las imágenes relevantes de los bundles.
 const getImageUrl = (imageUrl: string | null | undefined): string => {
   if (!imageUrl) return '';
   
@@ -98,6 +129,14 @@ const getImageUrl = (imageUrl: string | null | undefined): string => {
   // Solo retornamos la URL tal cual
   return imageUrl;
 };
+
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement;
+  // Ocultar la imagen si falla al cargar
+  img.style.display = 'none';
+  console.warn('Error cargando imagen del bundle:', img.src);
+};
+
 
 const handleOverlayClick = (event: MouseEvent) => {
   if (event.target === event.currentTarget) {
@@ -268,33 +307,32 @@ const handleOverlayClick = (event: MouseEvent) => {
   min-width: 0;
 }
 
-.book-image-wrapper {
+.book-icon {
   flex-shrink: 0;
+  font-size: 2rem;
   width: 60px;
-  height: 80px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--bg);
-  border: 1px solid var(--border);
-}
-
-.book-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.book-image-placeholder {
-  flex-shrink: 0;
-  width: 60px;
-  height: 80px;
-  border-radius: 8px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.book-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.book-machine-name {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+  word-wrap: break-word;
 }
 
 .book-title {
@@ -351,21 +389,37 @@ const handleOverlayClick = (event: MouseEvent) => {
   min-width: 200px;
 }
 
-.book-expanded-image {
+.book-expanded-info {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: center;
   animation: slideDown 0.3s ease;
 }
 
-.expanded-book-image {
-  max-width: 100%;
-  max-height: 400px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px var(--shadow-black-medium);
-  object-fit: contain;
+.book-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 0.95rem;
+  color: var(--text);
+  word-wrap: break-word;
 }
 
 .no-books {

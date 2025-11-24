@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from pydantic import ValidationError
 from requests import Session, exceptions
 
-from ..scrapers.image_scraper import ImageUrlScraper
+from ..scrapers.bundle_detail_scraper import BundleDetailScraper
 from ..schemas.bundle import BundleRecord
 from ..schemas.raw_data import LandingPageRawDataRecord
 from ..utils.transformers import (
@@ -46,6 +46,7 @@ class HumbleSpider:
         'tile_short_name',
         'tile_stamp',
         'short_marketing_blurb',
+        'tile_logo',
     )
 
     def __init__(self, session: Session | None = None) -> None:
@@ -56,7 +57,7 @@ class HumbleSpider:
             session: Sesión de requests a usar. Si es None, se crea una nueva.
         """
         self.session = session or Session()
-        self.image_scraper = ImageUrlScraper(self.session)
+        self.detail_scraper = BundleDetailScraper(self.session)
         self._last_raw_payload: Optional[Dict] = None
 
     def fetch_bundles(self) -> List[BundleRecord]:
@@ -228,15 +229,17 @@ class HumbleSpider:
         discarded = 0
         for item in frame.to_dict(orient='records'):
             machine_name = item.get('machine_name')
-            detail = self.image_scraper.fetch_detail(
-                item.get('product_url'), machine_name=machine_name)
+            detail = self.detail_scraper.fetch_bundle_details(item.get('product_url'))
             if detail:
                 item['price_tiers'] = detail.price_tiers
                 item['book_list'] = detail.book_list
-                item['featured_image'] = detail.featured_image
                 item['msrp_total'] = detail.msrp_total
                 # Guardar HTML raw para tests
                 item['raw_html'] = detail.raw_html
+                # tile_logo ya viene del JSON inicial, pero verificar que esté normalizado
+                if 'tile_logo' in item and item['tile_logo']:
+                    item['tile_logo'] = absolute_url(item['tile_logo'])
+                    logger.debug('tile_logo extraído para %s: %s', machine_name, item.get('tile_logo'))
             try:
                 record = BundleRecord.model_validate(item)
             except ValidationError as exc:

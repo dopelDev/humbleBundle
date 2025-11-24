@@ -1,6 +1,6 @@
 # Spider de Humble Bundle
 
-Este paquete encapsula el scraper ETL que obtiene bundles de **Humble Bundle Books**, normaliza los datos, descarga el detalle de cada bundle y persiste todo en PostgreSQL.
+Este paquete encapsula el scraper ETL que obtiene bundles de **Humble Bundle Books**, normaliza los datos, descarga el detalle de cada bundle y persiste todo en SQLite.
 
 ## Estructura del Módulo
 
@@ -20,11 +20,12 @@ spider/
 │
 ├── scrapers/                # Scrapers especializados
 │   ├── __init__.py
-│   └── image_scraper.py     # ImageUrlScraper (detalles de bundles)
+│   └── bundle_detail_scraper.py  # BundleDetailScraper (detalles de bundles)
 │
 ├── schemas/                 # Modelos Pydantic
 │   ├── __init__.py
-│   └── bundle.py            # BundleRecord
+│   ├── bundle.py            # BundleRecord
+│   └── raw_data.py          # LandingPageRawDataRecord
 │
 ├── database/                # Capa de persistencia
 │   ├── __init__.py
@@ -47,24 +48,24 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 
 1. **Extracción**: Obtiene datos del sitio web mediante scraping
 2. **Transformación**: Normaliza y enriquece los datos
-3. **Carga**: Persiste los datos en PostgreSQL
+3. **Carga**: Persiste los datos en SQLite
 
 ### Componentes Principales
 
 - **CLI** (`cli/run_spider.py`): Punto de entrada que orquesta el flujo completo
 - **Core** (`core/spider.py`): Clase `HumbleSpider` que maneja la extracción y transformación
-- **Scrapers** (`scrapers/image_scraper.py`): Enriquecimiento de datos con detalles de cada bundle
+- **Scrapers** (`scrapers/bundle_detail_scraper.py`): Enriquecimiento de datos con detalles de cada bundle (tiers, libros, MSRP, tile_logo)
 - **Schemas** (`schemas/`): Validación de datos con Pydantic (`BundleRecord`, `LandingPageRawDataRecord`)
-- **Database** (`database/`): Modelos ORM, persistencia y gestión de sesiones
-- **Config** (`config/settings.py`): Configuración basada en variables de entorno
+- **Database** (`database/`): Modelos ORM, persistencia y gestión de sesiones SQLite
+- **Config** (`config/settings.py`): Configuración basada en variables de entorno (SQLite)
 - **Utils** (`utils/transformers.py`): Funciones auxiliares de transformación
 
 ## Flujo general
 
 - **`cli/run_spider.py`**: punto de entrada. Carga configuración (`DB_*`), ejecuta `HumbleSpider`, elimina bundles expirados y guarda los nuevos/actualizados.
-- **`core/HumbleSpider`**: hace GET a `https://www.humblebundle.com/books`, lee el `<script id="landingPage-json-data">`, normaliza campos con pandas y Pydantic (`BundleRecord`), y para cada bundle consulta el detalle con `ImageUrlScraper`.
-- **`scrapers/ImageUrlScraper`**: descarga la página del bundle (`webpack-bundle-page-data`), extrae tiers, libros, imagen destacada y todas las URLs de imágenes encontradas en el HTML (soup + regex).
-- **Persistencia**: `database/persistence.py` hace upsert de los bundles (clave `machine_name`), recrea columnas faltantes y permite archivar el JSON bruto de `landingPage-json-data`.
+- **`core/HumbleSpider`**: hace GET a `https://www.humblebundle.com/books`, lee el `<script id="landingPage-json-data">`, normaliza campos con pandas y Pydantic (`BundleRecord`), y para cada bundle consulta el detalle con `BundleDetailScraper`.
+- **`scrapers/BundleDetailScraper`**: descarga la página del bundle (`webpack-bundle-page-data`), extrae tiers, libros, MSRP total y tile_logo desde el JSON embebido.
+- **Persistencia**: `database/persistence.py` hace upsert de los bundles (clave `machine_name`) usando SQLite, recrea columnas faltantes y permite archivar el JSON bruto de `landingPage-json-data`.
 
 ## Modelo de Datos
 
@@ -74,7 +75,7 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 ┌─────────────────────────────────────────────────────────────────┐
 │                          BUNDLE                                 │
 ├─────────────────────────────────────────────────────────────────┤
-│ PK  id                          UUID                            │
+│ PK  id                          VARCHAR (String)                │
 │ UNQ machine_name               VARCHAR(255)  NOT NULL           │
 │     high_res_tile_image         VARCHAR(2048)                   │
 │     disable_hero_tile           BOOLEAN                         │
@@ -104,8 +105,8 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 │     verification_date           TIMESTAMP  NOT NULL             │
 │     duration_days               FLOAT                           │
 │     is_active                   BOOLEAN  (INDEX)                │
-│     price_tiers                 JSONB                           │
-│     book_list                   JSONB                           │
+│     price_tiers                 TEXT (JSON)                    │
+│     book_list                   TEXT (JSON)                    │
 │     featured_image              VARCHAR                         │
 │     msrp_total                  FLOAT                           │
 │     raw_html                    TEXT                            │
@@ -118,8 +119,8 @@ El sistema implementa un pipeline ETL (Extract, Transform, Load) para obtener, n
 ┌────────────────────────────────────────────────┐
 │             LANDING_PAGE_RAW_DATA              │
 ├────────────────────────────────────────────────┤
-│ PK  id              UUID                       │
-│     json_data       JSONB      NOT NULL        │
+│ PK  id              VARCHAR (String)            │
+│     json_data       TEXT (JSON)  NOT NULL      │
 │     scraped_date    TIMESTAMP  (INDEX)         │
 │     source_url      VARCHAR    NOT NULL        │
 │     json_hash       VARCHAR    (INDEX)         │
@@ -158,17 +159,12 @@ La tabla `bundle` almacena los metadatos enriquecidos de cada bundle, y `landing
 ├─────────────────────────────────────────────────────────────────────┤
 │ HumbleSpider._to_records()                                          │
 │   Para cada producto:                                               │
-│     └─> ImageUrlScraper.fetch_detail(product_url)                   │
+│     └─> BundleDetailScraper.fetch_bundle_details(product_url)       │
 │         ├─> GET página del bundle                                   │
 │         ├─> Extrae <script id="webpack-bundle-page-data">          │
-│         ├─> Extrae URLs de imágenes del HTML:                       │
-│         │   ├─> <img> tags (src, data-src, srcset)                  │
-│         │   ├─> style="background-image: url(...)"                  │
-│         │   ├─> data-image, data-bg attributes                      │
-│         │   ├─> JSON embebido                                       │
-│         │   └─> Regex para .jpg/.jpeg                               │
-│         ├─> Resuelve URLs relativas → absolutas                     │
-│         ├─> Extrae price_tiers, book_list, featured_image          │
+│         ├─> Parsea JSON embebido                                   │
+│         ├─> Extrae price_tiers, book_list, msrp_total              │
+│         ├─> Normaliza tile_logo (si existe)                         │
 │         └─> Guarda raw_html                                         │
 └─────────────────────────────────────────────────────────────────────┘
                               ▼
@@ -184,8 +180,8 @@ La tabla `bundle` almacena los metadatos enriquecidos de cada bundle, y `landing
 │                          5. PERSISTENCIA                            │
 ├─────────────────────────────────────────────────────────────────────┤
 │ persist_bundles(records, session)                                   │
-│   ├─> UPSERT en tabla 'bundle' (ON CONFLICT machine_name)          │
-│   │   └─> Actualiza todos los campos excepto 'id'                   │
+│   ├─> SELECT/UPDATE en tabla 'bundle' (SQLite)                      │
+│   │   └─> Busca por machine_name, actualiza o inserta                 │
 │                                                                      │
 │ remove_outdated_bundles(session)                                    │
 │   └─> DELETE bundles donde end_date_datetime < NOW()               │
@@ -218,15 +214,16 @@ La tabla `bundle` almacena los metadatos enriquecidos de cada bundle, y `landing
   - `_extract_products()`: navega el JSON `data.books.mosaic[0].products` y lanza excepción si la estructura cambia.
   - `_normalize_products()`: usa pandas para limpiar, convertir fechas a UTC, serializar campos JSON, normalizar texto, absolutizar URLs y calcular `duration_days`/`is_active`.
   - `_to_records()`: itera filas, pide detalle por bundle, fusiona `price_tiers`, `book_list`, `featured_image`, `msrp_total` y `raw_html`; valida con Pydantic y descarta registros inválidos con logging.
-- `core/errors.py`: define excepciones de dominio `HumbleSpiderError` e `ImageUrlScraperError` (esta última hoy no se lanza desde `ImageUrlScraper`).
+- `core/errors.py`: define excepciones de dominio `HumbleSpiderError`.
 
 ### Scrapers
 
-- `scrapers/image_scraper.py`: clase `ImageUrlScraper`.
-  - `fetch_detail(product_path, machine_name)`: descarga la página de un bundle, busca el `<script id="webpack-bundle-page-data">` para leer `bundleData`, arma tiers (`_extract_price_tiers`), libros (`_extract_book_list`), msrp total, imagen destacada y guarda `raw_html`.
-  - `_extract_jpg_urls_from_html_with_info()`: recorre HTML con BeautifulSoup + regex para recopilar URLs de imágenes absolutas y mantener un mapeo filename→URL que ayuda a resolver rutas relativas del JSON.
-  - `_resolve_image_url()`: intenta resolver una URL parcial (del JSON) contra el mapeo de URLs encontradas; como fallback, construye URL absoluta con `BASE_URL`.
-  - Helpers: normalización de URLs relativas a absolutas, extracción de URLs desde JSON arbitrario, parseo de filename desde URL. Incluye dataclass `BundleDetail`.
+- `scrapers/bundle_detail_scraper.py`: clase `BundleDetailScraper`.
+  - `fetch_bundle_details(product_path)`: descarga la página de un bundle, busca el `<script id="webpack-bundle-page-data">` para leer `bundleData`, arma tiers (`_extract_price_tiers`), libros (`_extract_book_list`), msrp total y guarda `raw_html`.
+  - `_extract_price_tiers()`: extrae información de precios por tier desde el JSON.
+  - `_extract_book_list()`: extrae lista de libros con metadatos (machine_name, title, msrp, preview, content_type, tiers). NO incluye imágenes.
+  - `_safe_amount()`: extrae valores numéricos de objetos de dinero del JSON.
+  - Incluye dataclass `BundleDetails` con price_tiers, book_list, msrp_total y raw_html.
 
 ### Schemas
 
@@ -243,19 +240,19 @@ La tabla `bundle` almacena los metadatos enriquecidos de cada bundle, y `landing
 - `database/models.py`: modelos SQLAlchemy.
   - `Bundle`: tabla principal con metadatos del bundle, tiers/libros en JSON, imagen destacada y HTML crudo.
   - `LandingPageRawData`: almacena el JSON bruto del script `landingPage-json-data` con hash y metadata de scraping.
-- `database/session.py`: fábrica de sesión.
-  - Construye URI con settings, crea la BD si no existe, verifica existencia de `bundle` vía SQL simple, usa `Base.metadata.create_all(checkfirst=True)` como fallback.
+- `database/session.py`: fábrica de sesión SQLite.
+  - Construye URI con settings (ruta al archivo SQLite), crea directorio si no existe, crea la BD si no existe usando `Base.metadata.create_all(checkfirst=True)`.
   - Llama a `ensure_columns` y `ensure_landing_page_raw_data_table` para mantener el esquema mínimo.
 - `database/persistence.py`: operaciones de persistencia y mantenimiento.
-  - `persist_bundles`: upsert (ON CONFLICT machine_name) de bundles.
+  - `persist_bundles`: SELECT/UPDATE en SQLite (busca por machine_name, actualiza o inserta).
   - `persist_landing_page_raw_data`: inserta el JSON bruto de landingPage con metadata.
   - `remove_outdated_bundles`: borra bundles con `end_date_datetime` en el pasado.
-  - `recreate_database`: recrea la base opcionalmente borrando la existente; crea tablas y columnas auxiliares.
-  - `ensure_columns` y `ensure_landing_page_raw_data_table`: migraciones rápidas en SQL crudo para añadir columnas/tablas si faltan.
+  - `recreate_database`: elimina el archivo SQLite si existe y recrea tablas y columnas.
+  - `ensure_columns` y `ensure_landing_page_raw_data_table`: migraciones rápidas en SQL crudo para añadir columnas/tablas si faltan (usando tipos SQLite: TEXT, REAL, VARCHAR).
 
 ### Configuración
 
-- `config/settings.py`: clase `Settings` (pydantic-settings) con prefijo `DB_` y `.env` opcional; contiene credenciales y `sql_echo`.
+- `config/settings.py`: clase `Settings` (pydantic-settings) con prefijo `DB_` y `.env` opcional; contiene `db_path` (ruta al archivo SQLite) y `sql_echo`.
 
 ### Utilidades
 
@@ -269,21 +266,31 @@ La tabla `bundle` almacena los metadatos enriquecidos de cada bundle, y `landing
 
 - `spider/__init__.py`: exporta clases/funciones principales para import fácil (`HumbleSpider`, modelos, schemas, settings, helpers de persistencia).
 
-## Esquema de datos (PostgreSQL)
+## Esquema de datos (SQLite)
 
-- **bundle**: datos normalizados del listado + detalles (tiers, libros, imagen destacada, HTML raw, flags `is_active`/`duration_days`).
+- **bundle**: datos normalizados del listado + detalles (tiers, libros, tile_logo, HTML raw, flags `is_active`/`duration_days`).
 - **landing_page_raw_data**: snapshots del JSON bruto de `landingPage-json-data` con fecha de scraping, URL fuente, hash y versión opcional.
+
+**Nota**: Los tipos de datos usan SQLite (String en lugar de UUID, TEXT/JSON en lugar de JSONB, REAL en lugar de DOUBLE PRECISION).
 
 ## Ejecución local
 
-1. Exporta variables o `.env` con `DB_USER`, `DB_PASSWORD`, `DB_DATABASE`, `DB_HOST`, `DB_PORT` (valores por defecto: postgres/postgres/test/localhost/5432).
-2. Ejecuta:
+1. Exporta variables o `.env` con `DB_DB_PATH` (valor por defecto: `humble_bundle.db`).
+2. Inicializa la base de datos:
+
+```bash
+make db-init
+```
+
+3. Ejecuta el spider:
 
 ```bash
 python -m spider.cli.run_spider
+# o
+make etl
 ```
 
-El flujo recreará tablas faltantes, borrará bundles expirados y hará upsert de los actuales.
+El flujo creará tablas si no existen, borrará bundles expirados y hará upsert de los actuales en SQLite.
 
 El JSON bruto (`landingPage-json-data`) de la fase de extracción puede almacenarse en `landing_page_raw_data` combinando `HumbleSpider.get_raw_data_record()` con `persist_landing_page_raw_data()`.
 
@@ -308,11 +315,11 @@ El JSON bruto (`landingPage-json-data`) de la fase de extracción puede almacena
 
 ### Funcionalidades Clave
 
-- **Scraping de URLs de Imágenes**: Extracción multi-fuente (img tags, styles, data-attributes, JSON, regex)
-- **Resolución de URLs**: Mapeo inteligente de URLs relativas a absolutas usando el HTML del bundle
+- **Extracción de Detalles**: Scraping del JSON embebido (`webpack-bundle-page-data`) para obtener tiers, libros y MSRP
 - **Normalización de Datos**: Limpieza de texto, conversión de fechas, serialización JSON
 - **Validación Estricta**: Validación Pydantic con descarte de registros inválidos
 - **Mantenimiento Automático**: Limpieza de bundles expirados y actualización de columnas faltantes
+- **SQLite Local**: Base de datos local sin dependencias externas
 
 ## Próximos pasos recomendados
 
