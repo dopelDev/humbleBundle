@@ -33,11 +33,22 @@ SessionFactory = None
 AsyncSessionFactory = None
 
 def get_async_engine():
-    """Creates the async engine for FastAPI using SQLite."""
+    """Creates the async engine for FastAPI using SQLite or PostgreSQL."""
     from pathlib import Path
-    db_path = Path(settings.db_path)
-    db_path.parent.mkdir(parents=True, exist_ok=True)
-    uri = f'sqlite+aiosqlite:///{db_path.absolute()}'
+    from spider.database.session import build_database_uri
+    
+    uri = build_database_uri(settings)
+    
+    # Para async, necesitamos usar asyncpg para PostgreSQL
+    if settings.db_type == 'postgresql':
+        # Reemplazar postgresql:// con postgresql+asyncpg://
+        if uri.startswith('postgresql://'):
+            uri = uri.replace('postgresql://', 'postgresql+asyncpg://', 1)
+    else:  # sqlite
+        # Reemplazar sqlite:// con sqlite+aiosqlite://
+        if uri.startswith('sqlite:///'):
+            uri = uri.replace('sqlite:///', 'sqlite+aiosqlite:///', 1)
+    
     return create_async_engine(uri, echo=settings.sql_echo, future=True)
 
 @asynccontextmanager
@@ -46,6 +57,13 @@ async def lifespan(app: FastAPI):
     global AsyncSessionFactory
     async_engine = get_async_engine()
     
+    # Log database connection info
+    logger.info(f"Connecting to database: {settings.db_type.upper()}")
+    if settings.db_type == 'postgresql':
+        logger.info(f"PostgreSQL connection: {settings.pghost}:{settings.pgport}/{settings.pgdatabase}")
+    else:
+        logger.info(f"SQLite database path: {settings.db_path}")
+    
     # Create tables if they don't exist using the async engine
     from spider.database.models import Base
     async with async_engine.begin() as conn:
@@ -53,15 +71,19 @@ async def lifespan(app: FastAPI):
     
     # Ensure columns exist (works better with sync)
     from spider.database.persistence import ensure_columns, ensure_landing_page_raw_data_table
+    from spider.database.session import build_database_uri
     from sqlalchemy import create_engine
-    from pathlib import Path
-    db_path = Path(settings.db_path)
-    db_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    sync_uri = build_database_uri(settings)
+    connect_args = {}
+    if settings.db_type == 'sqlite':
+        connect_args = {'check_same_thread': False}
+    
     sync_engine = create_engine(
-        f'sqlite:///{db_path.absolute()}',
+        sync_uri,
         echo=settings.sql_echo,
         future=True,
-        connect_args={'check_same_thread': False}
+        connect_args=connect_args
     )
     try:
         ensure_columns(sync_engine)
