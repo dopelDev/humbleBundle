@@ -92,8 +92,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import DarkButton from "@components/header/components/DarkButton.vue";
-import LanguageSwitcher from "@components/header/components/LanguageSwitcher.vue";
+import DarkButton from "@components/floating-controls/components/DarkButton.vue";
+import LanguageSwitcher from "@components/floating-controls/components/LanguageSwitcher.vue";
 import ProfileCard from "@components/cards/ProfileCard.vue";
 import DesktopMain from "@components/main/DesktopMain.vue";
 import MobileMain from "@components/main/MobileMain.vue";

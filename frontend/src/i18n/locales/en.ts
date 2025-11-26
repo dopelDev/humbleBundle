@@ -135,6 +135,7 @@ export default {
     version: 'Version:',
     openJson: '🔗 Open JSON',
     download: '⬇ Download',
+    viewJson: '🔍 View JSON',
     jsonData: 'JSON Data',
     copyJson: 'Copy JSON',
     downloadJson: 'Download JSON',
