@@ -1,5 +1,6 @@
 <template>
   <div class="login-page">
+    <LogoutButton />
     <section class="login-card">
       <RouterLink class="back-link" to="/">
         ← {{ $t('auth.backHome') }}
@@ -50,6 +51,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import LogoutButton from "@components/floating-controls/components/LogoutButton.vue";
 import { useAuth } from "@composables/useAuth";
 
 const router = useRouter();

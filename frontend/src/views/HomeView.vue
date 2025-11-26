@@ -1,6 +1,7 @@
 <template>
   <div class="app-shell" :class="`locale-${locale}`">
     <DarkButton />
+    <LogoutButton />
     <LanguageSwitcher />
     
     <section class="intro">
@@ -115,6 +116,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import DarkButton from "@components/floating-controls/components/DarkButton.vue";
 import LanguageSwitcher from "@components/floating-controls/components/LanguageSwitcher.vue";
+import LogoutButton from "@components/floating-controls/components/LogoutButton.vue";
 import ProfileCard from "@components/cards/ProfileCard.vue";
 import DesktopMain from "@components/main/DesktopMain.vue";
 import MobileMain from "@components/main/MobileMain.vue";
