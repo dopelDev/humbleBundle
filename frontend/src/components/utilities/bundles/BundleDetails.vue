@@ -74,13 +74,13 @@ const props = withDefaults(defineProps<Props>(), {
   isBooksExpanded: false,
 });
 
-const { locale } = useI18n();
-
 defineEmits<{
   'toggle-books': [];
   'view-json': [];
   'download-json': [];
 }>();
+
+const { locale } = useI18n();
 
 const formattedStartDate = computed(() => {
   return props.bundle.start_date_datetime
@@ -112,6 +112,8 @@ const formattedEndDate = computed(() => {
     .detail-item {
       font-size: 0.9rem;
       color: var(--text);
+      overflow-wrap: anywhere;
+      word-break: break-word;
 
       strong {
         color: var(--accent);

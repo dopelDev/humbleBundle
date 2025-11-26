@@ -28,18 +28,10 @@
         <RawDataRecordsList
           v-else
           :records="rawDataList"
-          @select="handleRecordSelection"
           @view-json="viewRecordJson"
           @download-json="downloadRecordJson"
         />
       </div>
-
-      <RawDataJsonSection
-        :record="selectedRecord"
-        :is-loading="isDetailLoading"
-        @view-json="handleViewJson"
-        @download-json="handleDownloadJson"
-      />
     </div>
   </BaseCard>
 </template>
@@ -55,7 +47,6 @@ import ErrorMessage from '@/components/ui/ErrorMessage.vue';
 import LoadingState from '@/components/ui/LoadingState.vue';
 import EmptyState from '@/components/ui/EmptyState.vue';
 import RawDataRecordsList from '@/components/utilities/raw-data/RawDataRecordsList.vue';
-import RawDataJsonSection from '@/components/utilities/raw-data/RawDataJsonSection.vue';
 
 const {
   rawDataList,
@@ -63,9 +54,7 @@ const {
   fetchRawDataList,
 } = useRawData();
 
-const selectedRecord = ref<LandingPageRawData | null>(null);
 const isListLoading = ref(false);
-const isDetailLoading = ref(false);
 
 async function loadData() {
   isListLoading.value = true;
@@ -74,22 +63,6 @@ async function loadData() {
   } finally {
     isListLoading.value = false;
   }
-
-  if (error.value || rawDataList.value.length === 0) {
-    selectedRecord.value = null;
-  }
-}
-
-function handleRecordSelection(record: LandingPageRawData) {
-  if (selectedRecord.value?.id === record.id && !isDetailLoading.value) {
-    return;
-  }
-
-  isDetailLoading.value = true;
-  selectedRecord.value = record;
-  setTimeout(() => {
-    isDetailLoading.value = false;
-  }, 100);
 }
 
 function viewRecordJson(record: LandingPageRawData) {
@@ -98,18 +71,6 @@ function viewRecordJson(record: LandingPageRawData) {
 
 function downloadRecordJson(record: LandingPageRawData) {
   downloadJson(record.json_data, `landing-page-raw-data-${record.id}.json`);
-}
-
-function handleViewJson() {
-  if (selectedRecord.value) {
-    viewRecordJson(selectedRecord.value);
-  }
-}
-
-function handleDownloadJson() {
-  if (selectedRecord.value) {
-    downloadRecordJson(selectedRecord.value);
-  }
 }
 
 onMounted(() => {
@@ -156,7 +117,8 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .utility-card {
-    padding: 16px;
+    padding: 16px;	
+		right: 16px;
   }
 
   .raw-data-container {
