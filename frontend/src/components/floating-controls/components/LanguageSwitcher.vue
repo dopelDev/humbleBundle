@@ -81,7 +81,7 @@ const toggleLanguage = () => {
     position: fixed;
     top: auto;
     right: 16px;
-    bottom: 80px;
+    bottom: 70px;
     font-size: 0.85rem;
     padding: 0.35rem 0.75rem;
   }

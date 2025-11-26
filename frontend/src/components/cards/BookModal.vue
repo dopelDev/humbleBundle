@@ -335,6 +335,12 @@ const handleOverlayClick = (event: MouseEvent) => {
   word-wrap: break-word;
 }
 
+@media (max-width: 600px) {
+	.book-header {
+		max-width: calc(100% - 48px);
+	}
+}
+
 .book-title {
   font-size: 1rem;
   color: var(--text);
@@ -486,4 +492,3 @@ const handleOverlayClick = (event: MouseEvent) => {
   }
 }
 </style>
-

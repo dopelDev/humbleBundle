@@ -97,6 +97,12 @@ const formattedDate = computed(() => {
     flex-direction: column;
     gap: 8px;
 
+		@media (nax-widdth: 720px) {
+			.record-header {
+				max0-width: 10%;
+			}
+		}
+
     .record-date-section,
     .record-hash-section {
       display: flex;

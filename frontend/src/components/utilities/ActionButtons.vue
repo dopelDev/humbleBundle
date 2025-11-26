@@ -14,4 +14,10 @@
   padding-top: 16px;
   border-top: 1px dashed var(--border);
 }
+
+@media(max-width: 600px) {
+	.action-buttons {
+		justify-content: center;
+	}
+}
 </style>

@@ -99,7 +99,6 @@ onMounted(() => {
 
 .raw-data-container {
   display: grid;
-  grid-template-columns: 1fr 2fr;
   gap: 24px;
 
   @media (max-width: 1024px) {

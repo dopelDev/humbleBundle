@@ -30,11 +30,9 @@ defineEmits<{
 
 <style scoped lang="scss">
 .records-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
-  max-height: 600px;
-  overflow-y: auto;
   padding: 4px;
 }
 </style>
