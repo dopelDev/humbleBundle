@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
 
 
 class BundleResponse(BaseModel):
@@ -41,6 +41,32 @@ class LandingPageRawDataResponse(BaseModel):
     source_url: str
     json_hash: Optional[str] = None
     json_version: Optional[str] = None
+
+
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    username: str
+    email: EmailStr
+    created_at: datetime
+
+
+class UserCreate(BaseModel):
+    username: str = Field(..., min_length=3, max_length=64)
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=128, description='Contraseña en texto plano (el backend la hashea automáticamente)')
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str = Field(..., min_length=8, max_length=128)
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = 'bearer'
+    user: UserResponse
 
 
 

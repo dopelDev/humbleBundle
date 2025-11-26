@@ -1,5 +1,6 @@
 from functools import lru_cache
 from typing import Literal
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -34,10 +35,21 @@ class Settings(BaseSettings):
     pghost: str = 'localhost'
     pgport: int = 5432
 
+    jwt_secret_key: str = Field('change-me', description='Clave para firmar tokens JWT')
+    jwt_algorithm: str = Field('HS256', description='Algoritmo de firma JWT')
+    jwt_access_token_exp_minutes: int = Field(60, description='Minutos de expiración para el token de acceso')
+
+    # Admin bootstrap (opcional)
+    admin_username: str | None = Field(None, description='Usuario inicial para seed automático')
+    admin_email: str | None = Field(None, description='Email del usuario inicial')
+    admin_password_sha: str | None = Field(None, description='Hash SHA-256 generado en frontend')
+    admin_password_plain: str | None = Field(None, description='Contraseña en texto plano (desarrollo)')
+
     model_config = SettingsConfigDict(
         env_prefix='DB_',
         env_file='.env',
         env_file_encoding='utf-8',
+        extra='allow',
     )
 
 

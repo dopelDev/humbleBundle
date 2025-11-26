@@ -1,4 +1,18 @@
 export default {
+  auth: {
+    loggedInAs: 'Logged in as',
+    logout: 'Sign out',
+    loginHint: 'Sign in to trigger the protected ETL endpoint.',
+    goToLogin: 'Go to login',
+    backHome: 'Back to dashboard',
+    loginTitle: 'Sign in',
+    loginHintLong: 'Your password is sent via HTTPS and hashed by the backend automatically.',
+    username: 'Username',
+    password: 'Password',
+    signingIn: 'Signing in...',
+    loginCta: 'Sign in',
+    loginSuccess: 'Signed in successfully.'
+  },
   app: {
     eyebrow: 'Humble Tracker',
     title: 'Book bundles in real time',

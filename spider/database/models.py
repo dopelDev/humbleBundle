@@ -76,3 +76,22 @@ class LandingPageRawData(Base):
     source_url = Column(String, nullable=False)
     json_hash = Column(String, nullable=True, index=True)
     json_version = Column(String, nullable=True)
+
+
+class User(Base):
+    """
+    Modelo ORM para usuarios de autenticación básica.
+    
+    Almacena credenciales hasheadas y datos principales.
+    """
+    __tablename__ = 'user'
+    __table_args__ = (
+        UniqueConstraint('username', name='uq_user_username'),
+        UniqueConstraint('email', name='uq_user_email'),
+    )
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid4()), index=True)
+    username = Column(String, nullable=False, unique=True, index=True)
+    email = Column(String, nullable=False, unique=True, index=True)
+    password_hash = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)

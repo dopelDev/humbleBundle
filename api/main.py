@@ -3,11 +3,14 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import nulls_last, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 import logging
+
+from jose import JWTError
 
 from spider.database.session import get_session_factory as build_session_factory
 from spider.database.persistence import (
@@ -17,8 +20,9 @@ from spider.database.persistence import (
 )
 from spider.core.spider import HumbleSpider
 from spider.core.errors import HumbleSpiderError
-from spider.database.models import Bundle, LandingPageRawData
+from spider.database.models import Bundle, LandingPageRawData, User
 from spider.config.settings import get_settings
+from spider.database.seed import ensure_admin_user
 
 logger = logging.getLogger(__name__)
 
@@ -26,11 +30,16 @@ from api.schemas import (
     BundleResponse,
     ETLRunResponse,
     LandingPageRawDataResponse,
+    LoginRequest,
+    TokenResponse,
+    UserResponse,
 )
+from api.security import create_access_token, decode_access_token, verify_password
 
 settings = get_settings()
 SessionFactory = None
 AsyncSessionFactory = None
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/login')
 
 def get_async_engine():
     """Creates the async engine for FastAPI using SQLite or PostgreSQL."""
@@ -88,6 +97,16 @@ async def lifespan(app: FastAPI):
     try:
         ensure_columns(sync_engine)
         ensure_landing_page_raw_data_table(sync_engine)
+        SessionLocal = sessionmaker(bind=sync_engine, expire_on_commit=False, class_=Session)
+        try:
+            with SessionLocal() as sync_session:
+                result = ensure_admin_user(sync_session, settings)
+                if result == 'created':
+                    logger.info("Usuario admin '%s' creado durante el inicio de la API.", settings.admin_username)
+                elif result == 'updated':
+                    logger.info("Usuario admin '%s' actualizado durante el inicio de la API.", settings.admin_username)
+        except Exception as exc:
+            logger.error("Error seeding admin user: %s", exc)
     finally:
         sync_engine.dispose()
     
@@ -164,6 +183,45 @@ async def get_async_db():
             await session.close()
 
 
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+) -> User:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail='Credenciales inválidas',
+        headers={'WWW-Authenticate': 'Bearer'},
+    )
+    try:
+        payload = decode_access_token(token, settings)
+        user_id: str | None = payload.get('sub')
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    user = db.get(User, user_id)
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+@app.post('/auth/login', response_model=TokenResponse, tags=['auth'])
+def login(credentials: LoginRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == credentials.username).first()
+    if not user or not verify_password(credentials.password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Usuario o contraseña inválidos',
+        )
+    access_token = create_access_token({'sub': user.id, 'username': user.username}, settings)
+    return TokenResponse(access_token=access_token, user=user)
+
+
+@app.get('/auth/me', response_model=UserResponse, tags=['auth'])
+def read_current_user(current_user: User = Depends(get_current_user)):
+    return current_user
+
+
 @app.get('/health', tags=['health'])
 async def healthcheck():
     return {'status': 'ok', 'database': settings.db_path}
@@ -217,7 +275,10 @@ async def get_bundle_by_machine_name(machine_name: str, db: AsyncSession = Depen
 
 
 @app.post('/etl/run', response_model=ETLRunResponse, tags=['etl'])
-def trigger_etl(db: Session = Depends(get_db)):
+def trigger_etl(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     """Executes the ETL: downloads bundles and saves to the database."""
     spider = HumbleSpider()
     try:

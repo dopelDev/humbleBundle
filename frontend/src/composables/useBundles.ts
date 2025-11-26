@@ -1,6 +1,7 @@
 import { ref, computed, onMounted } from "vue";
 import type { Bundle } from "@/types/bundle";
 import { get, postLong, isAxiosError } from "@api/client";
+import { useAuth } from "@composables/useAuth";
 
 interface ETLRunResponse {
   bundles_processed: number;
@@ -14,6 +15,7 @@ export function useBundles() {
   const error = ref<string | null>(null);
   const lastUpdate = ref<Date | null>(null);
   const etlResult = ref<ETLRunResponse | null>(null);
+  const auth = useAuth();
 
   const activeBundles = computed(() =>
     bundles.value.filter((bundle) => bundle.is_active),
@@ -61,6 +63,10 @@ export function useBundles() {
   };
 
   const runETL = async () => {
+    if (!auth.isAuthenticated.value) {
+      error.value = "Debes iniciar sesión para ejecutar el ETL.";
+      return;
+    }
     loading.value = true;
     error.value = null;
     etlResult.value = null;

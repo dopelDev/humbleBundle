@@ -1,5 +1,5 @@
-api/env/*
-env/*
+.venv/*
+.env
 **/__pycache__/
 __pycache__/
 .cursor/

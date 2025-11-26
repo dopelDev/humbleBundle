@@ -28,6 +28,15 @@ make db-init  # Inicializar base de datos SQLite
 ```env
 DB_DB_PATH=humble_bundle.db
 DB_SQL_ECHO=false
+DB_JWT_SECRET_KEY=super-secret-key
+DB_JWT_ACCESS_TOKEN_EXP_MINUTES=60
+# Usuario inicial opcional (se crea/actualiza automáticamente si se define)
+DB_ADMIN_USERNAME=admin
+DB_ADMIN_EMAIL=admin@example.com
+# Opción 1 (recomendada en desarrollo): contraseña en texto plano
+DB_ADMIN_PASSWORD_PLAIN=supersecret
+# Opción 2 (compatibilidad): SHA-256 hex de 64 chars
+DB_ADMIN_PASSWORD_SHA=d2d2... (64 chars)
 ```
 
 ## Quick Makefile
@@ -63,10 +72,36 @@ Key endpoints:
 - `GET /bundles/{bundle_id}`: details by UUID.
 - `GET /bundles/by-machine-name/{machine_name}`: backward compatibility by `machine_name`.
 - `GET /bundles/featured`: featured bundle according to total MSRP and sales.
-- `POST /etl/run`: triggers the spider, removes expired bundles and persists the result.
+- `POST /auth/login`: valida credenciales (`SHA-256` enviado desde frontend) y devuelve JWT.
+- `GET /auth/me`: devuelve el usuario autenticado.
+- `POST /etl/run`: triggers the spider, removes expired bundles and persists the result (requiere JWT Bearer).
 - `GET /landing-page-raw-data`: list of raw data records.
 
-**Note**: API v1.0 includes only the original scraper (HumbleSpider).
+**Note**: API v1.0 incluye el scraper original (HumbleSpider), protección básica por JWT para `/etl/run` y seed automático de un usuario admin si defines las variables `DB_ADMIN_*`.
+
+### Seed automático de usuario
+1. Define `DB_ADMIN_USERNAME`, `DB_ADMIN_EMAIL` y **alguna** de las variables de contraseña:
+   - `DB_ADMIN_PASSWORD_PLAIN` (texto plano, el backend se encargará de hashear).
+   - `DB_ADMIN_PASSWORD_SHA` (hash SHA-256 hex para compatibilidad u operaciones manuales).
+2. Cada inicio de la API verificará/creará ese usuario y actualizará su e-mail o contraseña si cambias las variables.
+3. Comandos útiles:
+   - Crear/actualizar usuario sin levantar la API:
+     ```bash
+     python -m spider.cli.create_user \
+       --username admin \
+       --email admin@example.com \
+       --password "<texto o sha256>"  # el backend lo normaliza automáticamente
+     ```
+   - Obtener el hash SHA-256 de una contraseña (opcional):
+     ```bash
+     python -m spider.cli.hash_password --password "mi-contraseña"
+     ```
+
+### Flujo de autenticación y hashing
+1. El frontend envía la contraseña en texto plano usando HTTPS.
+2. El backend normaliza todo como `bcrypt(SHA-256(plain))`.
+3. Para obtener un token, envía `POST /auth/login` con `{ "username": "...", "password": "<texto>" }`.
+4. Usa el token `Bearer` en las peticiones que lo requieran (`/etl/run`, `/auth/me`).
 
 ## Frontend (Vue + Vite)
 The `frontend/` folder contains a SPA that replicates the original site's look & feel and consumes the API.
@@ -80,6 +115,11 @@ Available variables:
 VITE_API_BASE_URL=http://127.0.0.1:5002
 ```
 See `frontend/README.md` for scripts (`build`, `preview`), light/dark themes and component structure.
+
+## Docker Compose
+1. Copia `.env.example` a `.env` y ajusta los valores (`DB_*`, `DB_ADMIN_*`, `VITE_API_BASE_URL`, `FRONTEND_PORT`, etc.).
+2. `docker-compose.yml` usa `env_file: .env` en todos los servicios, por lo que basta con mantener ese archivo en la raíz antes de ejecutar `docker compose up`.
+3. El servicio `postgres` toma automáticamente `DB_PG*`, el backend `DB_*`/`DB_ADMIN_*`/`DB_JWT_*` y el frontend `VITE_API_BASE_URL` + `FRONTEND_PORT`.
 
 ## Repository Architecture
 - `spider/`: ETL module.
