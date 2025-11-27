@@ -108,7 +108,7 @@ const handleImageError = (event: Event) => {
     width: 100%;
     height: 200px;
     overflow: hidden;
-    background: var(--surface);
+    background: var(--image-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,4 +174,3 @@ const handleImageError = (event: Event) => {
   }
 }
 </style>
-
