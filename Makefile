@@ -2,6 +2,7 @@
 
 VENV_BIN=.venv/bin
 DB_FILE=humble_bundle.db
+CMD_DOCKER=docker compose
 
 etl:
 	@$(VENV_BIN)/python -m spider.cli.run_spider
@@ -26,14 +27,14 @@ frontend-dev:
 	@cd frontend && npm run dev
 
 docker-up:
-	@docker compose up -d
+	@$(CMD_DOCKER) up -d
 
 docker-down:
-	@docker compose down -v
+	@$(CMD_DOCKER) down -v
 
 docker-restart:
-	@docker compose down -v
-	@docker compose up -d --build
+	@$(CMD_DOCKER) down -v
+	@$(CMD_DOCKER) up -d --build
 
 help:
 	@echo "Comandos disponibles:"

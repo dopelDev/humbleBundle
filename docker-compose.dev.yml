@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  postgres:
+    env_file:
+      - .env.example
+    image: postgres:16-alpine
+    container_name: humble-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_PGUSER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PGPASSWORD:-postgres}
+      POSTGRES_DB: ${DB_PGDATABASE:-humble_bundle}
+    ports:
+      - "${DB_PGPORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_PGUSER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  api:
+    env_file:
+      - .env.example
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: humble-api
+    restart: unless-stopped
+    environment:
+      DB_DB_TYPE: postgresql
+      DB_PGUSER: ${DB_PGUSER:-postgres}
+      DB_PGPASSWORD: ${DB_PGPASSWORD:-postgres}
+      DB_PGDATABASE: ${DB_PGDATABASE:-humble_bundle}
+      DB_PGHOST: postgres
+      DB_PGPORT: ${DB_PGPORT:-5432}
+      DB_SQL_ECHO: ${DB_SQL_ECHO:-false}
+    ports:
+      - "5002:5002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./images:/app/images
+
+  frontend:
+    env_file:
+      - .env.example
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: humble-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:5002}
+    ports:
+      - "${FRONTEND_PORT:-3002}:3002"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+    driver: local
+
