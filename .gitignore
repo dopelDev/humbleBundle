@@ -7,3 +7,4 @@ node_modules/
 *.tsbuildinfo
 .tsbuild/
 humble_bundle.db
+frontend/dist/
